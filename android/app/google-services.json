@@ -1,0 +1,370 @@
+{
+  "project_info": {
+    "project_number": "641117441433",
+    "project_id": "motopickup-353120",
+    "storage_bucket": "motopickup-353120.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:641117441433:android:7f38dc92eb56e998d4d708",
+        "android_client_info": {
+          "package_name": "com.example.moto_pickup_client"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "641117441433-7q3ms3k3drfnn636o0j6pmuun51fe4qi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.moto_pickup_client",
+            "certificate_hash": "cea165cd834e13d40f1254f7517e4a272a9f1b45"
+          }
+        },
+        {
+          "client_id": "641117441433-p8qnbbgdnt53r5mqbjn8sdq8mec3hroo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.moto_pickup_client",
+            "certificate_hash": "829c47efb9251e5d154a85b15758026b060e8c09"
+          }
+        },
+        {
+          "client_id": "641117441433-b9pgkvt8a177of2m4cbblqsaesiou9kf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDd8r9RuiFo-KE9UDdwK0k3VcDUmtAR09c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "641117441433-b9pgkvt8a177of2m4cbblqsaesiou9kf.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "641117441433-2vgqk40b8tdulfk7452fqv14hpm8ajv7.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.motopickupDriver"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:641117441433:android:dd0ccd20de645905d4d708",
+        "android_client_info": {
+          "package_name": "com.example.motopickup_driver"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "641117441433-e5i6gderp91qipbh7c5n6nam2c3eq81s.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.motopickup_driver",
+            "certificate_hash": "81d690e37c1324c466d80a64ad5a8565632fa4b0"
+          }
+        },
+        {
+          "client_id": "641117441433-g07t0hosq20fcl0ign0qvg7e5ktv36sv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.motopickup_driver",
+            "certificate_hash": "cea165cd834e13d40f1254f7517e4a272a9f1b45"
+          }
+        },
+        {
+          "client_id": "641117441433-s8fhmatfdt6d2ihu4mceki92l560a0ig.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.motopickup_driver",
+            "certificate_hash": "829c47efb9251e5d154a85b15758026b060e8c09"
+          }
+        },
+        {
+          "client_id": "641117441433-b9pgkvt8a177of2m4cbblqsaesiou9kf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDd8r9RuiFo-KE9UDdwK0k3VcDUmtAR09c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "641117441433-b9pgkvt8a177of2m4cbblqsaesiou9kf.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "641117441433-2vgqk40b8tdulfk7452fqv14hpm8ajv7.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.motopickupDriver"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:641117441433:android:5fd16cae9a2db073d4d708",
+        "android_client_info": {
+          "package_name": "com.medyouin.motopickup"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "641117441433-2jeeducugrc2fgeoko1tbpppuoh0t028.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.medyouin.motopickup",
+            "certificate_hash": "eeeb852ec767f042af0354de2cef23b0d784b21c"
+          }
+        },
+        {
+          "client_id": "641117441433-2mjddbq3bvtvlpk4pjhd0f1545n5i10b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.medyouin.motopickup",
+            "certificate_hash": "b5c3ca28d9bd27a42960ab81efe8a1048a88268f"
+          }
+        },
+        {
+          "client_id": "641117441433-2qlqebhp1k2g2o74i62q4emc2npalm5g.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.medyouin.motopickup",
+            "certificate_hash": "7e471c2f164f8ca1bffcabe1ef9d39e2f760dad9"
+          }
+        },
+        {
+          "client_id": "641117441433-7sfffvi4a2pcolk6h5ibaqff4d0b9q7v.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.medyouin.motopickup",
+            "certificate_hash": "8f331e1eee0b4dcea6a60f93701bd23e963b1c03"
+          }
+        },
+        {
+          "client_id": "641117441433-b9pgkvt8a177of2m4cbblqsaesiou9kf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDd8r9RuiFo-KE9UDdwK0k3VcDUmtAR09c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "641117441433-b9pgkvt8a177of2m4cbblqsaesiou9kf.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "641117441433-2vgqk40b8tdulfk7452fqv14hpm8ajv7.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.motopickupDriver"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:641117441433:android:c56d73a927929507d4d708",
+        "android_client_info": {
+          "package_name": "com.medyouin.motopickupdriver"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "641117441433-lf1p9esr396o4frqa9a2fkotrpubivme.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.medyouin.motopickupdriver",
+            "certificate_hash": "7e471c2f164f8ca1bffcabe1ef9d39e2f760dad9"
+          }
+        },
+        {
+          "client_id": "641117441433-b9pgkvt8a177of2m4cbblqsaesiou9kf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDd8r9RuiFo-KE9UDdwK0k3VcDUmtAR09c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "641117441433-b9pgkvt8a177of2m4cbblqsaesiou9kf.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "641117441433-2vgqk40b8tdulfk7452fqv14hpm8ajv7.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.motopickupDriver"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:641117441433:android:8efd8506e55366c9d4d708",
+        "android_client_info": {
+          "package_name": "com.vitsey.org"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "641117441433-48f6dihlcsr5rno1cu2b7o3orl2j21k2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.vitsey.org",
+            "certificate_hash": "7e471c2f164f8ca1bffcabe1ef9d39e2f760dad9"
+          }
+        },
+        {
+          "client_id": "641117441433-idno3cc2qcui9vje3919t6rfdssaj30v.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.vitsey.org",
+            "certificate_hash": "3ad096670de08b60289abee14093b626085909d1"
+          }
+        },
+        {
+          "client_id": "641117441433-jbc61sejk77g39va4od3djg5blu1ebjq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.vitsey.org",
+            "certificate_hash": "81d690e37c1324c466d80a64ad5a8565632fa4b0"
+          }
+        },
+        {
+          "client_id": "641117441433-p84idlb5e06somgoi329vc2n0et451qn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.vitsey.org",
+            "certificate_hash": "61b5882720571526bae4fce7a081108b10eb9976"
+          }
+        },
+        {
+          "client_id": "641117441433-b9pgkvt8a177of2m4cbblqsaesiou9kf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDd8r9RuiFo-KE9UDdwK0k3VcDUmtAR09c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "641117441433-b9pgkvt8a177of2m4cbblqsaesiou9kf.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "641117441433-2vgqk40b8tdulfk7452fqv14hpm8ajv7.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.motopickupDriver"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:641117441433:android:4c91adeb928d0380d4d708",
+        "android_client_info": {
+          "package_name": "com.vitseydriver.mpdriver"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "641117441433-05fq5uf3h2ge0t86f48h3vjvhvnif9kn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.vitseydriver.mpdriver",
+            "certificate_hash": "81d690e37c1324c466d80a64ad5a8565632fa4b0"
+          }
+        },
+        {
+          "client_id": "641117441433-080o4q6ugpv19i0mh9lmur7g1eqt89b7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.vitseydriver.mpdriver",
+            "certificate_hash": "61b5882720571526bae4fce7a081108b10eb9976"
+          }
+        },
+        {
+          "client_id": "641117441433-57tv5jgftl39r42c0e6vihu7aq8av4bd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.vitseydriver.mpdriver",
+            "certificate_hash": "54c11a2c4a34a31cc02b7349dc681121f699c004"
+          }
+        },
+        {
+          "client_id": "641117441433-osnlqti33teibj82kk95c6sd0ldisffe.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.vitseydriver.mpdriver",
+            "certificate_hash": "7e471c2f164f8ca1bffcabe1ef9d39e2f760dad9"
+          }
+        },
+        {
+          "client_id": "641117441433-b9pgkvt8a177of2m4cbblqsaesiou9kf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDd8r9RuiFo-KE9UDdwK0k3VcDUmtAR09c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "641117441433-b9pgkvt8a177of2m4cbblqsaesiou9kf.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "641117441433-2vgqk40b8tdulfk7452fqv14hpm8ajv7.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.motopickupDriver"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
