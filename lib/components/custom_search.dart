@@ -163,8 +163,7 @@ class _CustomSearchableDropDownState extends State<CustomSearchableDropDown>
               decoration: widget.decoration,
               child: TextButton(
                 style: TextButton.styleFrom(
-                    backgroundColor: widget.backgroundColor,
-                    primary: widget.primaryColor ?? Colors.black,
+                    foregroundColor: widget.primaryColor ?? Colors.black, backgroundColor: widget.backgroundColor,
                     tapTargetSize: MaterialTapTargetSize.shrinkWrap),
                 child: Padding(
                   padding: widget.padding ?? const EdgeInsets.all(5.0),
@@ -248,7 +247,7 @@ class _CustomSearchableDropDownState extends State<CustomSearchableDropDown>
                               widget.showClearButton == true),
                           child: TextButton(
                             style: TextButton.styleFrom(
-                                primary: widget.primaryColor ?? Colors.black),
+                                foregroundColor: widget.primaryColor ?? Colors.black),
                             child: const Icon(
                               Icons.clear,
                             ),
@@ -362,8 +361,7 @@ class _CustomSearchableDropDownState extends State<CustomSearchableDropDown>
                   children: [
                     TextButton(
                       style: TextButton.styleFrom(
-                          primary: widget.primaryColor ?? Colors.black,
-                          tapTargetSize: MaterialTapTargetSize.shrinkWrap),
+                          foregroundColor: widget.primaryColor ?? Colors.black, tapTargetSize: MaterialTapTargetSize.shrinkWrap),
                       child: Text(
                         'Select All',
                         style: widget.labelStyle != null
@@ -384,8 +382,7 @@ class _CustomSearchableDropDownState extends State<CustomSearchableDropDown>
                     ),
                     TextButton(
                       style: TextButton.styleFrom(
-                          primary: widget.primaryColor ?? Colors.black,
-                          tapTargetSize: MaterialTapTargetSize.shrinkWrap),
+                          foregroundColor: widget.primaryColor ?? Colors.black, tapTargetSize: MaterialTapTargetSize.shrinkWrap),
                       child: Text(
                         'Clear All',
                         style: widget.labelStyle != null
@@ -421,8 +418,7 @@ class _CustomSearchableDropDownState extends State<CustomSearchableDropDown>
               children: [
                 TextButton(
                   style: TextButton.styleFrom(
-                      primary: widget.primaryColor ?? Colors.black,
-                      tapTargetSize: MaterialTapTargetSize.shrinkWrap),
+                      foregroundColor: widget.primaryColor ?? Colors.black, tapTargetSize: MaterialTapTargetSize.shrinkWrap),
                   child: Text(
                     context.locale.toString() == "fr" ? 'Fermer' : 'اغلاق',
                     style: widget.labelStyle != null
@@ -446,8 +442,7 @@ class _CustomSearchableDropDownState extends State<CustomSearchableDropDown>
                   visible: (widget.multiSelect ?? false),
                   child: TextButton(
                     style: TextButton.styleFrom(
-                        primary: widget.primaryColor ?? Colors.black,
-                        tapTargetSize: MaterialTapTargetSize.shrinkWrap),
+                        foregroundColor: widget.primaryColor ?? Colors.black, tapTargetSize: MaterialTapTargetSize.shrinkWrap),
                     child: Text(
                       'Done',
                       style: widget.labelStyle != null
@@ -531,8 +526,7 @@ class _CustomSearchableDropDownState extends State<CustomSearchableDropDown>
             itemBuilder: (BuildContext context, int index) {
               return TextButton(
                 style: TextButton.styleFrom(
-                    primary: widget.primaryColor ?? Colors.black,
-                    padding: const EdgeInsets.all(8),
+                    foregroundColor: widget.primaryColor ?? Colors.black, padding: const EdgeInsets.all(8),
                     tapTargetSize: MaterialTapTargetSize.shrinkWrap),
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),

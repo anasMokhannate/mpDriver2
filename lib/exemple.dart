@@ -1,8 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:in_app_update/in_app_update.dart';
 
 class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
   @override
   _MyAppState createState() => _MyAppState();
 }
@@ -18,7 +19,7 @@ class _MyAppState extends State<MyApp> {
 
   AppUpdateInfo? _updateInfo;
 
-  GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
 
   bool _flexibleUpdateAvailable = false;
 
@@ -63,11 +64,10 @@ class _MyAppState extends State<MyApp> {
                 child: Text('Update info: $_updateInfo'),
               ),
               ElevatedButton(
-                child: Text('Check for Update'),
+                child: const Text('Check for Update'),
                 onPressed: () => checkForUpdate(),
               ),
               ElevatedButton(
-                child: Text('Perform immediate update'),
                 onPressed: _updateInfo?.updateAvailability ==
                         UpdateAvailability.updateAvailable
                     ? () {
@@ -75,9 +75,9 @@ class _MyAppState extends State<MyApp> {
                             .catchError((e) => showSnack(e.toString()));
                       }
                     : null,
+                child: const Text('Perform immediate update'),
               ),
               ElevatedButton(
-                child: Text('Start flexible update'),
                 onPressed: _updateInfo?.updateAvailability ==
                         UpdateAvailability.updateAvailable
                     ? () {
@@ -90,9 +90,9 @@ class _MyAppState extends State<MyApp> {
                         });
                       }
                     : null,
+                child: const Text('Start flexible update'),
               ),
               ElevatedButton(
-                child: Text('Complete flexible update'),
                 onPressed: !_flexibleUpdateAvailable
                     ? null
                     : () {
@@ -102,6 +102,7 @@ class _MyAppState extends State<MyApp> {
                           showSnack(e.toString());
                         });
                       },
+                child: const Text('Complete flexible update'),
               )
             ],
           ),

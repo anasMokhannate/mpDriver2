@@ -4,27 +4,19 @@ import 'package:boxicons/boxicons.dart';
 import 'package:easy_localization/easy_localization.dart' as easy;
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:motopickupdriver/utils/colors.dart';
 import 'package:motopickupdriver/utils/functions.dart';
-import 'package:motopickupdriver/utils/models/userBase.dart';
 import 'package:motopickupdriver/utils/typography.dart';
-import 'package:motopickupdriver/views/help_center.dart';
-import 'package:motopickupdriver/views/my_command.dart';
-import 'package:motopickupdriver/views/profile/profile_page.dart';
-import 'package:motopickupdriver/views/settings_page.dart';
 import 'package:motopickupdriver/views/using_condition_screen.dart';
-import 'package:onesignal_flutter/onesignal_flutter.dart';
-import 'package:url_launcher/url_launcher_string.dart';
-import 'package:motopickupdriver/controllers/settings_page.dart';
 
-import '../utils/services.dart';
+import '../controllers/settings_page.dart';
+import '../utils/models/user.dart';
 import '../views/policy_screen.dart';
 
 class NavigationDrawerWidget extends StatefulWidget {
-  UserBase? currentUser;
+  MpUser? currentUser;
   NavigationDrawerWidget({required this.currentUser, Key? key})
       : super(key: key);
 
@@ -37,10 +29,10 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
   @override
   Widget build(BuildContext context) {
     print("hell");
-    double starss = widget.currentUser!.driver_note /
-        (widget.currentUser!.driver_total_orders == 0
+    double starss = widget.currentUser!.note! /
+(widget.currentUser!.totalOrders == 0
             ? 1
-            : widget.currentUser!.driver_total_orders);
+            : widget.currentUser!.totalOrders!);
 
    
 
@@ -63,9 +55,9 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
         child: Column(
           children: [
             buildHeader(
-              urlImage: widget.currentUser!.driver_profile_picture,
-              name: widget.currentUser!.driver_full_name,
-              stars: starss.round() ?? 0,
+              urlImage: widget.currentUser!.profilePicture!,
+              name: widget.currentUser!.fullName!,
+              stars: starss.round(),
               onClicked: () {},
             ),
             Divider(
@@ -87,8 +79,8 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                     icon: Boxicons.bx_user,
                     onClicked: () {
                       Navigator.pop(context);
-                      Get.offAll(() => ProfilePage(),
-                          transition: Transition.rightToLeft);
+                      // Get.offAll(() => ProfilePage(),
+                      //     transition: Transition.rightToLeft);
                     },
                   ),
                   buildMenuItem(
@@ -96,8 +88,8 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                     icon: Boxicons.bx_package,
                     onClicked: () {
                       Navigator.pop(context);
-                      Get.to(() => MyCommand(),
-                          transition: Transition.rightToLeft);
+                      // Get.to(() => MyCommand(),
+                      //     transition: Transition.rightToLeft);
                     },
                   ),
                   buildMenuItem(
@@ -105,8 +97,8 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                     icon: FontAwesomeIcons.gear,
                     onClicked: () {
                       Navigator.pop(context);
-                      Get.to(() => SettingScreen(),
-                          transition: Transition.rightToLeft);
+                      // Get.to(() => SettingScreen(),
+                      //     transition: Transition.rightToLeft);
                     },
                   ),
                   buildMenuItem(
@@ -114,8 +106,8 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                     icon: Boxicons.bx_help_circle,
                     onClicked: () {
                       Navigator.pop(context);
-                      Get.to(() => HelpCenter(),
-                          transition: Transition.rightToLeft);
+                      // Get.to(() => HelpCenter(),
+                      //     transition: Transition.rightToLeft);
                     },
                   ),
                   buildMenuItem(
@@ -124,7 +116,7 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                     onClicked: () {
                       Navigator.pop(context);
 
-                      Get.to(() => PolicyScreen(),
+                      Get.to(() => const PolicyScreen(),
                           transition: Transition.rightToLeft);
                     },
                   ),
@@ -134,7 +126,7 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                     onClicked: () {
                       Navigator.pop(context);
 
-                      Get.to(() => UsingConditionScreen(),
+                      Get.to(() => const UsingConditionScreen(),
                           transition: Transition.rightToLeft);
                     },
                   ),

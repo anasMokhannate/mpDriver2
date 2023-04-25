@@ -7,10 +7,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:loading_overlay/loading_overlay.dart';
-import 'package:motopickupdriver/controllers/completeYourProfile/phone_number.dart';
 import 'package:motopickupdriver/utils/buttons.dart';
 import 'package:motopickupdriver/utils/colors.dart';
 import 'package:motopickupdriver/utils/typography.dart';
+
+import '../../controllers/completeYourProfile/verify_phone_number.dart';
 
 class VerifyPhoneNumber extends StatelessWidget {
   VerifyPhoneNumber({Key? key}) : super(key: key);

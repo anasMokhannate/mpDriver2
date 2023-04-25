@@ -8,20 +8,21 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:motopickupdriver/components/inputs.dart';
-import 'package:motopickupdriver/controllers/auth/register_page.dart';
 import 'package:motopickupdriver/utils/buttons.dart';
 import 'package:motopickupdriver/utils/colors.dart';
 import 'package:motopickupdriver/utils/typography.dart';
 
+import '../../controllers/auth/register_controller.dart';
+
 class RegisterPage extends StatelessWidget {
   RegisterPage({Key? key}) : super(key: key);
-  var controller = Get.put(RegisterPageController());
+  var controller = Get.put(RegisterController());
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: GetBuilder<RegisterPageController>(
-        init: RegisterPageController(),
+      child: GetBuilder<RegisterController>(
+        init: RegisterController(),
         builder: (value) => LoadingOverlay(
           isLoading: controller.loading.value,
           color: dark,

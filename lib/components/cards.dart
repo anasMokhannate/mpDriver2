@@ -5,9 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:motopickupdriver/utils/colors.dart';
-import 'package:motopickupdriver/utils/models/userBase.dart';
 import 'package:motopickupdriver/utils/queries.dart';
 import 'package:motopickupdriver/utils/typography.dart';
+
+import '../utils/models/user.dart';
 
 class ProfileCard extends StatefulWidget {
   IconData icon;
@@ -543,7 +544,7 @@ class _CommandCardState extends State<CommandCard> {
 class OrdersCard extends StatefulWidget {
   String photo, username, orderType, from, to, idOrder, distance;
   double stars;
-  UserBase drive;
+  MpUser drive;
   int status;
   final VoidCallback accepte;
   OrdersCard(
@@ -571,7 +572,7 @@ class _OrdersCardState extends State<OrdersCard> {
   @override
   Widget build(BuildContext context) {
   time = double.parse(widget.distance) / 50 < 1 ? double.parse(widget.distance) / 50 *60 : double.parse(widget.distance) / 50 ; 
-    timeText =   double.parse(widget.distance) / 50 < 1 ? time.toStringAsFixed(1)+" minutes"   :   time.toStringAsFixed(1) + " heures";
+    timeText =   double.parse(widget.distance) / 50 < 1 ? "${time.toStringAsFixed(1)} minutes"   :   "${time.toStringAsFixed(1)} heures";
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
       child: Container(
@@ -693,7 +694,7 @@ class _OrdersCardState extends State<OrdersCard> {
                     ],
                   ),
                   const Spacer(),
-                  Text('${widget.distance} Km   ( ${timeText} )', style: bodyTextStyle),
+                  Text('${widget.distance} Km   ( $timeText )', style: bodyTextStyle),
                 ],
               ),
               20.verticalSpace,

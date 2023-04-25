@@ -2,9 +2,7 @@
 
 import 'package:boxicons/boxicons.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:diacritic/diacritic.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -22,9 +20,6 @@ import 'package:motopickupdriver/utils/buttons.dart';
 import 'package:motopickupdriver/utils/colors.dart';
 import 'package:motopickupdriver/utils/queries.dart';
 import 'package:motopickupdriver/utils/typography.dart';
-import 'package:motopickupdriver/views/help_center.dart';
-import 'package:motopickupdriver/views/rateClient.dart';
-import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../utils/services.dart';
@@ -69,9 +64,7 @@ class _HomePageState extends State<HomePage> {
                         await getCurrentUser().then((value) async {
                           controller.userBase = value;
                           await saveCurrentUser(controller.userBase!);
-                          print("this is the total orders" +
-                              controller.userBase!.driver_total_orders
-                                  .toString());
+                          print("this is the total orders${controller.userBase!.totalOrders}");
                         });
                       },
                       child: Icon(
@@ -135,7 +128,7 @@ class _HomePageState extends State<HomePage> {
                               compassEnabled: false,
                               polylines: controller.polylines,
                               onMapCreated: (onMapCreated) {
-                                controller.mapController = onMapCreated;
+                                // controller.mapController = onMapCreated;
                               },
                             ),
                           ),
@@ -179,12 +172,12 @@ class _HomePageState extends State<HomePage> {
                                                         'drivers_declined']
                                                     .contains(controller
                                                         .userBase!
-                                                        .driver_uid) &&
+                                                        .uid) &&
                                                 !documentSnapshot[
                                                         'drivers_accepted']
                                                     .contains((controller
                                                         .userBase!
-                                                        .driver_uid))) {
+                                                        .uid))) {
                                               print(documentSnapshot['user']
                                                   ['customer_note']);
                                               double distance =
@@ -245,7 +238,7 @@ class _HomePageState extends State<HomePage> {
                                                     controller.isOnOrder = true;
                                                     controller.isWithOrder =
                                                         true;
-                                                    String fcm_driver =
+                                                    String fcmDriver =
                                                         await SessionManager()
                                                             .get('driver_fcm');
                                                     FirebaseFirestore.instance
@@ -254,13 +247,13 @@ class _HomePageState extends State<HomePage> {
                                                             "order_id"])
                                                         .update(({
                                                           "driver_fcm":
-                                                              fcm_driver,
+                                                              fcmDriver,
                                                         }));
                                                     FirebaseFirestore.instance
                                                         .collection('drivers')
                                                         .doc(controller
                                                             .userBase!
-                                                            .driver_uid)
+                                                            .uid)
                                                         .update({
                                                       "is_on_order": true
                                                     });
@@ -341,12 +334,10 @@ class _HomePageState extends State<HomePage> {
                                                               'nbre_km_depart_destination']) /
                                                       50 <
                                                   1
-                                              ? controller.ttime
-                                                      .toStringAsFixed(1) +
-                                                  " minutes"
-                                              : controller.ttime
-                                                      .toStringAsFixed(1) +
-                                                  " heures";
+                                              ? "${controller.ttime
+                                                      .toStringAsFixed(1)} minutes"
+                                              : "${controller.ttime
+                                                      .toStringAsFixed(1)} heures";
 
                                           return Column(
                                             crossAxisAlignment:
@@ -426,7 +417,7 @@ class _HomePageState extends State<HomePage> {
                                                       ),
                                                       child: IconButton(
                                                         onPressed: () async {
-                                                          String customer_uid =
+                                                          String customerUid =
                                                               "";
 
                                                           var docSnapshot =
@@ -444,7 +435,7 @@ class _HomePageState extends State<HomePage> {
                                                                 data =
                                                                 docSnapshot
                                                                     .data();
-                                                            customer_uid = data![
+                                                            customerUid = data![
                                                                 'customer_uid'];
                                                           }
                                                           String phoneNo = "";
@@ -454,7 +445,7 @@ class _HomePageState extends State<HomePage> {
                                                                   .collection(
                                                                       'users')
                                                                   .doc(
-                                                                      customer_uid)
+                                                                      customerUid)
                                                                   .get();
                                                           if (docSnapshot
                                                               .exists) {
@@ -494,7 +485,7 @@ class _HomePageState extends State<HomePage> {
                                                       ),
                                                       child: IconButton(
                                                         onPressed: () async {
-                                                          String customer_uid =
+                                                          String customerUid =
                                                               "";
 
                                                           var docSnapshot =
@@ -512,7 +503,7 @@ class _HomePageState extends State<HomePage> {
                                                                 data =
                                                                 docSnapshot
                                                                     .data();
-                                                            customer_uid = data![
+                                                            customerUid = data![
                                                                 'customer_uid'];
                                                           }
                                                           String phoneNo = "";
@@ -522,7 +513,7 @@ class _HomePageState extends State<HomePage> {
                                                                   .collection(
                                                                       'users')
                                                                   .doc(
-                                                                      customer_uid)
+                                                                      customerUid)
                                                                   .get();
                                                           if (docSnapshot
                                                               .exists) {
@@ -600,7 +591,7 @@ class _HomePageState extends State<HomePage> {
                                                                 'drivers')
                                                             .doc(controller
                                                                 .userBase!
-                                                                .driver_uid)
+                                                                .uid)
                                                             .update({
                                                           "is_on_order": false
                                                         });
@@ -664,7 +655,7 @@ class _HomePageState extends State<HomePage> {
                                                                       'drivers')
                                                                   .doc(controller
                                                                       .userBase!
-                                                                      .driver_uid)
+                                                                      .uid)
                                                                   .update({
                                                                   "is_on_order":
                                                                       false,
@@ -679,7 +670,7 @@ class _HomePageState extends State<HomePage> {
                                                                       'drivers')
                                                                   .doc(controller
                                                                       .userBase!
-                                                                      .driver_uid)
+                                                                      .uid)
                                                                   .update({
                                                                   "is_on_order":
                                                                       false,
@@ -696,16 +687,16 @@ class _HomePageState extends State<HomePage> {
                                                           // Get.offAll(() =>
                                                           //     const HomePage());
 
-                                                          String customer_fcm =
+                                                          String customerFcm =
                                                               documentSnapshot[
                                                                   "customer_fcm"];
-                                                          String driver_fcm =
+                                                          String driverFcm =
                                                               documentSnapshot[
                                                                   "driver_fcm"];
 
                                                           sendPlanifiedNotification(
                                                               [
-                                                                customer_fcm
+                                                                customerFcm
                                                               ],
                                                               "voyage",
                                                               "Voyage va commencer dans 30 min",
@@ -714,7 +705,7 @@ class _HomePageState extends State<HomePage> {
                                                                       'order_pickup_time']));
                                                           sendPlanifiedNotification(
                                                               [
-                                                                driver_fcm
+                                                                driverFcm
                                                               ],
                                                               "voyage",
                                                               "Voyage va commencer dans 30 min",
@@ -732,10 +723,10 @@ class _HomePageState extends State<HomePage> {
                                                           controller.update();
                                                         } else {
                                                           if (documentSnapshot[
-                                                                  'driver_uid'] ==
+                                                                  'uid'] ==
                                                               controller
                                                                   .userBase!
-                                                                  .driver_uid) {
+                                                                  .uid) {
                                                             controller
                                                                     .startCourse =
                                                                 true;
@@ -760,10 +751,10 @@ class _HomePageState extends State<HomePage> {
                                                         decoration:
                                                             BoxDecoration(
                                                           color: documentSnapshot[
-                                                                      'driver_uid'] ==
+                                                                      'uid'] ==
                                                                   controller
                                                                       .userBase!
-                                                                      .driver_uid
+                                                                      .uid
                                                               ? primary
                                                               : Colors.grey
                                                                   .withOpacity(
@@ -775,10 +766,10 @@ class _HomePageState extends State<HomePage> {
                                                         ),
                                                         child: Text(
                                                           documentSnapshot[
-                                                                      'driver_uid'] ==
+                                                                      'uid'] ==
                                                                   controller
                                                                       .userBase!
-                                                                      .driver_uid
+                                                                      .uid
                                                               ? 'Continuer'
                                                               : 'En attente',
                                                           style: TextStyle(
@@ -806,7 +797,7 @@ class _HomePageState extends State<HomePage> {
                                                           .collection('drivers')
                                                           .doc(controller
                                                               .userBase!
-                                                              .driver_uid)
+                                                              .uid)
                                                           .update({
                                                           "is_on_order": false,
                                                           "driver_cancelled_trip":
@@ -818,7 +809,7 @@ class _HomePageState extends State<HomePage> {
                                                           .collection('drivers')
                                                           .doc(controller
                                                               .userBase!
-                                                              .driver_uid)
+                                                              .uid)
                                                           .update({
                                                           "is_on_order": false,
                                                           "driver_cancelled_delivery":
@@ -918,10 +909,8 @@ class _HomePageState extends State<HomePage> {
                                                               'nbre_km_depart_destination']) /
                                                       50 <
                                                   1
-                                              ? ttime.toStringAsFixed(1) +
-                                                  " minutes"
-                                              : ttime.toStringAsFixed(1) +
-                                                  " heures";
+                                              ? "${ttime.toStringAsFixed(1)} minutes"
+                                              : "${ttime.toStringAsFixed(1)} heures";
 
                                           return Column(
                                             crossAxisAlignment:
@@ -1001,7 +990,7 @@ class _HomePageState extends State<HomePage> {
                                                       ),
                                                       child: IconButton(
                                                         onPressed: () async {
-                                                          String customer_uid =
+                                                          String customerUid =
                                                               "";
 
                                                           var docSnapshot =
@@ -1019,7 +1008,7 @@ class _HomePageState extends State<HomePage> {
                                                                 data =
                                                                 docSnapshot
                                                                     .data();
-                                                            customer_uid = data![
+                                                            customerUid = data![
                                                                 'customer_uid'];
                                                           }
                                                           String phoneNo = "";
@@ -1029,7 +1018,7 @@ class _HomePageState extends State<HomePage> {
                                                                   .collection(
                                                                       'users')
                                                                   .doc(
-                                                                      customer_uid)
+                                                                      customerUid)
                                                                   .get();
                                                           if (docSnapshot
                                                               .exists) {
@@ -1069,7 +1058,7 @@ class _HomePageState extends State<HomePage> {
                                                       ),
                                                       child: IconButton(
                                                         onPressed: () async {
-                                                          String customer_uid =
+                                                          String customerUid =
                                                               "";
 
                                                           var docSnapshot =
@@ -1087,7 +1076,7 @@ class _HomePageState extends State<HomePage> {
                                                                 data =
                                                                 docSnapshot
                                                                     .data();
-                                                            customer_uid = data![
+                                                            customerUid = data![
                                                                 'customer_uid'];
                                                           }
                                                           String phoneNo = "";
@@ -1097,7 +1086,7 @@ class _HomePageState extends State<HomePage> {
                                                                   .collection(
                                                                       'users')
                                                                   .doc(
-                                                                      customer_uid)
+                                                                      customerUid)
                                                                   .get();
                                                           if (docSnapshot
                                                               .exists) {
@@ -1168,10 +1157,10 @@ class _HomePageState extends State<HomePage> {
                                                   children: [
                                                     InkWell(
                                                       onTap: () {
-                                                        Get.to(
-                                                            () => HelpCenter(),
-                                                            transition: Transition
-                                                                .rightToLeft);
+                                                        // Get.to(
+                                                        //     () => HelpCenter(),
+                                                        //     transition: Transition
+                                                        //         .rightToLeft);
                                                       },
                                                       child: Container(
                                                         height: 55.h,
@@ -1212,7 +1201,7 @@ class _HomePageState extends State<HomePage> {
                                                                       'drivers')
                                                                   .doc(controller
                                                                       .userBase!
-                                                                      .driver_uid)
+                                                                      .uid)
                                                                   .update({
                                                                 "is_on_order":
                                                                     false
@@ -1285,7 +1274,7 @@ class _HomePageState extends State<HomePage> {
                                                                 sendNotification(
                                                                     [fcm],
                                                                     "voyage a commencée",
-                                                                    "votre chauffeur arrivera dans ${double.parse(documentSnapshot['nbre_km_depart_destination']) / 50 < 1 ? ttime.toStringAsFixed(1) + " minutes" : ttime.toStringAsFixed(1) + " heures"}  ");
+                                                                    "votre chauffeur arrivera dans ${double.parse(documentSnapshot['nbre_km_depart_destination']) / 50 < 1 ? "${ttime.toStringAsFixed(1)} minutes" : "${ttime.toStringAsFixed(1)} heures"}  ");
                                                                 plannedNotif(
                                                                     [fcm],
                                                                     "Votre Motopickup vous attend.",
@@ -1353,7 +1342,7 @@ class _HomePageState extends State<HomePage> {
                                                                               'drivers')
                                                                           .doc(controller
                                                                               .userBase!
-                                                                              .driver_uid)
+                                                                              .uid)
                                                                           .update({
                                                                         "is_on_order":
                                                                             false
@@ -1380,9 +1369,9 @@ class _HomePageState extends State<HomePage> {
                                                                       controller
                                                                           .stopTimer();
                                                                       // Get.delete<HomePageController>();
-                                                                      Get.offAll(
-                                                                          () =>
-                                                                              RateClient());
+                                                                      // Get.offAll(
+                                                                      //     () =>
+                                                                      //         RateClient());
                                                                     });
                                                               controller
                                                                   .update();

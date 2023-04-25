@@ -47,7 +47,7 @@ class Congrats extends StatelessWidget {
               : StreamBuilder(
                   stream: FirebaseFirestore.instance
                       .collection("drivers")
-                      .doc(controller.userBase!.driver_uid)
+                      .doc(controller.userBase!.uid)
                       .snapshots(),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {
@@ -70,7 +70,7 @@ class Congrats extends StatelessWidget {
                             Padding(
                               padding: EdgeInsets.symmetric(horizontal: 20.w),
                               child: Text(
-                                'Bienvenue ${controller.userBase?.driver_full_name} parmi la communauté Motopickup!',
+                                'Bienvenue ${controller.userBase?.fullName} parmi la communauté Motopickup!',
                                 textAlign: TextAlign.center,
                                 style: bodyTextStyle,
                               ),

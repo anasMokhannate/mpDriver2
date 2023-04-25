@@ -5,39 +5,55 @@ import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:motopickupdriver/utils/models/config-params.dart';
 import 'package:motopickupdriver/utils/models/emergency.dart';
 
-import 'package:motopickupdriver/utils/models/userBase.dart';
+import 'package:motopickupdriver/utils/models/user.dart';
 
-Future createUser(UserBase user) async {
+Future createUser(MpUser user) async {
   final docUser =
-      FirebaseFirestore.instance.collection('drivers').doc(user.driver_uid);
+      FirebaseFirestore.instance.collection('drivers').doc(user.uid);
 
   await docUser.set(user.toJson());
 }
 
-Future completeUser(UserBase user) async {
+Future<String> getProvider(String email) async {
+  print('email: $email');
+  String provider = "";
+  await FirebaseFirestore.instance
+      .collection("mp_users")
+      .where("email", isEqualTo: email)
+      .where("is_deleted_account", isEqualTo: false)
+      //  .where("is_driver", isEqualTo: false)
+      .snapshots()
+      .first
+      .then((value) {
+    provider = value.docs.first.get("auth_type");
+  });
+  print('provider: $provider');
+  return provider;
+}
+Future completeUser(MpUser user) async {
   final docUser =
-      FirebaseFirestore.instance.collection('drivers').doc(user.driver_uid);
+      FirebaseFirestore.instance.collection('drivers').doc(user.uid);
   await docUser.update(user.toJson());
 }
 
 Future<int> getUserStatus(uid) async {
   int status = 4;
   await getUser(uid).then((value) async {
-    if (!value.is_verified_account) status = 0;
-    if (!value.is_verified_account && value.is_activated_account) status = 1;
-    if (value.is_activated_account) status = 2;
+    if (!value.isVerifiedAccount!) status = 0;
+    if (!value.isVerifiedAccount! && value.isActivatedAccount!) status = 1;
+    if (value.isVerifiedAccount!) status = 2;
   });
 
   return status;
 }
 
-Future<UserBase> getUser(uid) async {
-  UserBase? user;
+Future<MpUser> getUser(uid) async {
+  MpUser? user;
   var docSnapshot =
       await FirebaseFirestore.instance.collection('drivers').doc(uid).get();
   if (docSnapshot.exists) {
     Map<String, dynamic>? data = docSnapshot.data();
-    user = UserBase.fromJson(data!);
+    user = MpUser.fromJson(data!);
   }
   return user!;
 }
@@ -113,9 +129,9 @@ Future<String> loginWithPhone(phone) async {
   return email!;
 }
 
-Future deleteUser(UserBase user, reason) async {
+Future deleteUser(MpUser user, reason) async {
   final docUser =
-      FirebaseFirestore.instance.collection('drivers').doc(user.driver_uid);
+      FirebaseFirestore.instance.collection('drivers').doc(user.uid);
 
   await docUser.update({
     'is_deleted_account': true,
@@ -132,9 +148,9 @@ Future createEmergency(Emergency emergency) async {
   await docUser.set(emergency.toJson());
 }
 
-Future addDriverToOrder(UserBase driver, orderId) async {
+Future addDriverToOrder(MpUser driver, orderId) async {
   final fcm = await SessionManager().get('driver_fcm');
-  driver.driver_fcm = fcm;
+  //driver.driver_fcm = fcm;
   final docUser = FirebaseFirestore.instance
       .collection('orders')
       .doc(orderId)
@@ -142,8 +158,28 @@ Future addDriverToOrder(UserBase driver, orderId) async {
       .add(driver.toJson());
 
   FirebaseFirestore.instance.collection('orders').doc(orderId).update(({
-        'drivers_accepted': FieldValue.arrayUnion([driver.driver_uid])
+        'drivers_accepted': FieldValue.arrayUnion([driver.uid])
       }));
+}
+
+Future<bool> checkEmail(email) async {
+  bool message = false;
+  //String message = "not-found";
+  await FirebaseFirestore.instance
+      .collection('mp_users')
+      .where('email', isEqualTo: email)
+      //.where('auth_type', whereIn: ["Phone", "Facebook", "Google"])
+      // .where('is_deleted_account', isEqualTo: false)
+      .snapshots()
+      .first
+      .then((value) {
+    if (value.size != 0) {
+      message = true;
+    } else {
+      message = false;
+    }
+  });
+  return message;
 }
 
 Future<bool> isUserExist(phoneNo) async {
@@ -174,11 +210,11 @@ Future<List<MotoType>> getData() async {
   return motos;
 }
 
-Future refuserOrder(UserBase driver, orderId) async {
+Future refuserOrder(MpUser driver, orderId) async {
   FirebaseFirestore.instance.collection('orders').doc(orderId).update(({
         'is_canceled_by_driver': true,
         'status': 0,
-        'drivers_declined': FieldValue.arrayUnion([driver.driver_uid])
+        'drivers_declined': FieldValue.arrayUnion([driver.uid])
       }));
       String type = "";
        var docSnapshot2 =
@@ -189,13 +225,13 @@ Future refuserOrder(UserBase driver, orderId) async {
     type != '0'?
   FirebaseFirestore.instance
       .collection('drivers')
-      .doc(driver.driver_uid)
+      .doc(driver.uid)
       .update({
     "is_on_order": false,
     "driver_cancelled_trip": FieldValue.increment(1),
   }):FirebaseFirestore.instance
       .collection('drivers')
-      .doc(driver.driver_uid)
+      .doc(driver.uid)
       .update({
     "is_on_order": false,
     "driver_cancelled_delivery": FieldValue.increment(1),

@@ -8,7 +8,6 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:motopickupdriver/utils/colors.dart';
-import 'package:motopickupdriver/utils/services.dart';
 import 'package:motopickupdriver/utils/typography.dart';
 import 'package:motopickupdriver/views/auth/login_page.dart';
 
@@ -147,6 +146,12 @@ Future<Future> deleteAccount(context, function, controller) async {
       ],
     ),
   );
+}
+
+bool validateEmail(String email) {
+  RegExp emailRegex = RegExp(
+      r"^[a-zA-Z0-9.!#$%&\'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$");
+  return emailRegex.hasMatch(email);
 }
 
 bool validatePassword(String value) {

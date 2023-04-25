@@ -78,7 +78,7 @@ class VerfiyNumber extends StatelessWidget {
                           builder: (value) => Padding(
                             padding: EdgeInsets.symmetric(horizontal: 20.w),
                             child: Text(
-                              'Un SMS a été envoyé au ${controller.tmpUser!.phoneNo}, entrez le code reçu pour valider votre inscription.',
+                              'Un SMS a été envoyé au ${controller.phoneNumber}, entrez le code reçu pour valider votre inscription.',
                               style: bodyTextStyle,
                             ),
                           ),

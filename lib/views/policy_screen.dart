@@ -5,9 +5,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:get/get_navigation/src/routes/transitions_type.dart';
 import 'package:motopickupdriver/utils/colors.dart';
-import 'package:motopickupdriver/utils/navigations.dart';
 import 'package:motopickupdriver/utils/policies_list.dart';
-import 'package:motopickupdriver/utils/colors.dart';
 
 import 'home_page.dart';
 
@@ -19,7 +17,7 @@ class PolicyScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leading: InkWell(
-          onTap: () =>  Get.offAll(() => HomePage(), transition: Transition.leftToRight),
+          onTap: () =>  Get.offAll(() => const HomePage(), transition: Transition.leftToRight),
           child: Icon(
             Boxicons.bx_arrow_back,
             color: primary,
@@ -58,7 +56,7 @@ class PolicyScreen extends StatelessWidget {
               15.verticalSpace,
               ListView.separated(
                 shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 itemBuilder: (context, index) => Container(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -80,7 +78,7 @@ class PolicyScreen extends StatelessWidget {
                       if (policies[index].infos != null)
                         ListView.separated(
                             shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
+                            physics: const NeverScrollableScrollPhysics(),
                             itemBuilder: (context, ide) => Text(
                                   "- ${policies[index].infos![ide]}",
                                   style: TextStyle(

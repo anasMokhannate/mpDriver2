@@ -7,10 +7,11 @@ import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:motopickupdriver/utils/models/ListItems.dart';
-import 'package:motopickupdriver/utils/models/userBase.dart';
 import 'package:motopickupdriver/utils/queries.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
+
+import 'models/user.dart';
 
 handlerPermission() async {
   var permission = await Permission.sensors.status;
@@ -45,13 +46,13 @@ List<DropdownMenuItem<ListItem>>? buildDropDownMenuItems(List listItems) {
   return items;
 }
 
-Future<UserBase?> getUserFromMemory() async {
-  UserBase user = UserBase.fromJson(await SessionManager().get("currentUser"));
+Future<MpUser?> getUserFromMemory() async {
+  MpUser user = MpUser.fromJson(await SessionManager().get("currentUser"));
   return user;
 }
 
-Future<UserBase?> getCurrentUser() async {
-  UserBase? currentUser;
+Future<MpUser?> getCurrentUser() async {
+  MpUser? currentUser;
   User firebaseUser = FirebaseAuth.instance.currentUser!;
   await getUser(firebaseUser.uid).then((value) async {
     currentUser = value;
@@ -59,10 +60,10 @@ Future<UserBase?> getCurrentUser() async {
   return currentUser;
 }
 
-Future<bool> saveCurrentUser(UserBase userBase) async {
+Future<bool> saveCurrentUser(MpUser MpUser) async {
   bool done = false;
   await SessionManager()
-      .set('currentUser', userBase)
+      .set('currentUser', MpUser)
       .then((value) => done = true);
 
   return done;
@@ -119,13 +120,13 @@ Future<void> initOneSignal() async {
 }
 
 updateFcm() async {
-  UserBase value = UserBase.fromJson(await SessionManager().get('currentUser'));
+  MpUser value = MpUser.fromJson(await SessionManager().get('currentUser'));
   String fcm = await SessionManager().get('driver_fcm');
   await FirebaseFirestore.instance
       .collection('drivers')
-      .doc(value.driver_uid)
+      .doc(value.uid)
       .update({'driver_fcm': fcm});
-  value.driver_fcm = fcm;
+ // value.driver_fcm = fcm;
   await SessionManager().set('currentUser', value);
 }
 

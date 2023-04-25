@@ -8,24 +8,23 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:motopickupdriver/components/inputs.dart';
-import 'package:motopickupdriver/controllers/auth/login_page.dart';
 import 'package:motopickupdriver/utils/buttons.dart';
 import 'package:motopickupdriver/utils/colors.dart';
 import 'package:motopickupdriver/utils/typography.dart';
-import 'package:motopickupdriver/views/auth/change_phone_number.dart';
-import 'package:motopickupdriver/views/auth/forgot_password.dart';
 import 'package:motopickupdriver/views/auth/register_page.dart';
 import 'package:motopickupdriver/views/welcome_page.dart';
 
+import '../../controllers/auth/login_controller.dart';
+
 class LoginPage extends StatelessWidget {
   LoginPage({Key? key}) : super(key: key);
-  var controller = Get.put(LoginPageController());
+  var controller = Get.put(LoginController());
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: GetBuilder<LoginPageController>(
-        init: LoginPageController(),
+      child: GetBuilder<LoginController>(
+        init: LoginController(),
         builder: (value) => LoadingOverlay(
           isLoading: controller.loading.value,
           color: dark,
@@ -125,8 +124,8 @@ class LoginPage extends StatelessWidget {
                       alignment: Alignment.centerRight,
                       child: InkWell(
                         onTap: () {
-                          Get.to(() => ForgotPassword(),
-                              transition: Transition.rightToLeft);
+                          // Get.to(() => ForgotPassword(),
+                          //     transition: Transition.rightToLeft);
                         },
                         child: Text(
                           'Mot de passe oubliée?',
@@ -145,8 +144,8 @@ class LoginPage extends StatelessWidget {
                   40.verticalSpace,
                   InkWell(
                     onTap: () {
-                      Get.to(() => ChangePhoneNumberNoAuth(),
-                          transition: Transition.rightToLeft);
+                      // Get.to(() => ChangePhoneNumberNoAuth(),
+                          // transition: Transition.rightToLeft);
                     },
                     child: Center(
                       child: Text(

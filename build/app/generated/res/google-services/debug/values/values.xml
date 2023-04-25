@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="default_web_client_id" translatable="false">641117441433-b9pgkvt8a177of2m4cbblqsaesiou9kf.apps.googleusercontent.com</string>
+    <string name="gcm_defaultSenderId" translatable="false">641117441433</string>
+    <string name="google_api_key" translatable="false">AIzaSyDd8r9RuiFo-KE9UDdwK0k3VcDUmtAR09c</string>
+    <string name="google_app_id" translatable="false">1:641117441433:android:4c91adeb928d0380d4d708</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyDd8r9RuiFo-KE9UDdwK0k3VcDUmtAR09c</string>
+    <string name="google_storage_bucket" translatable="false">motopickup-353120.appspot.com</string>
+    <string name="project_id" translatable="false">motopickup-353120</string>
+</resources>

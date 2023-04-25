@@ -8,7 +8,6 @@ import 'package:in_app_update/in_app_update.dart';
 import 'package:motopickupdriver/utils/services.dart';
 import 'package:motopickupdriver/views/completeYourProfile/complete_profile.dart';
 import 'package:motopickupdriver/views/onboarding/onboarding_page.dart';
-import 'package:motopickupdriver/views/updatePage.dart';
 
 import '../views/congrats_page.dart';
 import '../views/home_page.dart';
@@ -24,10 +23,10 @@ Future<Widget?> initWidget() async {
   if (isLoggedIn) {
     try {
       await getCurrentUser().then((value) async {
-      print(value!.driver_email);
-      isActivated = value!.is_activated_account;
-      isVerified = value.is_verified_account;
-      id = value.driver_uid;
+      print(value!.email);
+      isActivated = value.isActivatedAccount!;
+      isVerified = value.isVerifiedAccount!;
+      id = value.uid!;
     });
 
     if (isVerified) {
@@ -68,7 +67,7 @@ goBackOff(Widget target) {
 
 AppUpdateInfo? _updateInfo;
 
-GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey();
+GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
 
 bool _flexibleUpdateAvailable = false;
 
