@@ -50,6 +50,12 @@ Future<Widget?> initWidget() async {
             case 'AddingMoto':
               mainPage = AddingMoto();
               break;
+            case 'AddingPhotoMoto':
+              mainPage = AddingMoto();
+              break;  
+            case 'VerifyIdentity':
+              mainPage = AddingMoto();
+              break;  
             default:
               mainPage = WelcomeScreen();
           }

@@ -97,7 +97,7 @@ class CompleteProfileController extends GetxController {
             completeUser(userBase!);
             
             Get.to(() => UploadImage(), transition: Transition.rightToLeft);
-            loading.toggle();
+            //loading.toggle();
             update();
           });
         } else if (userBase!.authType == "Google") {

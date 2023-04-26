@@ -29,7 +29,7 @@ class MpUser {
   int? succededTrip;
   int? plannedTrip;
   double? note;
-  List<Moto>? motos;
+  List? motos;
   String? identityCardNumber;
   String? identityCardPicture;
   String? identityCardExpirationDate;

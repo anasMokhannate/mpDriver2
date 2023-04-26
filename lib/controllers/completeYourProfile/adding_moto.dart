@@ -25,9 +25,7 @@ class AddingMotoController extends GetxController {
   TextEditingController color = TextEditingController();
 
   List<DropdownMenuItem<ListItem>>? dropdowntypeItems;
-
   ListItem? type;
-
   List<ListItem> typeItems = [
     ListItem("-", "Sélectionnez Type"),
   ];
@@ -39,7 +37,6 @@ class AddingMotoController extends GetxController {
     super.onInit();
     await getUserFromMemory().then((value) async {
       userBase = value;
-      userBase!.motos = [];
     });
     await getMoto();
     dropdowntypeItems = buildDropDownMenuItems(typeItems);
@@ -99,16 +96,12 @@ class AddingMotoController extends GetxController {
         if (userBase!.motos == null) {
           userBase!.motos = [];
         }
-        userBase!.motos!.add(moto);
-        print("from list "+userBase!.motos![0].toString());
-        print(moto.toString());
 
-        userBase!.currentOrderDriver = "AddingPhotoMoto";
-        await SessionManager().set("currentUser", userBase);
-        print("from session "+getUserFromMemory().toString());
+        userBase!.motos!.add(moto.toJson());
+        userBase!.currentPageDriver = "addingOhotoMoto";
+        saveCurrentUser(userBase!);
         completeUser(userBase!);
-        loading.toggle();
-        update();
+
 
         await Get.to(() => AddingPhotoMoto());
       }
