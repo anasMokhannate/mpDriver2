@@ -140,6 +140,7 @@ MERGED from [:in_app_update] C:\src\Projects\MP-driver\build\in_app_update\inter
 MERGED from [:url_launcher_android] C:\src\Projects\MP-driver\build\url_launcher_android\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-16:12
 MERGED from [:google_sign_in_android] C:\src\Projects\MP-driver\build\google_sign_in_android\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-11:12
 MERGED from [:flutter_native_splash] C:\src\Projects\MP-driver\build\flutter_native_splash\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-9:12
+MERGED from [:connectivity_plus] C:\src\Projects\MP-driver\build\connectivity_plus\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-11:12
 MERGED from [:permission_handler_android] C:\src\Projects\MP-driver\build\permission_handler_android\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-9:12
 MERGED from [com.onesignal:OneSignal:4.8.2] C:\Users\acer\.gradle\caches\transforms-3\6c5885f72012f03a93fe71ef2cbcdc9f\transformed\jetified-OneSignal-4.8.2\AndroidManifest.xml:2:1-136:12
 MERGED from [com.google.android.play:app-update-ktx:2.0.1] C:\Users\acer\.gradle\caches\transforms-3\4e3deafefa400937d15a3ba77502727c\transformed\jetified-app-update-ktx-2.0.1\AndroidManifest.xml:2:1-14:12
@@ -253,6 +254,8 @@ INJECTED from C:\src\Projects\MP-driver\android\app\src\debug\AndroidManifest.xm
 		ADDED from C:\src\Projects\MP-driver\android\app\src\main\AndroidManifest.xml:1:11-69
 uses-permission#android.permission.ACCESS_NETWORK_STATE
 ADDED from C:\src\Projects\MP-driver\android\app\src\main\AndroidManifest.xml:3:5-79
+MERGED from [:connectivity_plus] C:\src\Projects\MP-driver\build\connectivity_plus\intermediates\merged_manifest\debug\AndroidManifest.xml:9:5-79
+MERGED from [:connectivity_plus] C:\src\Projects\MP-driver\build\connectivity_plus\intermediates\merged_manifest\debug\AndroidManifest.xml:9:5-79
 MERGED from [com.onesignal:OneSignal:4.8.2] C:\Users\acer\.gradle\caches\transforms-3\6c5885f72012f03a93fe71ef2cbcdc9f\transformed\jetified-OneSignal-4.8.2\AndroidManifest.xml:25:5-79
 MERGED from [com.onesignal:OneSignal:4.8.2] C:\Users\acer\.gradle\caches\transforms-3\6c5885f72012f03a93fe71ef2cbcdc9f\transformed\jetified-OneSignal-4.8.2\AndroidManifest.xml:25:5-79
 MERGED from [com.google.firebase:firebase-auth:21.1.0] C:\Users\acer\.gradle\caches\transforms-3\ff4a6f8a79f1c843e707f01dc2a2fdaf\transformed\jetified-firebase-auth-21.1.0\AndroidManifest.xml:24:5-79
@@ -401,6 +404,8 @@ MERGED from [:google_sign_in_android] C:\src\Projects\MP-driver\build\google_sig
 MERGED from [:google_sign_in_android] C:\src\Projects\MP-driver\build\google_sign_in_android\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [:flutter_native_splash] C:\src\Projects\MP-driver\build\flutter_native_splash\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [:flutter_native_splash] C:\src\Projects\MP-driver\build\flutter_native_splash\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
+MERGED from [:connectivity_plus] C:\src\Projects\MP-driver\build\connectivity_plus\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
+MERGED from [:connectivity_plus] C:\src\Projects\MP-driver\build\connectivity_plus\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [:permission_handler_android] C:\src\Projects\MP-driver\build\permission_handler_android\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [:permission_handler_android] C:\src\Projects\MP-driver\build\permission_handler_android\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [com.onesignal:OneSignal:4.8.2] C:\Users\acer\.gradle\caches\transforms-3\6c5885f72012f03a93fe71ef2cbcdc9f\transformed\jetified-OneSignal-4.8.2\AndroidManifest.xml:4:5-44

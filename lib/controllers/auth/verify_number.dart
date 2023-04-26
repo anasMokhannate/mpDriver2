@@ -1,12 +1,16 @@
 // ignore_for_file: file_names
 
 import 'dart:async';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:get/get.dart';
 
+import '../../utils/alert_dialog.dart';
+import '../../utils/models/user.dart';
+import '../../utils/queries.dart';
 import '../../views/completeYourProfile/complete_profile.dart';
 
 class VerfiyNumberController extends GetxController {
@@ -54,58 +58,55 @@ class VerfiyNumberController extends GetxController {
   }
 
   submit(context) async {
-    // if (code.text.isNotEmpty) {
-    //   loading.toggle();
-    //   update();
-    //   try {
-       
-    //     PhoneAuthCredential credential = PhoneAuthProvider.credential(
-    //         verificationId: verificationCode, smsCode: code.text);
-    //     AuthCredential emailCredential = EmailAuthProvider.credential(
-    //       email: email!,
-    //       password: password!,
-    //     );
-    //     UserCredential authResult =
-    //         await FirebaseAuth.instance.signInWithCredential(credential);
-    //     User? user = authResult.user;
-        
-    //     user!.linkWithCredential(emailCredential).then((value) async {
-    //       MpUser userBase = MpUser(
-    //         uid: user.uid,
-    //         email: email,
-    //         phoneNumber: phoneNumber,
-    //         authType: 'Phone',
-    //         isActivatedAccount: false,
-    //         currentPage: 'completeProfile',
-    //         isDriver: false,
-    //         lastLoginDate:
-    //             DateFormat("dd-MM-yyyy HH:mm", "Fr_fr").format(DateTime.now()),
-    //         registrationDate:
-    //             DateFormat("dd-MM-yyyy HH:mm", "Fr_fr").format(DateTime.now()),
-    //         isDeletedAccount: false,
-    //         isVerifiedAccount: true,
-    //       );
-    //       await SessionManager().set('currentUser', userBase);
-    //       await createUser(userBase);
-    //     });
+    if (code.text.isNotEmpty) {
+      loading.toggle();
+      update();
+      try {
+        PhoneAuthCredential credential = PhoneAuthProvider.credential(
+            verificationId: verificationCode, smsCode: code.text);
+        AuthCredential emailCredential = EmailAuthProvider.credential(
+          email: email!,
+          password: password!,
+        );
+        UserCredential authResult =
+            await FirebaseAuth.instance.signInWithCredential(credential);
+        User? user = authResult.user;
+        user!.linkWithCredential(emailCredential).then((value) async {
+          MpUser userBase = MpUser(
+            uid: user.uid,
+            email: email,
+            phoneNumber: phoneNumber,
+            authType: 'Phone',
+            isActivatedAccount: false,
+            currentPage: 'completeProfile',
+            isDriver: true,
+            lastLoginDate:
+                DateFormat("dd-MM-yyyy HH:mm", "Fr_fr").format(DateTime.now()),
+            registrationDate:
+                DateFormat("dd-MM-yyyy HH:mm", "Fr_fr").format(DateTime.now()),
+            isDeletedAccount: false,
+            isVerifiedAccount: true,
+          );
+          await SessionManager().set('currentUser', userBase);
+          await createUser(userBase);
+        });
 
         Get.offAll(() => CompleteProfile());
         loading.toggle();
         update();
 
-       
-  //     } catch (e) {
-  //       showAlertDialogOneButton(
-  //           context, "Code requis", "Veuillez entrer le bon code.", "Ok");
-  //       loading.toggle();
-  //       update();
-  //       Get.snackbar('catch', 'catch');
-  //     }
-  //   } else {
-  //     showAlertDialogOneButton(
-  //         context, "Code requis", "Veuillez entrer le bon code.", "Ok");
-  //   }
-  // }
+      } catch (e) {
+        showAlertDialogOneButton(
+            context, "Code requis", "Veuillez entrer le bon code.", "Ok");
+        loading.toggle();
+        update();
+        Get.snackbar('catch', 'catch');
+      }
+    } else {
+      showAlertDialogOneButton(
+          context, "Code requis", "Veuillez entrer le bon code.", "Ok");
+    }
+  }
 
   @override
   void onInit() async {
@@ -119,4 +120,5 @@ class VerfiyNumberController extends GetxController {
     startTimer();
     update();
   }
-}}
+  
+}

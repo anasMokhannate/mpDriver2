@@ -9,7 +9,7 @@ import 'package:motopickupdriver/utils/models/user.dart';
 
 Future createUser(MpUser user) async {
   final docUser =
-      FirebaseFirestore.instance.collection('drivers').doc(user.uid);
+      FirebaseFirestore.instance.collection('mp_users').doc(user.uid);
 
   await docUser.set(user.toJson());
 }
@@ -30,9 +30,10 @@ Future<String> getProvider(String email) async {
   print('provider: $provider');
   return provider;
 }
+
 Future completeUser(MpUser user) async {
   final docUser =
-      FirebaseFirestore.instance.collection('drivers').doc(user.uid);
+      FirebaseFirestore.instance.collection('mp_users').doc(user.uid);
   await docUser.update(user.toJson());
 }
 
@@ -50,7 +51,7 @@ Future<int> getUserStatus(uid) async {
 Future<MpUser> getUser(uid) async {
   MpUser? user;
   var docSnapshot =
-      await FirebaseFirestore.instance.collection('drivers').doc(uid).get();
+      await FirebaseFirestore.instance.collection('mp_users').doc(uid).get();
   if (docSnapshot.exists) {
     Map<String, dynamic>? data = docSnapshot.data();
     user = MpUser.fromJson(data!);
@@ -59,52 +60,47 @@ Future<MpUser> getUser(uid) async {
 }
 
 Future<String> checkPhoneNumber(phoneNo) async {
-  String message = "not-found";
+  String message = "";
 
   await FirebaseFirestore.instance
-      .collection('drivers')
-      .where('driver_phone_number', isEqualTo: phoneNo)
+      .collection('mp_users')
+      .where('phone_number', isEqualTo: phoneNo)
       .where('is_deleted_account', isEqualTo: false)
       .snapshots()
       .first
       .then((value) {
-    if (value.size != 0) message = "found-in-driver";
-  });
-
-  await FirebaseFirestore.instance
-      .collection('users')
-      .where('customer_phone_number', isEqualTo: phoneNo)
-      .where('is_deleted_account', isEqualTo: false)
-      .snapshots()
-      .first
-      .then((value) {
-    if (value.size != 0) message = "found-in-users";
+    if (value.size != 0) {
+      message = "found";
+    }
+    else{
+      message = "not-found";
+    }
   });
 
   return message;
 }
+
 Future<String> checkPhoneNumber2(phoneNo) async {
   String message = "not-found";
 
+  await FirebaseFirestore.instance
+      .collection('mp_users')
+      .where('phone_number', isEqualTo: phoneNo)
+      .where('is_deleted_account', isEqualTo: false)
+      .snapshots()
+      .first
+      .then((value) {
+    if (value.size != 0) message = "found";
+  });
 
   await FirebaseFirestore.instance
-      .collection('users')
-      .where('customer_phone_number', isEqualTo: phoneNo)
+      .collection('mp_users')
+      .where('phone_number', isEqualTo: phoneNo)
       .where('is_deleted_account', isEqualTo: false)
       .snapshots()
       .first
       .then((value) {
-    if (value.size != 0) message = "found-in-users";
-  });
-  
-  await FirebaseFirestore.instance
-      .collection('drivers')
-      .where('driver_phone_number', isEqualTo: phoneNo)
-      .where('is_deleted_account', isEqualTo: false)
-      .snapshots()
-      .first
-      .then((value) {
-    if (value.size != 0) message = "found-in-driver";
+    if (value.size != 0) message = "found";
   });
 
   return message;
@@ -114,13 +110,13 @@ Future<String> loginWithPhone(phone) async {
   String? email;
   try {
     await FirebaseFirestore.instance
-        .collection('drivers')
-        .where('driver_phone_number', isEqualTo: phone)
+        .collection('mp_users')
+        .where('phone_number', isEqualTo: phone)
         .where('is_deleted_account', isEqualTo: false)
         .snapshots()
         .first
         .then((value) {
-      email = value.docs.first.get('driver_email');
+      email = value.docs.first.get('email');
     });
   } catch (e) {
     email = 'usernoexistawsa@gmail.com';
@@ -131,11 +127,11 @@ Future<String> loginWithPhone(phone) async {
 
 Future deleteUser(MpUser user, reason) async {
   final docUser =
-      FirebaseFirestore.instance.collection('drivers').doc(user.uid);
+      FirebaseFirestore.instance.collection('mp_users').doc(user.uid);
 
   await docUser.update({
     'is_deleted_account': true,
-    'reason_for_delete': reason ?? '-',
+    // 'reason_for_delete': reason ?? '-',
     'is_activated_account': false,
     'is_verified_account': false
   });
@@ -154,22 +150,19 @@ Future addDriverToOrder(MpUser driver, orderId) async {
   final docUser = FirebaseFirestore.instance
       .collection('orders')
       .doc(orderId)
-      .collection('drivers')
+      .collection('mp_users')
       .add(driver.toJson());
 
   FirebaseFirestore.instance.collection('orders').doc(orderId).update(({
-        'drivers_accepted': FieldValue.arrayUnion([driver.uid])
+        'mp_users_accepted': FieldValue.arrayUnion([driver.uid])
       }));
 }
 
 Future<bool> checkEmail(email) async {
   bool message = false;
-  //String message = "not-found";
   await FirebaseFirestore.instance
       .collection('mp_users')
       .where('email', isEqualTo: email)
-      //.where('auth_type', whereIn: ["Phone", "Facebook", "Google"])
-      // .where('is_deleted_account', isEqualTo: false)
       .snapshots()
       .first
       .then((value) {
@@ -185,8 +178,8 @@ Future<bool> checkEmail(email) async {
 Future<bool> isUserExist(phoneNo) async {
   bool exist = false;
   await FirebaseFirestore.instance
-      .collection('drivers')
-      .where('driver_phone_number', isEqualTo: phoneNo)
+      .collection('mp_users')
+      .where('phone_number', isEqualTo: phoneNo)
       .where('is_deleted_account', isEqualTo: false)
       .snapshots()
       .first
@@ -214,30 +207,32 @@ Future refuserOrder(MpUser driver, orderId) async {
   FirebaseFirestore.instance.collection('orders').doc(orderId).update(({
         'is_canceled_by_driver': true,
         'status': 0,
-        'drivers_declined': FieldValue.arrayUnion([driver.uid])
+        'mp_users_declined': FieldValue.arrayUnion([driver.uid])
       }));
-      String type = "";
-       var docSnapshot2 =
+  String type = "";
+  var docSnapshot2 =
       await FirebaseFirestore.instance.collection('orders').doc(orderId).get();
-        if (docSnapshot2.exists) {
+  if (docSnapshot2.exists) {
     Map<String, dynamic>? data = docSnapshot2.data();
-    type= data!['order_type'].toString();  
-    type != '0'?
-  FirebaseFirestore.instance
-      .collection('drivers')
-      .doc(driver.uid)
-      .update({
-    "is_on_order": false,
-    "driver_cancelled_trip": FieldValue.increment(1),
-  }):FirebaseFirestore.instance
-      .collection('drivers')
-      .doc(driver.uid)
-      .update({
-    "is_on_order": false,
-    "driver_cancelled_delivery": FieldValue.increment(1),
-  });
+    type = data!['order_type'].toString();
+    type != '0'
+        ? FirebaseFirestore.instance
+            .collection('mp_users')
+            .doc(driver.uid)
+            .update({
+            "is_on_order": false,
+            "driver_cancelled_trip": FieldValue.increment(1),
+          })
+        : FirebaseFirestore.instance
+            .collection('mp_users')
+            .doc(driver.uid)
+            .update({
+            "is_on_order": false,
+            "driver_cancelled_delivery": FieldValue.increment(1),
+          });
+  }
 }
-}
+
 Future updateStatusOrder(orderId) async {
   FirebaseFirestore.instance
       .collection('orders')
@@ -255,7 +250,7 @@ Future updateSuccedOrder(orderId) async {
 Future<bool> userExist(uid) async {
   bool exist = false;
   await FirebaseFirestore.instance
-      .collection('drivers')
+      .collection('mp_users')
       .where('driver_uid', isEqualTo: uid)
       .where('is_deleted_account', isEqualTo: false)
       .snapshots()
