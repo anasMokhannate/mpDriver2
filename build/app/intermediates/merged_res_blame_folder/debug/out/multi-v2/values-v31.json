@@ -1,17 +1,17 @@
 {
     "logs": [
         {
-            "outputFile": "D:\\Projects\\Moto_Pickup\\mpDriver2\\build\\app\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-v31\\values-v31.xml",
+            "outputFile": "C:\\src\\Projects\\MP-driver\\build\\app\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-v31\\values-v31.xml",
             "map": [
                 {
-                    "source": "D:\\Projects\\Moto_Pickup\\mpDriver2\\android\\app\\src\\main\\res\\values-v31\\styles.xml",
+                    "source": "C:\\src\\Projects\\MP-driver\\android\\app\\src\\main\\res\\values-v31\\styles.xml",
                     "from": {
                         "startLines": "3,15",
                         "startColumns": "4,4",
-                        "startOffsets": "176,915",
+                        "startOffsets": "173,900",
                         "endLines": "8,17",
                         "endColumns": "12,12",
-                        "endOffsets": "557,1081"
+                        "endOffsets": "549,1064"
                     },
                     "to": {
                         "startLines": "2,8",

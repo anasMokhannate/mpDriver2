@@ -12,6 +12,7 @@ import 'package:motopickupdriver/views/completeYourProfile/complete_profile.dart
 import 'package:motopickupdriver/views/onboarding/onboarding_page.dart';
 
 import '../views/auth/register_page.dart';
+import '../views/completeYourProfile/adding_moto.dart';
 import '../views/completeYourProfile/upload_image.dart';
 import '../views/congrats_page.dart';
 import '../views/home_page.dart';
@@ -35,7 +36,7 @@ Future<Widget?> initWidget() async {
           print('object ${userFromDb.currentPageDriver}');
           switch (userFromDb.currentPageDriver) {
             case 'homePage':
-              mainPage = HomePage();
+              mainPage = const HomePage();
               break;
             case 'completeProfile':
               mainPage = CompleteProfile();
@@ -45,7 +46,9 @@ Future<Widget?> initWidget() async {
               break;
             case 'registerPage':
               mainPage = RegisterPage();
-
+              break;
+            case 'AddingMoto':
+              mainPage = AddingMoto();
               break;
             default:
               mainPage = WelcomeScreen();

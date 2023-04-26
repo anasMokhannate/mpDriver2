@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-#Wed Apr 26 09:20:40 WET 2023
-=======
-#Wed Apr 26 09:14:30 WET 2023
->>>>>>> 5d5bfe6e3264c80d1268b8e92b4d5a0246cd1ab2
+#Wed Apr 26 15:49:43 WET 2023
 path.4=4/classes.dex
 path.3=1/classes.dex
 path.2=0/classes.dex
@@ -10,17 +6,17 @@ path.1=0/classes.dex
 path.6=classes3.dex
 path.5=classes2.dex
 path.0=classes.dex
-base.4=D\:\\Projects\\Moto_Pickup\\mpDriver2\\build\\app\\intermediates\\dex\\debug\\mergeProjectDexDebug\\4\\classes.dex
-base.3=D\:\\Projects\\Moto_Pickup\\mpDriver2\\build\\app\\intermediates\\dex\\debug\\mergeProjectDexDebug\\1\\classes.dex
-base.2=D\:\\Projects\\Moto_Pickup\\mpDriver2\\build\\app\\intermediates\\dex\\debug\\mergeProjectDexDebug\\0\\classes.dex
-base.1=D\:\\Projects\\Moto_Pickup\\mpDriver2\\build\\app\\intermediates\\dex\\debug\\mergeLibDexDebug\\0\\classes.dex
-base.0=D\:\\Projects\\Moto_Pickup\\mpDriver2\\build\\app\\intermediates\\dex\\debug\\mergeExtDexDebug\\classes.dex
+base.4=C\:\\src\\Projects\\MP-driver\\build\\app\\intermediates\\dex\\debug\\mergeProjectDexDebug\\4\\classes.dex
+base.3=C\:\\src\\Projects\\MP-driver\\build\\app\\intermediates\\dex\\debug\\mergeProjectDexDebug\\1\\classes.dex
+base.2=C\:\\src\\Projects\\MP-driver\\build\\app\\intermediates\\dex\\debug\\mergeProjectDexDebug\\0\\classes.dex
+base.1=C\:\\src\\Projects\\MP-driver\\build\\app\\intermediates\\dex\\debug\\mergeLibDexDebug\\0\\classes.dex
+base.0=C\:\\src\\Projects\\MP-driver\\build\\app\\intermediates\\dex\\debug\\mergeExtDexDebug\\classes.dex
 renamed.3=classes4.dex
 renamed.2=classes3.dex
 renamed.1=classes2.dex
 renamed.0=classes.dex
 renamed.6=classes7.dex
 renamed.5=classes6.dex
-base.6=D\:\\Projects\\Moto_Pickup\\mpDriver2\\build\\app\\intermediates\\dex\\debug\\mergeExtDexDebug\\classes3.dex
+base.6=C\:\\src\\Projects\\MP-driver\\build\\app\\intermediates\\dex\\debug\\mergeExtDexDebug\\classes3.dex
 renamed.4=classes5.dex
-base.5=D\:\\Projects\\Moto_Pickup\\mpDriver2\\build\\app\\intermediates\\dex\\debug\\mergeExtDexDebug\\classes2.dex
+base.5=C\:\\src\\Projects\\MP-driver\\build\\app\\intermediates\\dex\\debug\\mergeExtDexDebug\\classes2.dex

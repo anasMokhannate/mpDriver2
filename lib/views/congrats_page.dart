@@ -46,7 +46,7 @@ class Congrats extends StatelessWidget {
                 )
               : StreamBuilder(
                   stream: FirebaseFirestore.instance
-                      .collection("drivers")
+                      .collection("mp_users")
                       .doc(controller.userBase!.uid)
                       .snapshots(),
                   builder: (context, snapshot) {

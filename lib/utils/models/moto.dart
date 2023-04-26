@@ -1,22 +1,22 @@
 // ignore_for_file: non_constant_identifier_names
 
 class Moto {
-  String motocycle_brand;
-  String motocycle_model;
-  String motocycle_color;
-  String motocycle_type;
-  String motocycle_imm;
-  String motocycle_photo;
-  bool motocycle_status;
+  String? motocycle_brand;
+  String? motocycle_model;
+  String? motocycle_color;
+  String? motocycle_type;
+  String? motocycle_imm;
+  String? motocycle_photo;
+  bool? motocycle_status;
 
   Moto({
-    required this.motocycle_brand,
-    required this.motocycle_model,
-    required this.motocycle_color,
-    required this.motocycle_type,
-    required this.motocycle_imm,
-    required this.motocycle_photo,
-    required this.motocycle_status,
+    this.motocycle_brand,
+    this.motocycle_model,
+    this.motocycle_color,
+    this.motocycle_type,
+    this.motocycle_imm,
+    this.motocycle_photo,
+    this.motocycle_status,
   });
 
   factory Moto.fromJson(Map<String, dynamic> json) {
@@ -40,4 +40,9 @@ class Moto {
         'motocycle_photo': motocycle_photo,
         'motocycle_status': motocycle_status,
       };
+
+  @override
+  String toString() {
+    return toJson().toString();
+  }
 }

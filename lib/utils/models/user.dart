@@ -1,4 +1,5 @@
 import 'config-params.dart';
+import 'moto.dart';
 
 class MpUser {
   String? fullName;
@@ -28,7 +29,7 @@ class MpUser {
   int? succededTrip;
   int? plannedTrip;
   double? note;
-  List<MotoType>? mototype;
+  List<Moto>? motos;
   String? identityCardNumber;
   String? identityCardPicture;
   String? identityCardExpirationDate;
@@ -74,7 +75,7 @@ class MpUser {
       this.succededTrip,
       this.plannedTrip,
       this.note,
-      this.mototype,
+      this.motos,
       this.identityCardNumber,
       this.identityCardPicture,
       this.identityCardExpirationDate,
@@ -121,11 +122,7 @@ class MpUser {
       succededTrip: json?['succeded_trip'],
       plannedTrip: json?['planned_trip'],
       note: json?['note'] ?? 0.0,
-      mototype: json?['mototype'] != null
-          ? (json?['mototype'] as List)
-              .map((i) => MotoType.fromJson(i))
-              .toList()
-          : null,
+      motos: json?['motos'],
       identityCardNumber: json?['identity_card_number'],
       identityCardPicture: json?['identity_card_picture'],
       identityCardExpirationDate: json?['identity_card_expiration_date'],
@@ -174,9 +171,7 @@ class MpUser {
     data['succeded_trip'] = succededTrip;
     data['planned_trip'] = plannedTrip;
     data['note'] = note ?? 0.0;
-    if (mototype != null) {
-      data['mototype'] = mototype!.map((v) => v.toJson()).toList();
-    }
+    data['motos'] = motos;
     data['identity_card_number'] = identityCardNumber;
     data['identity_card_picture'] = identityCardPicture;
     data['identity_card_expiration_date'] = identityCardExpirationDate;
@@ -194,5 +189,10 @@ class MpUser {
     data['current_page_driver'] = currentPageDriver;
     data['auth_type'] = authType;
     return data;
+  }
+  
+  @override
+  String toString() {
+    return toJson.toString();
   }
 }

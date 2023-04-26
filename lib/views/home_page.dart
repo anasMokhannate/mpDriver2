@@ -270,10 +270,10 @@ class _HomePageState extends State<HomePage> {
                                                         documentSnapshot[
                                                                 "order_arrival_location"]
                                                             ["longitude"]);
-                                                    addDriverToOrder(
-                                                        controller.userBase!,
-                                                        documentSnapshot[
-                                                            "order_id"]);
+                                                    // addDriverToOrder(
+                                                    //     controller.userBase!,
+                                                    //     documentSnapshot[
+                                                    //         "order_id"]);
                                                     controller.orderID =
                                                         documentSnapshot[
                                                             "order_id"];
@@ -1303,9 +1303,9 @@ class _HomePageState extends State<HomePage> {
                                                                 //     DateTime.now().add(Duration(
                                                                 //         hours:
                                                                 //             ttime.toInt())));
-                                                                await updateStatusOrder(
-                                                                    controller
-                                                                        .orderID);
+                                                                // await updateStatusOrder(
+                                                                //     controller
+                                                                //         .orderID);
                                                                 controller.updateMyLocation(
                                                                     documentSnapshot[
                                                                         "order_id"]);
@@ -1324,9 +1324,9 @@ class _HomePageState extends State<HomePage> {
                                                                       //     [fcm],
                                                                       //     "voyage est finis",
                                                                       //     "au revoir");
-                                                                      updateSuccedOrder(
-                                                                          controller
-                                                                              .orderID);
+                                                                      // updateSuccedOrder(
+                                                                      //     controller
+                                                                      //         .orderID);
                                                                       controller
                                                                               .startCourse =
                                                                           false;

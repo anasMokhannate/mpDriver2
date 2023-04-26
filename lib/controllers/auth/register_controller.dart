@@ -77,7 +77,8 @@ class RegisterController extends GetxController {
             loading.toggle();
             update();
           } else {
-            await checkPhoneNumber(indicatif + phone.text).then((message) async {
+            await checkPhoneNumber(indicatif + phone.text)
+                .then((message) async {
               if (message == 'found') {
                 showAlertDialogOneButton(
                   context,
@@ -89,7 +90,7 @@ class RegisterController extends GetxController {
                 update();
               } else {
                 String phoneNumber = indicatif + phone.text;
-                SessionManager().set('email', email.text);
+                // SessionManager().set('email', email.text);
                 await FirebaseAuth.instance.verifyPhoneNumber(
                   phoneNumber: indicatif + phone.text,
                   verificationCompleted: (phonesAuthCredentials) async {},
@@ -107,6 +108,7 @@ class RegisterController extends GetxController {
                   },
                   codeSent: (verificationId, resendingToken) async {
                     await SessionManager().set('phone', phoneNumber);
+                    await SessionManager().set('email', email.text);
                     await SessionManager().set('password', password.text);
 
                     Get.to(() => VerfiyNumber(),
@@ -122,67 +124,6 @@ class RegisterController extends GetxController {
           }
         });
       }
-
-      // if (value) {
-
-      //   await checkEmail(email.text).then((value) {
-      //     if (value) {
-      //       showAlertDialogOneButton(
-      //         context,
-      //         "Email déjà utilisé!",
-      //         "Veuillez saisir un autre Email, car celui-ci est déjà utilisé par un autre compte, ou essayez de vous connecter.",
-      //         "Ok",
-      //       );
-      //       loading.toggle();
-      //       update();
-      //     } else {
-      //       SessionManager().set('email', email.text);
-      //     }
-      //   });
-      //   String phoneNumber = indicatif + phone.text;
-      //   await checkPhoneNumber(phoneNumber).then((message) async {
-      //     if (message == "found-in-users") {
-      //       showAlertDialogOneButton(
-      //         context,
-      //         "Numéro de téléphone déjà utilisé!",
-      //         "Veuillez saisir un autre numéro de téléphone, car celui-ci est déjà utilisé par un autre compte, ou essayez de vous connecter.",
-      //         "Ok",
-      //       );
-      //       loading.toggle();
-      //       update();
-      //     }
-      //     // await checkEmail(email.text).then((message) async {}
-      //     else {
-      //       await FirebaseAuth.instance.verifyPhoneNumber(
-      //         phoneNumber: indicatif + phone.text,
-      //         verificationCompleted: (phonesAuthCredentials) async {},
-      //         verificationFailed: (FirebaseAuthException e) async {
-      //           loading.toggle();
-      //           update();
-      //           if (e.code == 'too-many-requests') {
-      //             showAlertDialogOneButton(
-      //               context,
-      //               "Réessayez plus tard",
-      //               "Nous avons bloqué toutes les demandes de cet appareil en raison d'une activité inhabituelle",
-      //               "Ok",
-      //             );
-      //           }
-      //         },
-      //         codeSent: (verificationId, resendingToken) async {
-      //           await SessionManager().set('phone', phoneNumber);
-      //           await SessionManager().set('password', password.text);
-
-      //           Get.to(() => VerfiyNumber(),
-      //               arguments: verificationId,
-      //               transition: Transition.rightToLeft);
-      //           loading.toggle();
-      //           update();
-      //         },
-      //         codeAutoRetrievalTimeout: (verificationId) async {},
-      //       );
-      //     }
-      //   });
-      // }
     });
   }
 }

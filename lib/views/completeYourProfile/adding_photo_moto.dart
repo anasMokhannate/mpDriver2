@@ -93,10 +93,10 @@ class AddingPhotoMoto extends StatelessWidget {
                             )
                           : ClipRRect(
                               borderRadius: BorderRadius.circular(12),
-                              child: Image.file(
-                                controller.image!,
-                                fit: BoxFit.cover,
-                              ),
+                              // child: Image.file(
+                              //   controller.image!,
+                              //   fit: BoxFit.cover,
+                              // ),
                             ),
                     ),
                   ),

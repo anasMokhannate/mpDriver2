@@ -68,7 +68,6 @@ Future<bool> saveCurrentUser(MpUser userBase) async {
   await SessionManager()
       .set('currentUser', userBase)
       .then((value) => done = true);
-
   return done;
 }
 

@@ -7,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:get/get.dart';
+import 'package:motopickupdriver/utils/services.dart';
 
 import '../../utils/alert_dialog.dart';
 import '../../utils/models/user.dart';
@@ -59,8 +60,8 @@ class VerfiyNumberController extends GetxController {
 
   submit(context) async {
     if (code.text.isNotEmpty) {
-      loading.toggle();
-      update();
+      // loading.toggle();
+      // update();
       try {
         PhoneAuthCredential credential = PhoneAuthProvider.credential(
             verificationId: verificationCode, smsCode: code.text);
@@ -78,8 +79,9 @@ class VerfiyNumberController extends GetxController {
             phoneNumber: phoneNumber,
             authType: 'Phone',
             isActivatedAccount: false,
+            currentPageClient: 'completeProfile',
             currentPageDriver: 'completeProfile',
-            isDriver: true,
+            isDriver: false,
             lastLoginDate:
                 DateFormat("dd-MM-yyyy HH:mm", "Fr_fr").format(DateTime.now()),
             registrationDate:
@@ -87,14 +89,16 @@ class VerfiyNumberController extends GetxController {
             isDeletedAccount: false,
             isVerifiedAccount: true,
           );
-          await SessionManager().set('currentUser', userBase);
+          await saveCurrentUser(userBase).then((value) {
+            print(value);
+          });
           await createUser(userBase);
         });
 
         Get.offAll(() => CompleteProfile());
         loading.toggle();
         update();
-
+        
       } catch (e) {
         showAlertDialogOneButton(
             context, "Code requis", "Veuillez entrer le bon code.", "Ok");
@@ -112,11 +116,13 @@ class VerfiyNumberController extends GetxController {
   void onInit() async {
     super.onInit();
     phoneNumber = await SessionManager().get('phone');
+    print (phoneNumber);
     password = await SessionManager().get('password');
+    print(password);
     email = await SessionManager().get('email');
+    print(email);
     verificationCode = Get.arguments;
     isTrue = false.obs;
-
     startTimer();
     update();
   }

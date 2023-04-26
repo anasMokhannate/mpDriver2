@@ -750,7 +750,7 @@ class _OrdersCardState extends State<OrdersCard> {
                 children: [
                   InkWell(
                     onTap: () {
-                      refuserOrder(widget.drive, widget.idOrder);
+                    //  refuserOrder(widget.drive, widget.idOrder);
                     },
                     child: Container(
                       height: 40.h,

@@ -349,4 +349,9 @@ class WelcomeController extends GetxController {
   //   // }
   // }
   //=============================================================================================
+  @override
+  void onInit() {
+    // SessionManager().remove("currentUser");
+    super.onInit();
+  }
 }
