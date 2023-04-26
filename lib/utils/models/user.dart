@@ -42,11 +42,12 @@ class MpUser {
   List<String>? fcmList;
   String? currentOrderDriver;
   String? currentOrderCustomer;
-  String? currentPage;
+  String? currentPageClient;
+  String? currentPageDriver;
   String? authType;
 
-  MpUser({
-      this.fullName,
+  MpUser(
+      {this.fullName,
       this.uid,
       this.email,
       this.sexe,
@@ -87,59 +88,11 @@ class MpUser {
       this.fcmList,
       this.currentOrderDriver,
       this.currentOrderCustomer,
-      this.currentPage,
-      this.authType
-      });
+      this.currentPageClient,
+      this.currentPageDriver,
+      this.authType});
 
   factory MpUser.fromJson(Map<String, dynamic>? json) {
-    // fullName = json?['full_name'];
-    // uid = json?['uid'];
-    // email = json?['email'];
-    // sexe = json?['sexe'];
-    // dateNaissance = json?['date_naissance'];
-    // phoneNumber = json?['phone_number'];
-    // profilePicture = json?['profile_picture'];
-    // registrationDate = json?['registration_date'];
-    // lastLoginDate = json?['last_login_date'];
-    // currentCity = json?['current_city'];
-    // latitude = json?['latitude'];
-    // longitude = json?['longitude'];
-    // isDeletedAccount = json?['is_deleted_account'];
-    // isActivatedAccount = json?['is_activated_account'];
-    // isVerifiedAccount = json?['is_verified_account'];
-    // isBlacklistedAccount = json?['is_blacklisted_account'];
-    // isOnline = json?['is_online'];
-    // isOnOrder = json?['is_on_order'];
-    // isPasswordChange = json?['is_password_change'];
-    // isDriver = json?['is_driver'];
-    // cancelledDelivery = json?['cancelled_delivery'];
-    // succededDelivery = json?['succeded_delivery'];
-    // plannedDelivery = json?['planned_delivery'];
-    // cancelledTrip = json?['cancelled_trip'];
-    // succededTrip = json?['succeded_trip'];
-    // plannedTrip = json?['planned_trip'];
-    // note = json?['note'] ?? 0.0;
-    // if (json?['mototype'] != null) {
-    //   mototype = <MotoType>[];
-    //   json?['mototype'].forEach((v) {
-    //     mototype!.add(new MotoType.fromJson(v));
-    //   });
-    // }
-    // identityCardNumber = json?['identity_card_number'];
-    // identityCardPicture = json?['identity_card_picture'];
-    // identityCardExpirationDate = json?['identity_card_expiration_date'];
-    // drivingLicenceNumber = json?['driving_licence_number'];
-    // drivingLicencePicture = json?['driving_licence_picture'];
-    // drivingLicenceExpirationDate = json?['driving_licence_expiration_date'];
-    // orderTotalAmount = json?['order_total_amount'];
-    // anthropometrique = json?['anthropometrique'];
-    // totalOrders = json?['total_orders'];
-    // reportedTimes = json?['reported_times'];
-    // fcmList = json?['fcmList'];
-    // currentOrderDriver = json?['current_order_driver'];
-    // currentOrderCustomer = json?['current_order_customer'];
-    // currentPage = json?['current_page'];
-    // authType = json?['auth_type'];
     return MpUser(
       fullName: json?['full_name'],
       uid: json?['uid'],
@@ -185,8 +138,11 @@ class MpUser {
       reportedTimes: json?['reported_times'],
       fcmList: json?['fcmList'],
       currentOrderDriver: json?['current_order_driver'],
-      currentOrderCustomer: json?['current_order_customer']);
-
+      currentOrderCustomer: json?['current_order_customer'],
+      currentPageClient: json?['current_page_client'],
+      currentPageDriver: json?['current_page_driver'],
+      authType: json?['auth_type'],
+    );
   }
 
   Map<String, dynamic> toJson() {
@@ -234,7 +190,8 @@ class MpUser {
     data['fcmList'] = fcmList;
     data['current_order_driver'] = currentOrderDriver;
     data['current_order_customer'] = currentOrderCustomer;
-    data['current_page'] = currentPage;
+    data['current_page_client'] = currentPageClient;
+    data['current_page_driver'] = currentPageDriver;
     data['auth_type'] = authType;
     return data;
   }

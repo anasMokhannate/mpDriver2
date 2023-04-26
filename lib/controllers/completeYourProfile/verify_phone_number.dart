@@ -20,7 +20,7 @@ class VerifyPhoneNumberController extends GetxController {
   void onInit() async {
     super.onInit();
     currUser = MpUser.fromJson(await SessionManager().get('currentUser'));
-    currUser!.currentPage = "VerifyPhoneNumber";
+    currUser!.currentPageClient = "VerifyPhoneNumber";
     update();
   }
 

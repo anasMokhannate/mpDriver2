@@ -47,7 +47,10 @@ List<DropdownMenuItem<ListItem>>? buildDropDownMenuItems(List listItems) {
 }
 
 Future<MpUser?> getUserFromMemory() async {
-  MpUser user = MpUser.fromJson(await SessionManager().get("currentUser"));
+  MpUser? user;
+  await SessionManager().get("currentUser").then((value) {
+    user = MpUser.fromJson(value);
+  });
   return user;
 }
 
@@ -60,10 +63,10 @@ Future<MpUser?> getCurrentUser() async {
   return currentUser;
 }
 
-Future<bool> saveCurrentUser(MpUser MpUser) async {
+Future<bool> saveCurrentUser(MpUser userBase) async {
   bool done = false;
   await SessionManager()
-      .set('currentUser', MpUser)
+      .set('currentUser', userBase)
       .then((value) => done = true);
 
   return done;
@@ -126,7 +129,7 @@ updateFcm() async {
       .collection('drivers')
       .doc(value.uid)
       .update({'driver_fcm': fcm});
- // value.driver_fcm = fcm;
+  // value.driver_fcm = fcm;
   await SessionManager().set('currentUser', value);
 }
 
@@ -162,19 +165,14 @@ sendPlanifiedNotification(fcm, heading, content, whenDate) async {
         .subtract(const Duration(minutes: 30)),
   ));
 }
+
 plannedNotif(fcm, heading, content, whenDate) async {
   DateTime dateTime = DateTime.now();
   await OneSignal.shared.postNotification(OSCreateNotification(
     playerIds: fcm,
     content: content,
     heading: heading,
-    sendAfter: DateTime(
-            whenDate.year,
-            whenDate.month,
-            whenDate.day,
-            whenDate.hour - int.parse(dateTime.timeZoneName),
-            whenDate.minute,
-            0)
-         ,
+    sendAfter: DateTime(whenDate.year, whenDate.month, whenDate.day,
+        whenDate.hour - int.parse(dateTime.timeZoneName), whenDate.minute, 0),
   ));
 }

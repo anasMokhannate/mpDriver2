@@ -2,68 +2,101 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:in_app_update/in_app_update.dart';
+import 'package:motopickupdriver/utils/queries.dart';
 import 'package:motopickupdriver/utils/services.dart';
 import 'package:motopickupdriver/views/completeYourProfile/complete_profile.dart';
 import 'package:motopickupdriver/views/onboarding/onboarding_page.dart';
 
+import '../views/auth/register_page.dart';
+import '../views/completeYourProfile/upload_image.dart';
 import '../views/congrats_page.dart';
 import '../views/home_page.dart';
+import '../views/welcome_page.dart';
+import 'models/user.dart';
 
-GetStorage box = GetStorage();
+
 
 Future<Widget?> initWidget() async {
-  bool isVerified = false, isActivated = false;
   Widget? mainPage;
-  String id = "";
-  bool isLoggedIn = box.read('isLoggedIn') ?? false;
-  print(isLoggedIn);
-  if (isLoggedIn) {
-    try {
-      await getCurrentUser().then((value) async {
-      print(value!.email);
-      isActivated = value.isActivatedAccount!;
-      isVerified = value.isVerifiedAccount!;
-      id = value.uid!;
-    });
-
-    if (isVerified) {
-      if (isActivated) {
-        await FirebaseFirestore.instance.collection('drivers').doc(id).update({
-          "is_on_order": false,
-        });
-        mainPage = const HomePage();
-      } else {
-        mainPage = Congrats();
-      }
-    } else {
-      mainPage = CompleteProfile();
-    }
-    } catch (e) {
-      mainPage = const OnBoardingPage();
-      
-    }
-    
-  } else {
+  bool isFirstTime = await SessionManager().get('first_time') ?? true;
+  if (isFirstTime) {
     mainPage = const OnBoardingPage();
+  } else {
+    await getUserFromMemory().then((value) async {
+      if (value == null) {
+        mainPage = WelcomeScreen();
+      } else {
+        MpUser user = value;
+        await getUser(user.uid).then((userFromDb) {
+          print('object ${userFromDb.currentPageDriver}');
+          switch (userFromDb.currentPageDriver) {
+            case 'homePage':
+              mainPage = HomePage();
+              break;
+            case 'completeProfile':
+              mainPage = CompleteProfile();
+              break;
+            case 'uploadImage':
+              mainPage = UploadImage();
+              break;
+            case 'registerPage':
+              mainPage = RegisterPage();
+
+              break;
+            default:
+              mainPage = WelcomeScreen();
+          }
+        });
+      }
+    });
   }
-  await checkForUpdate();
+
   return mainPage;
 }
 
-goTo(Widget target) {
-  Get.to(() => target, transition: Transition.rightToLeft);
-}
+// Future<Widget?> initWidget() async {
+//   bool isVerified = false, isActivated = false;
+//   Widget? mainPage;
+//   String id = "";
+//   bool isLoggedIn = box.read('isLoggedIn') ?? false;
+//   print(isLoggedIn);
+//   if (isLoggedIn) {
+//     try {
+//       await getCurrentUser().then((value) async {
+//       print(value!.email);
+//       isActivated = value.isActivatedAccount!;
+//       isVerified = value.isVerifiedAccount!;
+//       id = value.uid!;
+//     });
 
-goToOff(Widget target) {
-  Get.offAll(() => target, transition: Transition.rightToLeft);
-}
+//     if (isVerified) {
+//       if (isActivated) {
+//         await FirebaseFirestore.instance.collection('drivers').doc(id).update({
+//           "is_on_order": false,
+//         });
+//         mainPage = const HomePage();
+//       } else {
+//         mainPage = Congrats();
+//       }
+//     } else {
+//       mainPage = CompleteProfile();
+//     }
+//     } catch (e) {
+//       mainPage = const OnBoardingPage();
+      
+//     }
+    
+//   } else {
+//     mainPage = const OnBoardingPage();
+//   }
+//   await checkForUpdate();
+//   return mainPage;
+// }
 
-goBackOff(Widget target) {
-  Get.offAll(() => target, transition: Transition.leftToRight);
-}
 
 AppUpdateInfo? _updateInfo;
 
