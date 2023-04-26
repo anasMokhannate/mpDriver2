@@ -76,7 +76,7 @@ class WelcomeController extends GetxController {
                   .format(DateTime.now()),
               isDeletedAccount: false,
               isDriver: false,
-              currentPage: "completeProfile");
+              currentPageClient: "completeProfile");
           await SessionManager().set('currentUser', mpUser);
           await createUser(mpUser).then(
             (value) async {

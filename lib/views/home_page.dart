@@ -824,9 +824,9 @@ class _HomePageState extends State<HomePage> {
                                                       [fcm],
                                                       "voyage annulé",
                                                       "Le chauffeur a annulé le voyage");
-                                                  refuserOrder(
-                                                      controller.userBase!,
-                                                      controller.orderID);
+                                                  // refuserOrder(
+                                                  //     controller.userBase!,
+                                                  //     controller.orderID);
                                                   controller.markers.clear();
                                                   controller.polylines.clear();
 

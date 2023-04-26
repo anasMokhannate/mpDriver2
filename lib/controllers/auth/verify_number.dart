@@ -78,7 +78,7 @@ class VerfiyNumberController extends GetxController {
             phoneNumber: phoneNumber,
             authType: 'Phone',
             isActivatedAccount: false,
-            currentPage: 'completeProfile',
+            currentPageDriver: 'completeProfile',
             isDriver: true,
             lastLoginDate:
                 DateFormat("dd-MM-yyyy HH:mm", "Fr_fr").format(DateTime.now()),

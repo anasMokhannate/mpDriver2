@@ -13,7 +13,6 @@ import 'package:motopickupdriver/utils/colors.dart';
 import 'package:motopickupdriver/utils/typography.dart';
 import 'package:motopickupdriver/views/auth/register_page.dart';
 import 'package:motopickupdriver/views/welcome_page.dart';
-
 import '../../controllers/auth/login_controller.dart';
 
 class LoginPage extends StatelessWidget {

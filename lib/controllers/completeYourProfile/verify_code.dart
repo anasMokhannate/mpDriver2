@@ -47,7 +47,7 @@ class VerifyCodeController extends GetxController {
             currUser!.isActivatedAccount = true;
             currUser!.isVerifiedAccount = true;
             currUser!.phoneNumber = phoneNumber;
-            currUser!.currentPage = "homePage";
+            currUser!.currentPageClient = "homePage";
 
             completeUser(currUser!).then((value) {
               saveCurrentUser(currUser!);

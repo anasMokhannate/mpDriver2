@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:get/get.dart';
 import 'package:motopickupdriver/utils/colors.dart';
 import 'package:motopickupdriver/views/onboarding/first_onboarding.dart';
@@ -39,6 +40,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
 
   void next() {
     if (index == _pages.length - 1) {
+      SessionManager().set('first_time', false);
       Get.offAll(() => WelcomeScreen());
     } else {
       _pageController.nextPage(duration: _duration, curve: _curve);

@@ -4,7 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:motopickupdriver/utils/models/config-params.dart';
 import 'package:motopickupdriver/utils/models/emergency.dart';
-
 import 'package:motopickupdriver/utils/models/user.dart';
 
 Future createUser(MpUser user) async {
@@ -15,7 +14,6 @@ Future createUser(MpUser user) async {
 }
 
 Future<String> getProvider(String email) async {
-  print('email: $email');
   String provider = "";
   await FirebaseFirestore.instance
       .collection("mp_users")
@@ -118,7 +116,8 @@ Future<String> loginWithPhone(phone) async {
         .then((value) {
       email = value.docs.first.get('email');
     });
-  } catch (e) {
+  }  
+  catch (e) {
     email = 'usernoexistawsa@gmail.com';
   }
 
@@ -203,35 +202,43 @@ Future<List<MotoType>> getData() async {
   return motos;
 }
 
-Future refuserOrder(MpUser driver, orderId) async {
-  FirebaseFirestore.instance.collection('orders').doc(orderId).update(({
-        'is_canceled_by_driver': true,
-        'status': 0,
-        'mp_users_declined': FieldValue.arrayUnion([driver.uid])
-      }));
-  String type = "";
-  var docSnapshot2 =
-      await FirebaseFirestore.instance.collection('orders').doc(orderId).get();
-  if (docSnapshot2.exists) {
-    Map<String, dynamic>? data = docSnapshot2.data();
-    type = data!['order_type'].toString();
-    type != '0'
-        ? FirebaseFirestore.instance
-            .collection('mp_users')
-            .doc(driver.uid)
-            .update({
-            "is_on_order": false,
-            "driver_cancelled_trip": FieldValue.increment(1),
-          })
-        : FirebaseFirestore.instance
-            .collection('mp_users')
-            .doc(driver.uid)
-            .update({
-            "is_on_order": false,
-            "driver_cancelled_delivery": FieldValue.increment(1),
-          });
-  }
-}
+// Future refuserOrder(MpUser driver, orderId) async {
+//   FirebaseFirestore.instance.collection('orders').doc(orderId).update(({
+//         'is_canceled_by_driver': true,
+//         'status': 0,
+//         'mp_users_declined': FieldValue.arrayUnion([driver.uid])
+//       }));
+//   String type = "";
+//   var docSnapshot2 =
+//       await FirebaseFirestore.instance.collection('orders').doc(orderId).get();
+//   if (docSnapshot2.exists) {
+//     Map<String, dynamic>? data = docSnapshot2.data();
+//     type = data!['order_type'].toString();
+//     type != '0'
+//         ? FirebaseFirestore.instance
+// <<<<<<< HEAD
+//             .collection('mp_users')
+// =======
+//             .collection('drivers')
+// >>>>>>> 5d5bfe6e3264c80d1268b8e92b4d5a0246cd1ab2
+//             .doc(driver.uid)
+//             .update({
+//             "is_on_order": false,
+//             "driver_cancelled_trip": FieldValue.increment(1),
+//           })
+//         : FirebaseFirestore.instance
+// <<<<<<< HEAD
+//             .collection('mp_users')
+// =======
+//             .collection('drivers')
+// >>>>>>> 5d5bfe6e3264c80d1268b8e92b4d5a0246cd1ab2
+//             .doc(driver.uid)
+//             .update({
+//             "is_on_order": false,
+//             "driver_cancelled_delivery": FieldValue.increment(1),
+//           });
+//   }
+// }
 
 Future updateStatusOrder(orderId) async {
   FirebaseFirestore.instance
