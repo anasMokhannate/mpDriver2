@@ -3,6 +3,7 @@
 import 'package:boxicons/boxicons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:get/get.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 import 'package:loading_overlay/loading_overlay.dart';
@@ -11,6 +12,7 @@ import 'package:motopickupdriver/controllers/completeYourProfile/adding_moto.dar
 import 'package:motopickupdriver/utils/buttons.dart';
 import 'package:motopickupdriver/utils/colors.dart';
 import 'package:motopickupdriver/utils/typography.dart';
+import 'package:motopickupdriver/views/welcome_page.dart';
 
 class AddingMoto extends StatelessWidget {
   AddingMoto({Key? key}) : super(key: key);
@@ -32,7 +34,10 @@ class AddingMoto extends StatelessWidget {
           child: Scaffold(
             appBar: AppBar(
               leading: InkWell(
-                onTap: () => Get.back(),
+                onTap: () {
+                  Get.to(WelcomeScreen());
+                  SessionManager().remove('current_user');
+                },
                 child: Icon(
                   Boxicons.bx_arrow_back,
                   color: primary,

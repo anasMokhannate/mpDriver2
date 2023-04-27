@@ -1,9 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:get/get.dart';
-
-
 import '../../utils/alert_dialog.dart';
 import '../../utils/navigations.dart';
 import '../../utils/queries.dart';

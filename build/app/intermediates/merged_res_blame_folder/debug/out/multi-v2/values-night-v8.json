@@ -1,17 +1,17 @@
 {
     "logs": [
         {
-            "outputFile": "C:\\src\\Projects\\MP-driver\\build\\app\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-night-v8\\values-night-v8.xml",
+            "outputFile": "D:\\Projects\\Moto_Pickup\\mpDriver2\\build\\app\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-night-v8\\values-night-v8.xml",
             "map": [
                 {
-                    "source": "C:\\src\\Projects\\MP-driver\\android\\app\\src\\main\\res\\values-night\\styles.xml",
+                    "source": "D:\\Projects\\Moto_Pickup\\mpDriver2\\android\\app\\src\\main\\res\\values-night\\styles.xml",
                     "from": {
                         "startLines": "3,14",
                         "startColumns": "4,4",
-                        "startOffsets": "172,817",
+                        "startOffsets": "175,831",
                         "endLines": "7,16",
                         "endColumns": "12,12",
-                        "endOffsets": "475,981"
+                        "endOffsets": "482,997"
                     },
                     "to": {
                         "startLines": "2,7",
@@ -23,7 +23,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\acer\\.gradle\\caches\\transforms-3\\5cfdb2ce6517ad4cad1f3be5c7221343\\transformed\\appcompat-1.2.0\\res\\values-night-v8\\values-night-v8.xml",
+                    "source": "C:\\Users\\oussa\\.gradle\\caches\\transforms-3\\5cfdb2ce6517ad4cad1f3be5c7221343\\transformed\\appcompat-1.2.0\\res\\values-night-v8\\values-night-v8.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9",
                         "startColumns": "4,4,4,4,4,4,4,4",

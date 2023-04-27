@@ -1,5 +1,4 @@
 // ignore_for_file: must_be_immutable
-
 import 'package:boxicons/boxicons.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +13,8 @@ import 'package:motopickupdriver/utils/typography.dart';
 import 'package:motopickupdriver/views/auth/register_page.dart';
 import 'package:motopickupdriver/views/welcome_page.dart';
 import '../../controllers/auth/login_controller.dart';
+import 'change_phone_number.dart';
+import 'forgot_password.dart';
 
 class LoginPage extends StatelessWidget {
   LoginPage({Key? key}) : super(key: key);
@@ -123,8 +124,8 @@ class LoginPage extends StatelessWidget {
                       alignment: Alignment.centerRight,
                       child: InkWell(
                         onTap: () {
-                          // Get.to(() => ForgotPassword(),
-                          //     transition: Transition.rightToLeft);
+                          Get.to(() => ForgotPassword(),
+                              transition: Transition.rightToLeft);
                         },
                         child: Text(
                           'Mot de passe oubliée?',
@@ -143,8 +144,8 @@ class LoginPage extends StatelessWidget {
                   40.verticalSpace,
                   InkWell(
                     onTap: () {
-                      // Get.to(() => ChangePhoneNumberNoAuth(),
-                          // transition: Transition.rightToLeft);
+                      Get.to(() => ChangePhoneNumberNoAuth(),
+                      transition: Transition.rightToLeft);
                     },
                     child: Center(
                       child: Text(

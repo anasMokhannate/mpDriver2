@@ -14,12 +14,11 @@ import 'package:motopickupdriver/views/onboarding/onboarding_page.dart';
 import '../views/auth/register_page.dart';
 import '../views/completeYourProfile/adding_moto.dart';
 import '../views/completeYourProfile/upload_image.dart';
+import '../views/completeYourProfile/verify_identity.dart';
 import '../views/congrats_page.dart';
 import '../views/home_page.dart';
 import '../views/welcome_page.dart';
 import 'models/user.dart';
-
-
 
 Future<Widget?> initWidget() async {
   Widget? mainPage;
@@ -52,10 +51,10 @@ Future<Widget?> initWidget() async {
               break;
             case 'AddingPhotoMoto':
               mainPage = AddingMoto();
-              break;  
+              break;
             case 'VerifyIdentity':
-              mainPage = AddingMoto();
-              break;  
+              mainPage = const VerifyIdentity();
+              break;
             default:
               mainPage = WelcomeScreen();
           }
@@ -96,16 +95,15 @@ Future<Widget?> initWidget() async {
 //     }
 //     } catch (e) {
 //       mainPage = const OnBoardingPage();
-      
+
 //     }
-    
+
 //   } else {
 //     mainPage = const OnBoardingPage();
 //   }
 //   await checkForUpdate();
 //   return mainPage;
 // }
-
 
 AppUpdateInfo? _updateInfo;
 

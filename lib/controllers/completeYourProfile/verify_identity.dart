@@ -1,12 +1,14 @@
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:motopickupdriver/utils/models/user.dart';
 
 import '../../views/congrats_page.dart';
 
 class VerifyIdentityController extends GetxController{
-  var loading;
-
-  var cardFile;
+  MpUser? userBase;
+  RxBool loading = false.obs;
+  XFile? cardFile;
 
   var card;
 

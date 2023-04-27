@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "C:\\src\\Projects\\MP-driver\\build\\app\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-xlarge-v4\\values-xlarge-v4.xml",
+            "outputFile": "D:\\Projects\\Moto_Pickup\\mpDriver2\\build\\app\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-xlarge-v4\\values-xlarge-v4.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\acer\\.gradle\\caches\\transforms-3\\5cfdb2ce6517ad4cad1f3be5c7221343\\transformed\\appcompat-1.2.0\\res\\values-xlarge-v4\\values-xlarge-v4.xml",
+                    "source": "C:\\Users\\oussa\\.gradle\\caches\\transforms-3\\5cfdb2ce6517ad4cad1f3be5c7221343\\transformed\\appcompat-1.2.0\\res\\values-xlarge-v4\\values-xlarge-v4.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7",
                         "startColumns": "4,4,4,4,4,4",
