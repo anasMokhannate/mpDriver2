@@ -103,7 +103,7 @@ class Congrats extends StatelessWidget {
                             Padding(
                               padding: EdgeInsets.symmetric(horizontal: 20.w),
                               child: Text(
-                                'Bienvenue Ayoub Chahid parmi la communauté Motopickup!',
+                                'Bienvenue ${controller.userBase?.fullName} parmi la communauté Motopickup!',
                                 textAlign: TextAlign.center,
                                 style: bodyTextStyle,
                               ),

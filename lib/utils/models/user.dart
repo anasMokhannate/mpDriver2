@@ -36,8 +36,13 @@ class MpUser {
   String? drivingLicenceNumber;
   String? drivingLicencePicture;
   String? drivingLicenceExpirationDate;
+  String? assurancePicture;
+  String? assuranceExpirationDate;
+  String? carteGrisePicture;
+  String? carteGriseExpirationDate;
   String? orderTotalAmount;
   String? anthropometrique;
+
   int? totalOrders;
   int? reportedTimes;
   List<String>? fcmList;
@@ -46,52 +51,59 @@ class MpUser {
   String? currentPageClient;
   String? currentPageDriver;
   String? authType;
+  String? lastDocumentUpdateDate;
 
-  MpUser(
-      {this.fullName,
-      this.uid,
-      this.email,
-      this.sexe,
-      this.dateNaissance,
-      this.phoneNumber,
-      this.profilePicture,
-      this.registrationDate,
-      this.lastLoginDate,
-      this.currentCity,
-      this.latitude,
-      this.longitude,
-      this.isDeletedAccount,
-      this.isActivatedAccount,
-      this.isVerifiedAccount,
-      this.isBlacklistedAccount,
-      this.isOnline,
-      this.isOnOrder,
-      this.isPasswordChange,
-      this.isDriver,
-      this.cancelledDelivery,
-      this.succededDelivery,
-      this.plannedDelivery,
-      this.cancelledTrip,
-      this.succededTrip,
-      this.plannedTrip,
-      this.note,
-      this.motos,
-      this.identityCardNumber,
-      this.identityCardPicture,
-      this.identityCardExpirationDate,
-      this.drivingLicenceNumber,
-      this.drivingLicencePicture,
-      this.drivingLicenceExpirationDate,
-      this.orderTotalAmount,
-      this.anthropometrique,
-      this.totalOrders,
-      this.reportedTimes,
-      this.fcmList,
-      this.currentOrderDriver,
-      this.currentOrderCustomer,
-      this.currentPageClient,
-      this.currentPageDriver,
-      this.authType});
+  MpUser({
+    this.fullName,
+    this.uid,
+    this.email,
+    this.sexe,
+    this.dateNaissance,
+    this.phoneNumber,
+    this.profilePicture,
+    this.registrationDate,
+    this.lastLoginDate,
+    this.currentCity,
+    this.latitude,
+    this.longitude,
+    this.isDeletedAccount,
+    this.isActivatedAccount,
+    this.isVerifiedAccount,
+    this.isBlacklistedAccount,
+    this.isOnline,
+    this.isOnOrder,
+    this.isPasswordChange,
+    this.isDriver,
+    this.cancelledDelivery,
+    this.succededDelivery,
+    this.plannedDelivery,
+    this.cancelledTrip,
+    this.succededTrip,
+    this.plannedTrip,
+    this.note,
+    this.motos,
+    this.identityCardNumber,
+    this.identityCardPicture,
+    this.identityCardExpirationDate,
+    this.drivingLicenceNumber,
+    this.drivingLicencePicture,
+    this.drivingLicenceExpirationDate,
+    this.orderTotalAmount,
+    this.anthropometrique,
+    this.totalOrders,
+    this.reportedTimes,
+    this.fcmList,
+    this.currentOrderDriver,
+    this.currentOrderCustomer,
+    this.currentPageClient,
+    this.currentPageDriver,
+    this.authType,
+    this.assurancePicture,
+    this.assuranceExpirationDate,
+    this.carteGrisePicture,
+    this.carteGriseExpirationDate,
+    this.lastDocumentUpdateDate,
+  });
 
   factory MpUser.fromJson(Map<String, dynamic>? json) {
     return MpUser(
@@ -139,6 +151,11 @@ class MpUser {
       currentPageClient: json?['current_page_client'],
       currentPageDriver: json?['current_page_driver'],
       authType: json?['auth_type'],
+      assurancePicture: json?['assurance_picture'],
+      assuranceExpirationDate: json?['assurance_expiration_date'],
+      carteGrisePicture: json?['carte_grise_picture'],
+      carteGriseExpirationDate: json?['carte_grise_expiration_date'],
+      lastDocumentUpdateDate: json?['last_document_update_date'],
     );
   }
 
@@ -188,9 +205,14 @@ class MpUser {
     data['current_page_client'] = currentPageClient;
     data['current_page_driver'] = currentPageDriver;
     data['auth_type'] = authType;
+    data['assurance_picture'] = assurancePicture;
+    data['assurance_expiration_date'] = assuranceExpirationDate;
+    data['carte_grise_picture'] = carteGrisePicture;
+    data['carte_grise_expiration_date'] = carteGriseExpirationDate;
+    data['last_document_update_date'] = lastDocumentUpdateDate;
     return data;
   }
-  
+
   @override
   String toString() {
     return toJson.toString();
