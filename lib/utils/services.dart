@@ -5,9 +5,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
+import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:motopickupdriver/utils/models/ListItems.dart';
 import 'package:motopickupdriver/utils/queries.dart';
+import 'package:motopickupdriver/views/welcome_page.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 
@@ -174,4 +177,14 @@ plannedNotif(fcm, heading, content, whenDate) async {
     sendAfter: DateTime(whenDate.year, whenDate.month, whenDate.day,
         whenDate.hour - int.parse(dateTime.timeZoneName), whenDate.minute, 0),
   ));
+}
+
+
+signOut() async {
+  await FirebaseAuth.instance.signOut().then((value) async {
+    await GoogleSignIn().signOut().then((value) {
+      SessionManager().remove("currentUser");
+      Get.offAll(() => WelcomeScreen());
+    });
+  });
 }

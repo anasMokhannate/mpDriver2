@@ -1,13 +1,11 @@
 // ignore_for_file: dead_code
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
-import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:in_app_update/in_app_update.dart';
 import 'package:motopickupdriver/utils/queries.dart';
 import 'package:motopickupdriver/utils/services.dart';
+import 'package:motopickupdriver/views/completeYourProfile/adding_photo_moto.dart';
 import 'package:motopickupdriver/views/completeYourProfile/complete_profile.dart';
 import 'package:motopickupdriver/views/onboarding/onboarding_page.dart';
 
@@ -46,14 +44,17 @@ Future<Widget?> initWidget() async {
             case 'registerPage':
               mainPage = RegisterPage();
               break;
-            case 'AddingMoto':
+            case 'addingMoto':
               mainPage = AddingMoto();
               break;
-            case 'AddingPhotoMoto':
-              mainPage = AddingMoto();
+            case 'addingPhotoMoto':
+              mainPage = AddingPhotoMoto();
               break;
-            case 'VerifyIdentity':
+            case 'verifyIdentity':
               mainPage = const VerifyIdentity();
+              break;
+            case 'congratsPage':
+              mainPage = Congrats();
               break;
             default:
               mainPage = WelcomeScreen();

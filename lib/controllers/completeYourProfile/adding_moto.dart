@@ -1,13 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:get/get.dart';
 import 'package:motopickupdriver/utils/models/ListItems.dart';
 import 'package:motopickupdriver/utils/models/user.dart';
 import 'package:motopickupdriver/utils/queries.dart';
-import 'package:motopickupdriver/views/welcome_page.dart';
 
 import '../../utils/alert_dialog.dart';
 import '../../utils/models/config-params.dart';
@@ -102,8 +98,8 @@ class AddingMotoController extends GetxController {
         saveCurrentUser(userBase!);
         completeUser(userBase!);
 
-
-        await Get.to(() => AddingPhotoMoto());
+        await Get.to(() => AddingPhotoMoto(),
+            transition: Transition.leftToRight);
       }
     });
   }

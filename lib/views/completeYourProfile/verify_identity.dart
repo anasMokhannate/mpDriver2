@@ -441,15 +441,69 @@ class _VerifyIdentityState extends State<VerifyIdentity> {
                                         style: bodyTextStyle,
                                       ),
                                     ),
+                                    // Container(
+                                    //   height: 20.h,
+                                    //   color: Colors.white,
+                                    // ),
+                                    // InkWell(
+                                    //   onTap: () {
+                                    //     // controller.isCoursier =
+                                    //     //     !controller.isCoursier;
+                                    //     // controller.update();
+                                    //   },
+                                    //   child: Padding(
+                                    //     padding: EdgeInsets.symmetric(
+                                    //         horizontal: 20.w),
+                                    //     child: Container(
+                                    //       height: 60.h,
+                                    //       width:
+                                    //           MediaQuery.of(context).size.width,
+                                    //       decoration: BoxDecoration(
+                                    //         borderRadius:
+                                    //             BorderRadius.circular(12),
+                                    //         border: Border.all(
+                                    //           color: primary,
+                                    //         ),
+                                    //       ),
+                                    //       child: Row(
+                                    //         children: [
+                                    //           15.horizontalSpace,
+                                    //           Container(
+                                    //             height: 40.h,
+                                    //             width: 40.h,
+                                    //             decoration: BoxDecoration(
+                                    //               borderRadius:
+                                    //                   BorderRadius.circular(10),
+                                    //               border: Border.all(
+                                    //                 color: primary,
+                                    //               ),
+                                    //             ),
+                                    //             child: const Icon(
+                                    //               Boxicons.bx_check,
+                                    //               color: // controller.isCoursier
+                                    //                   //? primary
+                                    //                   //:
+                                    //                   Colors.transparent,
+                                    //             ),
+                                    //           ),
+                                    //           15.horizontalSpace,
+                                    //           Text(
+                                    //             'Coursier',
+                                    //             style: alertDialogTitle,
+                                    //           )
+                                    //         ],
+                                    //       ),
+                                    //     ),
+                                    //   ),
+                                    // ),
                                     Container(
                                       height: 20.h,
                                       color: Colors.white,
                                     ),
                                     InkWell(
                                       onTap: () {
-                                        // controller.isCoursier =
-                                        //     !controller.isCoursier;
-                                        // controller.update();
+                                        controller.isDriver.toggle();
+                                        controller.update();
                                       },
                                       child: Padding(
                                         padding: EdgeInsets.symmetric(
@@ -480,65 +534,10 @@ class _VerifyIdentityState extends State<VerifyIdentity> {
                                                 ),
                                                 child: Icon(
                                                   Boxicons.bx_check,
-                                                  color: // controller.isCoursier
-                                                      //? primary
-                                                      //: 
-                                                      Colors.transparent,
-                                                ),
-                                              ),
-                                              15.horizontalSpace,
-                                              Text(
-                                                'Coursier',
-                                                style: alertDialogTitle,
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Container(
-                                      height: 20.h,
-                                      color: Colors.white,
-                                    ),
-                                    InkWell(
-                                      onTap: () {
-                                        // controller.isDriver =
-                                        //     !controller.isDriver;
-                                        // controller.update();
-                                      },
-                                      child: Padding(
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 20.w),
-                                        child: Container(
-                                          height: 60.h,
-                                          width:
-                                              MediaQuery.of(context).size.width,
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
-                                            border: Border.all(
-                                              color: primary,
-                                            ),
-                                          ),
-                                          child: Row(
-                                            children: [
-                                              15.horizontalSpace,
-                                              Container(
-                                                height: 40.h,
-                                                width: 40.h,
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
-                                                  border: Border.all(
-                                                    color: primary,
-                                                  ),
-                                                ),
-                                                child: Icon(
-                                                  Boxicons.bx_check,
-                                                  color: 
-                                                  // controller.isDriver
-                                                  //     ? primary
-                                                  //     : 
+                                                  color:
+                                                      controller.isDriver.value
+                                                          ? primary
+                                                          :
                                                       Colors.transparent,
                                                 ),
                                               ),

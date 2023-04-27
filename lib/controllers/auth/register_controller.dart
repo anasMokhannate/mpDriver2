@@ -64,33 +64,32 @@ class RegisterController extends GetxController {
   }
 
   submit(context) async {
-    await validate(context).then((isValid) async {
-      if (isValid) {
-        await checkEmail(email.text.trim()).then((emailExist) async {
-          if (emailExist == true) {
-            showAlertDialogOneButton(
-              context,
-              "Email déjà utilisé!",
-              "Veuillez saisir un autre Email, car celui-ci est déjà utilisé par un autre compte, ou essayez de vous connecter.",
-              "Ok",
-            );
+    await validate(context).then((value) async {
+      if (value) {
+        await checkPhoneNumber(indicatif + phone.text).then((message) async {
+          if (message == "found-in-users") {
             loading.toggle();
             update();
+            showAlertDialogOneButton(
+              context,
+              "Numéro de téléphone déjà utilisé!",
+              "Veuillez saisir un autre numéro de téléphone, car celui-ci est déjà utilisé par un autre compte, ou essayez de vous connecter.",
+              "Ok",
+            );
           } else {
-            await checkPhoneNumber(indicatif + phone.text)
-                .then((message) async {
-              if (message == 'found') {
-                showAlertDialogOneButton(
-                  context,
-                  "Numéro de téléphone déjà utilisé!",
-                  "Veuillez saisir un autre numéro de téléphone, car celui-ci est déjà utilisé par un autre compte, ou essayez de vous connecter.",
-                  "Ok",
-                );
+            await checkEmail(email.text.trim()).then((emailFound) async {
+              if (emailFound) {
                 loading.toggle();
                 update();
+                showAlertDialogOneButton(
+                  context,
+                  "Email déjà utilisé!",
+                  "Veuillez saisir un autre Email, car celui-ci est déjà utilisé par un autre compte, ou essayez de vous connecter.",
+                  "Ok",
+                );
               } else {
                 String phoneNumber = indicatif + phone.text;
-                // SessionManager().set('email', email.text);
+                SessionManager().set('email', email.text);
                 await FirebaseAuth.instance.verifyPhoneNumber(
                   phoneNumber: indicatif + phone.text,
                   verificationCompleted: (phonesAuthCredentials) async {},
@@ -108,14 +107,12 @@ class RegisterController extends GetxController {
                   },
                   codeSent: (verificationId, resendingToken) async {
                     await SessionManager().set('phone', phoneNumber);
-                    await SessionManager().set('email', email.text);
                     await SessionManager().set('password', password.text);
-
+                    loading.toggle();
+                    update();
                     Get.to(() => VerfiyNumber(),
                         arguments: verificationId,
                         transition: Transition.rightToLeft);
-                    loading.toggle();
-                    update();
                   },
                   codeAutoRetrievalTimeout: (verificationId) async {},
                 );
@@ -125,5 +122,14 @@ class RegisterController extends GetxController {
         });
       }
     });
+  }
+
+  @override
+  void dispose() {
+    phone.dispose();
+    email.dispose();
+    password.dispose();
+    confirmPassword.dispose();
+    super.dispose();
   }
 }

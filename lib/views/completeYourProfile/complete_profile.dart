@@ -12,6 +12,7 @@ import 'package:motopickupdriver/components/inputs.dart';
 import 'package:motopickupdriver/controllers/completeYourProfile/complete_profile.dart';
 import 'package:motopickupdriver/utils/buttons.dart';
 import 'package:motopickupdriver/utils/colors.dart';
+import 'package:motopickupdriver/utils/services.dart';
 import 'package:motopickupdriver/utils/typography.dart';
 
 class CompleteProfile extends StatelessWidget {
@@ -40,6 +41,18 @@ class CompleteProfile extends StatelessWidget {
               centerTitle: true,
               elevation: 0,
               backgroundColor: Colors.transparent,
+              actions: <Widget>[
+                IconButton(
+                  icon: Icon(
+                    Boxicons.bx_log_out,
+                    color: primary,
+                    size: 30.h,
+                  ),
+                  onPressed: () async {
+                    signOut();
+                  },
+                )
+              ],
             ),
             body: !controller.isTrue.value
                 ? Center(
@@ -74,11 +87,11 @@ class CompleteProfile extends StatelessWidget {
                         ),
                         5.verticalSpace,
                         InputTextField(
-                          enable:controller.shown,
                           hintText: 'Entrez votre Email',
                           type: TextInputType.emailAddress,
                           controller: controller.email,
                           icon: Boxicons.bxs_envelope,
+                          enable: false,
                         ),
                         5.verticalSpace,
                         GetBuilder<CompleteProfileController>(

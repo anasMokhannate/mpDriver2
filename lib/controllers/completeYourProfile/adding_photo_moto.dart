@@ -56,15 +56,17 @@ class AddingPhotoMotoController extends GetxController {
           .putFile(image!)
           .then((picture) {
         picture.ref.getDownloadURL().then((value) async {
-          userBase!.currentPageDriver = 'VerifyIdentity';
+          userBase!.currentPageDriver = 'verifyIdentity';
           userBase!.motos!.first['motocycle_photo'] = value;
 
-          await saveCurrentUser(userBase!);
-
-          await completeUser(userBase!).then((value) {
+          await saveCurrentUser(userBase!).then((value) async {
+            await completeUser(userBase!).then((value) {
             Get.offAll(() => const VerifyIdentity(),
                 transition: Transition.rightToLeft);
           });
+          });
+
+          
         });
       });
     } else {

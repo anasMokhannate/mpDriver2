@@ -4,7 +4,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:get/get.dart';
-import 'package:motopickupdriver/views/welcome_page.dart';
 
 import '../../utils/alert_dialog.dart';
 import '../../utils/colors.dart';
@@ -87,29 +86,39 @@ class CompleteProfileController extends GetxController {
         userBase!.fullName = fullname.text;
         userBase!.email = email.text;
         userBase!.dateNaissance = birthday;
+        userBase!.identityCardNumber = cni.text;
         userBase!.sexe = sexe!.value;
         userBase!.currentCity = selected;
         if (userBase!.authType == "Phone") {
-          userBase!.currentPageDriver = "uploadImage";
           userBase!.currentPageClient = "uploadImage";
-
-          await saveCurrentUser(userBase!).then((value) {
-            completeUser(userBase!);
-            
-            Get.to(() => UploadImage(), transition: Transition.rightToLeft);
-            //loading.toggle();
-            update();
+          userBase!.currentPageDriver = 'uploadImage';
+          await saveCurrentUser(userBase!).then((value) async {
+            print(
+                'user from memory (complete profile): ${userBase?.email} ${userBase?.authType}');
+            await completeUser(userBase!).then((value) {
+              loading.toggle();
+              update();
+              Get.to(() => UploadImage(), transition: Transition.rightToLeft);
+              // } else {
+              //   showAlertDialogOneButton(
+              //       context, "Erreur", "Réssayez plus tard", "Ok");
+              // }
+            });
           });
         } else if (userBase!.authType == "Google") {
-          userBase!.currentPageDriver = "verifyPhoneNumber";
           userBase!.currentPageClient = "verifyPhoneNumber";
-
-          await SessionManager().set('currentUser', userBase).then((value) {
-            completeUser(userBase!);
-            loading.toggle();
-            update();
-            Get.to(() => VerifyPhoneNumber(),
-                transition: Transition.rightToLeft);
+          userBase!.currentPageDriver = "verifyPhoneNumber";
+          await saveCurrentUser(userBase!).then((value) async {
+            await completeUser(userBase!).then((userUpdated) {
+              loading.toggle();
+              update();
+              Get.to(() => VerifyPhoneNumber(),
+                  transition: Transition.rightToLeft);
+              // } else {
+              //   showAlertDialogOneButton(
+              //       context, "Erreur", "Réssayez plus tard", "Ok");
+              // }
+            });
           });
         }
       }
@@ -121,6 +130,10 @@ class CompleteProfileController extends GetxController {
     super.onInit();
     await getUserFromMemory().then((value) {
       userBase = value;
+    });
+    print("tesst: currentUser: ${userBase!.email}");
+    await SessionManager().get("email").then((value) {
+      print('tesst: email: $value');
     });
     email.text = userBase!.email ?? await SessionManager().get('email');
     phoneNumber = await SessionManager().get('phone');

@@ -13,9 +13,6 @@ class CongratsController extends GetxController {
   @override
   void onInit() async {
     super.onInit();
-    print(
-        'Congraaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaats');
-    Get.snackbar('Congrats', 'Congrats');
     await getUserFromMemory().then((value) async {
       userBase = value;
       isTrue = true.obs;

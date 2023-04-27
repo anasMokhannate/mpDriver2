@@ -5,13 +5,13 @@ import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-
+import 'package:motopickupdriver/utils/navigations.dart';
+import 'package:motopickupdriver/utils/services.dart';
 
 import '../utils/alert_dialog.dart';
 import '../utils/models/user.dart';
 import '../utils/queries.dart';
 import '../views/completeYourProfile/complete_profile.dart';
-import '../views/home_page.dart';
 // import 'package:motopickup/views/completeYourProfile/complete_profile_page.dart';
 // import 'package:motopickup/views/home_page.dart';
 
@@ -20,76 +20,79 @@ class WelcomeController extends GetxController {
   MpUser? mpUser;
 
   void googleAuth(context) async {
-     //await GoogleSignIn().signOut();
+    await GoogleSignIn().signOut();
     loading.toggle();
+    update();
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
     if (googleUser != null) {
-      GoogleSignInAuthentication googleAuth = await googleUser.authentication;
-      // Create a new credential
-      final credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
-      );
-      UserCredential result =
-          await FirebaseAuth.instance.signInWithCredential(credential);
-      User? user = result.user;
-      await isUserExist(user!.uid).then((exist) async {
-        if (exist) {
-          await getUser(user.uid).then((user) async {
-            await getProvider(user.email!).then((provider) async {
-              if (provider != "Google" && provider != "") {
-                await FirebaseAuth.instance.signOut();
-                await GoogleSignIn().signOut();
-                showAlertDialogOneButton(
-                    context,
-                    "Utilisateur existe déjà",
-                    "Il existe déjà un compte avec cet e-mail, veuillez essayer de vous connecter avec $provider",
-                    "Ok");
-                loading.toggle();
-                update();
-              } else {
-                MpUser mpUser = user;
-                //mpUser.authType = "Google";
-                mpUser.lastLoginDate = DateFormat('dd-MM-yyyy Hh:mm', 'Fr_fr')
-                    .format(DateTime.now());
-                //TODO check if profile is complete
-                completeUser(mpUser);
-                await SessionManager().set('currentUser', mpUser);
-                Get.offAll(
-                  //TODO use initWidget instead of HomePage
-                  () => const HomePage(),
-                  transition: Transition.rightToLeft,
-                );
-              }
-            });
-          });
+      await getProvider(googleUser.email).then((provider) async {
+        if (provider != "Google" && provider != "") {
+          await FirebaseAuth.instance.signOut();
+          await GoogleSignIn().signOut();
+          loading.toggle();
+          update();
+          showAlertDialogOneButton(
+              context,
+              "Utilisateur existe déjà",
+              "Il existe déjà un compte avec cet e-mail, veuillez essayer de vous connecter avec $provider",
+              "Ok");
         } else {
-          MpUser mpUser = MpUser(
-              // fullName: user.displayName,
-              uid: user.uid,
-              email: user.email,
-              profilePicture: user.photoURL,
-              authType: "Google",
-              registrationDate: DateFormat('dd-MM-yyyy Hh:mm', 'Fr_fr')
-                  .format(DateTime.now()),
-              lastLoginDate: DateFormat('dd-MM-yyyy Hh:mm', 'Fr_fr')
-                  .format(DateTime.now()),
-              isDeletedAccount: false,
-              isDriver: false,
-              currentPageClient: "completeProfile");
-          await SessionManager().set('currentUser', mpUser);
-          await createUser(mpUser).then(
-            (value) async {
-              Get.offAll(() => CompleteProfile(),
-                  transition: Transition.rightToLeft);
-            },
+          GoogleSignInAuthentication googleAuth =
+              await googleUser.authentication;
+          // Create a new credential
+          final credential = GoogleAuthProvider.credential(
+            accessToken: googleAuth.accessToken,
+            idToken: googleAuth.idToken,
           );
+          UserCredential result =
+              await FirebaseAuth.instance.signInWithCredential(credential);
+          User? user = result.user;
+
+          if (provider == "") {
+            MpUser mpUser = MpUser(
+                // fullName: user.displayName,
+                uid: user?.uid,
+                email: user?.email,
+                profilePicture: user?.photoURL,
+                authType: "Google",
+                registrationDate: DateFormat('dd-MM-yyyy Hh:mm', 'Fr_fr')
+                    .format(DateTime.now()),
+                lastLoginDate: DateFormat('dd-MM-yyyy Hh:mm', 'Fr_fr')
+                    .format(DateTime.now()),
+                isDeletedAccount: false,
+                isDriver: false,
+                isBlacklistedAccount: false,
+                isActivatedAccount: false,
+                isVerifiedAccount: false,
+                currentPageClient: "completeProfile",
+                currentPageDriver: "completeProfile");
+            await saveCurrentUser(mpUser);
+            await createUser(mpUser).then(
+              (value) async {
+                Get.offAll(() => CompleteProfile(),
+                    transition: Transition.rightToLeft);
+              },
+            );
+          } else {
+            await getUser(user?.uid).then((user) async {
+              MpUser mpUser = user;
+              mpUser.lastLoginDate = DateFormat('dd-MM-yyyy Hh:mm', 'Fr_fr')
+                  .format(DateTime.now());
+              //TODO check if profile is complete
+              await completeUser(mpUser).then((value) async {
+                await saveCurrentUser(mpUser).then((value) async {
+                  await initWidget().then((mainPage) {
+                    Get.offAll(
+                      () => mainPage as Widget,
+                      transition: Transition.rightToLeft,
+                    );
+                  });
+                });
+              });
+            });
+            //mpUser.authType = "Google";
+          }
         }
-        // await FirebaseFirestore.instance
-        //     .collection('mp_users')
-        //     .doc(user.uid)
-        //     .delete();
-        // await user.delete();
       });
     } else {
       loading.toggle();
@@ -350,8 +353,15 @@ class WelcomeController extends GetxController {
   // }
   //=============================================================================================
   @override
-  void onInit() {
-    // SessionManager().remove("currentUser");
+  void onInit() async {
     super.onInit();
+    // TODO: implement onInit
+    await getUserFromMemory().then((value) {
+      print('user from memory (welcome 1): ${value?.email} ${value?.authType}');
+    });
+    SessionManager().remove('currentUser');
+    await getUserFromMemory().then((value) {
+      print('user from memory (welcome 2): ${value?.email} ${value?.authType}');
+    });
   }
 }

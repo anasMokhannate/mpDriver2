@@ -72,7 +72,7 @@ Future deleteUser(MpUser user, reason) async {
   });
 }
 
-Future<String> getProvider(String email) async {
+Future<String?> getProvider(String email) async {
   print('email: $email');
   String provider = "";
   await FirebaseFirestore.instance
@@ -83,13 +83,15 @@ Future<String> getProvider(String email) async {
       .snapshots()
       .first
       .then((value) {
-    provider = value.docs.first.get("auth_type");
+    if (value.size != 0) {
+      provider = value.docs.first.get("auth_type");
+    }
   });
   print('provider: $provider');
   return provider;
 }
 
-Future<String> loginWithPhone(phone) async {
+Future<String?> loginWithPhone(phone) async {
   String? email;
   await FirebaseFirestore.instance
       .collection('mp_users')

@@ -9,6 +9,7 @@ import 'package:loading_overlay/loading_overlay.dart';
 import 'package:motopickupdriver/controllers/completeYourProfile/upload_image.dart';
 import 'package:motopickupdriver/utils/buttons.dart';
 import 'package:motopickupdriver/utils/colors.dart';
+import 'package:motopickupdriver/utils/services.dart';
 import 'package:motopickupdriver/utils/typography.dart';
 
 class UploadImage extends StatelessWidget {
@@ -46,6 +47,18 @@ class UploadImage extends StatelessWidget {
               centerTitle: true,
               elevation: 0,
               backgroundColor: Colors.transparent,
+              actions: <Widget>[
+                    IconButton(
+                      icon: Icon(
+                        Boxicons.bx_log_out,
+                        color: primary,
+                        size: 30.h,
+                      ),
+                      onPressed: () async {
+                        signOut();
+                      },
+                    )
+                  ],
             ),
             body: SingleChildScrollView(
               child: Column(

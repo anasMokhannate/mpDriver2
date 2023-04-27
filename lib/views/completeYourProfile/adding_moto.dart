@@ -3,7 +3,6 @@
 import 'package:boxicons/boxicons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:get/get.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 import 'package:loading_overlay/loading_overlay.dart';
@@ -11,8 +10,8 @@ import 'package:motopickupdriver/components/inputs.dart';
 import 'package:motopickupdriver/controllers/completeYourProfile/adding_moto.dart';
 import 'package:motopickupdriver/utils/buttons.dart';
 import 'package:motopickupdriver/utils/colors.dart';
+import 'package:motopickupdriver/utils/services.dart';
 import 'package:motopickupdriver/utils/typography.dart';
-import 'package:motopickupdriver/views/welcome_page.dart';
 
 class AddingMoto extends StatelessWidget {
   AddingMoto({Key? key}) : super(key: key);
@@ -33,17 +32,6 @@ class AddingMoto extends StatelessWidget {
           ),
           child: Scaffold(
             appBar: AppBar(
-              leading: InkWell(
-                onTap: () {
-                  Get.to(WelcomeScreen());
-                  SessionManager().remove('current_user');
-                },
-                child: Icon(
-                  Boxicons.bx_arrow_back,
-                  color: primary,
-                  size: 30.h,
-                ),
-              ),
               toolbarHeight: 80.h,
               title: Image.asset(
                 'assets/images/logoMoto_colored.png',
@@ -52,6 +40,18 @@ class AddingMoto extends StatelessWidget {
               centerTitle: true,
               elevation: 0,
               backgroundColor: Colors.transparent,
+              actions: <Widget>[
+                IconButton(
+                  icon: Icon(
+                    Boxicons.bx_log_out,
+                    color: primary,
+                    size: 30.h,
+                  ),
+                  onPressed: () async {
+                    signOut();
+                  },
+                )
+              ],
             ),
             body: !controller.isTrue.value
                 ? Center(

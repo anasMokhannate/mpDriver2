@@ -89,15 +89,15 @@ class VerfiyNumberController extends GetxController {
             isDeletedAccount: false,
             isVerifiedAccount: true,
           );
-          await saveCurrentUser(userBase).then((value) {
+          await saveCurrentUser(userBase).then((value) async {
             print(value);
-          });
           await createUser(userBase);
+          });
         });
-
-        Get.offAll(() => CompleteProfile());
-        loading.toggle();
+loading.toggle();
         update();
+        Get.offAll(() => CompleteProfile());
+        
         
       } catch (e) {
         showAlertDialogOneButton(

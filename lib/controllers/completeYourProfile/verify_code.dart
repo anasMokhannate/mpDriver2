@@ -7,6 +7,7 @@ import '../../utils/alert_dialog.dart';
 import '../../utils/models/user.dart';
 import '../../utils/queries.dart';
 import '../../utils/services.dart';
+import '../../views/completeYourProfile/adding_moto.dart';
 import '../../views/congrats_page.dart';
 
 class VerifyCodeController extends GetxController {
@@ -36,35 +37,35 @@ class VerifyCodeController extends GetxController {
 
   void submit(BuildContext context) {
     if (code.text.isNotEmpty) {
-        PhoneAuthCredential credential = PhoneAuthProvider.credential(
-            verificationId: verificationCode, smsCode: code.text);
-        try {
-          loading.toggle();
-          update();
-          FirebaseAuth.instance.currentUser!
-              .linkWithCredential(credential)
-              .then((value) async {
-            currUser!.isActivatedAccount = true;
-            currUser!.isVerifiedAccount = true;
-            currUser!.phoneNumber = phoneNumber;
-            currUser!.currentPageClient = "homePage";
-
-            completeUser(currUser!).then((value) {
-              saveCurrentUser(currUser!);
-              Get.to(() => Congrats());
-            });
-          }).catchError((e) {});
-        } catch (e) {
-          message =
-              "Le code SMS a expiré. Veuillez renvoyer le code de vérification pour réessayer.";
-          update();
-        }
-      } else {
-        showAlertDialogOneButton(
-            context, "Code requis", "Veuillez entrer le bon code.", "Ok");
+      PhoneAuthCredential credential = PhoneAuthProvider.credential(
+          verificationId: verificationCode, smsCode: code.text);
+      try {
         loading.toggle();
         update();
+        FirebaseAuth.instance.currentUser!
+            .linkWithCredential(credential)
+            .then((value) async {
+          currUser!.isVerifiedAccount = true;
+          currUser!.phoneNumber = phoneNumber;
+          currUser!.currentPageClient = "homePage";
+          currUser!.currentPageDriver = "addingMoto";
+
+          completeUser(currUser!).then((value) {
+            saveCurrentUser(currUser!);
+            Get.to(() => AddingMoto());
+          });
+        }).catchError((e) {});
+      } catch (e) {
+        message =
+            "Le code SMS a expiré. Veuillez renvoyer le code de vérification pour réessayer.";
+        update();
       }
+    } else {
+      showAlertDialogOneButton(
+          context, "Code requis", "Veuillez entrer le bon code.", "Ok");
+      loading.toggle();
+      update();
+    }
   }
 
   void reSendCode(BuildContext context) {}

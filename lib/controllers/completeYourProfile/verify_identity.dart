@@ -13,7 +13,7 @@ import 'package:motopickupdriver/views/congrats_page.dart';
 class VerifyIdentityController extends GetxController {
   RxBool loading = false.obs;
   MpUser? userBase;
-  //bool isOpen = false, isCoursier = false, isDriver = false;
+  RxBool isDriver = false.obs;
   XFile? cardFile, cardLicence, cardAssurance, cardGrise, cardAnthropometrique;
   String cardExpire = "Date d'expiration",
       licenceExpire = "Date d'expiration",
@@ -118,102 +118,113 @@ class VerifyIdentityController extends GetxController {
     // } else {
     loading.toggle();
     update();
-    await uploadImage();
-    loading.toggle();
-    update();
+    await uploadImage(context);
+    // loading.toggle();
+    // update();
   }
 
-  uploadImage() async {
-    await FirebaseStorage.instance
-        .ref('test-images/user-images/${cardFile!.name}')
-        .putFile(card!)
-        .then((p0) {
-      p0.ref.getDownloadURL().then((value) async {
-        userBase!.identityCardPicture = value;
-        userBase!.identityCardExpirationDate = cardExpire;
+  uploadImage(context) async {
+    if (isDriver.value == true) {
+      await FirebaseStorage.instance
+          .ref('test-images/user-images/${cardFile!.name}')
+          .putFile(card!)
+          .then((p0) {
+        p0.ref.getDownloadURL().then((value) async {
+          userBase!.identityCardPicture = value;
+          userBase!.identityCardExpirationDate = cardExpire;
+        });
       });
-    });
-    await FirebaseStorage.instance
-        .ref('test-images/user-images/${cardLicence!.name}')
-        .putFile(licence!)
-        .then((p4) {
-      p4.ref.getDownloadURL().then((value) async {
-        userBase!.drivingLicencePicture = value;
-        userBase!.drivingLicenceExpirationDate = licenceExpire;
+      await FirebaseStorage.instance
+          .ref('test-images/user-images/${cardLicence!.name}')
+          .putFile(licence!)
+          .then((p4) {
+        p4.ref.getDownloadURL().then((value) async {
+          userBase!.drivingLicencePicture = value;
+          userBase!.drivingLicenceExpirationDate = licenceExpire;
+        });
       });
-    });
 
-    await FirebaseStorage.instance
-        .ref('test-images/user-images/${cardAssurance!.name}')
-        .putFile(assurance!)
-        .then((p0) {
-      p0.ref.getDownloadURL().then((value) async {
-        userBase!.assurancePicture = value;
-        userBase!.assuranceExpirationDate = assuranceExpire;
+      await FirebaseStorage.instance
+          .ref('test-images/user-images/${cardAssurance!.name}')
+          .putFile(assurance!)
+          .then((p0) {
+        p0.ref.getDownloadURL().then((value) async {
+          userBase!.assurancePicture = value;
+          userBase!.assuranceExpirationDate = assuranceExpire;
+        });
       });
-    });
-    await FirebaseStorage.instance
-        .ref('test-images/user-images/${cardGrise!.name}')
-        .putFile(grise!)
-        .then((p2) {
-      p2.ref.getDownloadURL().then((value) async {
-        userBase!.carteGrisePicture = value;
-        userBase!.carteGriseExpirationDate = griseExpire;
-        if (cardAnthropometrique != null) {
-          await FirebaseStorage.instance
-              .ref('test-images/user-images/${cardAnthropometrique!.name}')
-              .putFile(anthropometrique!)
-              .then((p1) {
-            p1.ref.getDownloadURL().then((value) async {
-              userBase!.anthropometrique = value;
-              userBase!.isVerifiedAccount = true;
-              // if (isCoursier == true && isDriver == false) {
-              //   userBase!.isDriver = 1;
-              // }
-              // if (isCoursier == false && isDriver == true) {
-              //   userBase!.is_driver = 2;
-              // }
-              // if (isCoursier == true && isDriver == true) {
-              //   userBase!.is_driver = 3;
-              // }
-              userBase!.isActivatedAccount = false;
-              DateFormat dateFormat = DateFormat("yyyy-MM-dd ");
-              String datenow = dateFormat.format(DateTime.now());
-              userBase!.lastDocumentUpdateDate = datenow;
-              await saveCurrentUser(userBase!);
-              completeUser(userBase!).then((value) {
-                Get.offAll(() => Congrats(),
-                    transition: Transition.rightToLeft);
-                loading.toggle();
-                update();
+      await FirebaseStorage.instance
+          .ref('test-images/user-images/${cardGrise!.name}')
+          .putFile(grise!)
+          .then((p2) {
+        p2.ref.getDownloadURL().then((value) async {
+          userBase!.carteGrisePicture = value;
+          userBase!.carteGriseExpirationDate = griseExpire;
+          if (cardAnthropometrique != null) {
+            await FirebaseStorage.instance
+                .ref('test-images/user-images/${cardAnthropometrique!.name}')
+                .putFile(anthropometrique!)
+                .then((p1) {
+              p1.ref.getDownloadURL().then((value) async {
+                userBase!.anthropometrique = value;
+                userBase!.isVerifiedAccount = true;
+                userBase!.currentPageDriver = 'congratsPage';
+                userBase!.isDriver = true;
+                // if (isCoursier == true && isDriver == false) {
+                //   userBase!.isDriver = 1;
+                // }
+                // if (isCoursier == false && isDriver == true) {
+                //   userBase!.is_driver = 2;
+                // }
+                // if (isCoursier == true && isDriver == true) {
+                //   userBase!.is_driver = 3;
+                // }
+                userBase!.isActivatedAccount = false;
+                DateFormat dateFormat = DateFormat("yyyy-MM-dd ");
+                String datenow = dateFormat.format(DateTime.now());
+                userBase!.lastDocumentUpdateDate = datenow;
+                await saveCurrentUser(userBase!).then((value) {
+                  completeUser(userBase!).then((value) {
+                    Get.offAll(() => Congrats(),
+                        transition: Transition.rightToLeft);
+                    loading.toggle();
+                    update();
+                  });
+                });
               });
             });
-          });
-        } else {
-          userBase!.isVerifiedAccount = true;
-          // if (isCoursier == true && isDriver == false) {
-          //   userBase!.is_driver = 1;
-          // }
-          // if (isCoursier == false && isDriver == true) {
-          //   userBase!.is_driver = 2;
-          // }
-          // if (isCoursier == true && isDriver == true) {
-          //   userBase!.is_driver = 3;
-          // }
-          userBase!.isActivatedAccount = false;
-          DateFormat dateFormat = DateFormat("yyyy-MM-dd ");
+          } else {
+            userBase!.isVerifiedAccount = true;
+            // if (isCoursier == true && isDriver == false) {
+            //   userBase!.is_driver = 1;
+            // }
+            // if (isCoursier == false && isDriver == true) {
+            //   userBase!.is_driver = 2;
+            // }
+            // if (isCoursier == true && isDriver == true) {
+            //   userBase!.is_driver = 3;
+            // }
+            userBase!.isActivatedAccount = false;
+            DateFormat dateFormat = DateFormat("yyyy-MM-dd ");
 
-          String datenow = dateFormat.format(DateTime.now());
-          userBase!.lastDocumentUpdateDate = datenow;
-          await saveCurrentUser(userBase!);
-          completeUser(userBase!).then((value) {
-            Get.offAll(() => Congrats(), transition: Transition.rightToLeft);
-            loading.toggle();
-            update();
-          });
-        }
+            String datenow = dateFormat.format(DateTime.now());
+            userBase!.lastDocumentUpdateDate = datenow;
+            await saveCurrentUser(userBase!);
+            completeUser(userBase!).then((value) {
+              Get.offAll(() => Congrats(), transition: Transition.rightToLeft);
+              loading.toggle();
+              update();
+            });
+          }
+        });
       });
-    });
+    } else {
+      loading.toggle();
+      update();
+
+      showAlertDialogOneButton(context, "Obligatoire",
+          "Veuillez choisir votre type de travail.", "Ok");
+    }
   }
 
   @override

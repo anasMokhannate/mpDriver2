@@ -11,7 +11,6 @@ import '../../utils/models/user.dart';
 import '../../utils/queries.dart';
 import '../../utils/services.dart';
 import '../../views/completeYourProfile/adding_moto.dart';
-import '../../views/congrats_page.dart';
 
 class UploadImageController extends GetxController {
   MpUser? userBase;
@@ -43,31 +42,31 @@ class UploadImageController extends GetxController {
           .putFile(image!)
           .then((picture) {
         picture.ref.getDownloadURL().then((value) async {
-          userBase!.currentPageDriver = 'AddingMoto';
+          userBase!.currentPageDriver = 'addingMoto';
           userBase!.isActivatedAccount = false;
           userBase!.isVerifiedAccount = true;
           userBase!.profilePicture = value;
 
-          await saveCurrentUser(userBase!);
-
-          await completeUser(userBase!).then((value) {
-            Get.offAll(() => AddingMoto(), transition: Transition.rightToLeft);
+          await saveCurrentUser(userBase!).then((value) async {
+            await completeUser(userBase!).then((value) {
+              Get.offAll(() => AddingMoto(),
+                  transition: Transition.rightToLeft);
+            });
           });
         });
       });
     } else {
-      userBase!.currentPageDriver = 'AddingMoto';
+      userBase!.currentPageDriver = 'addingMoto';
       userBase!.isActivatedAccount = false;
       userBase!.isVerifiedAccount = true;
       userBase!.profilePicture = fileName;
 
-      await saveCurrentUser(userBase!);
-
-      await completeUser(userBase!).then((value) {
-        Get.offAll(() => Congrats(), transition: Transition.rightToLeft);
+      await saveCurrentUser(userBase!).then((value) async {
+        await completeUser(userBase!).then((value) {
+          Get.offAll(() => AddingMoto(), transition: Transition.rightToLeft);
+        });
       });
     }
-    Get.to(() => AddingMoto(), transition: Transition.rightToLeft);
   }
 
   @override

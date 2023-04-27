@@ -1,5 +1,6 @@
 // ignore_for_file: must_be_immutable
 
+import 'package:boxicons/boxicons.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -8,6 +9,7 @@ import 'package:loading_indicator/loading_indicator.dart';
 import 'package:motopickupdriver/controllers/congrats_page.dart';
 import 'package:motopickupdriver/utils/buttons.dart';
 import 'package:motopickupdriver/utils/colors.dart';
+import 'package:motopickupdriver/utils/services.dart';
 import 'package:motopickupdriver/utils/typography.dart';
 import 'package:motopickupdriver/views/home_page.dart';
 
@@ -31,6 +33,18 @@ class Congrats extends StatelessWidget {
             centerTitle: true,
             elevation: 0,
             backgroundColor: Colors.transparent,
+            actions: <Widget>[
+                IconButton(
+                  icon: Icon(
+                    Boxicons.bx_log_out,
+                    color: primary,
+                    size: 30.h,
+                  ),
+                  onPressed: () async {
+                    signOut();
+                  },
+                )
+              ],
           ),
           body: !controller.isTrue.value
               ? Center(
