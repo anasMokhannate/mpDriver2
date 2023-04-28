@@ -42,7 +42,7 @@ class UploadImageController extends GetxController {
           .putFile(image!)
           .then((picture) {
         picture.ref.getDownloadURL().then((value) async {
-          userBase!.currentPageClient = 'homePage';
+          userBase!.currentPageClient = "homePage";
           userBase!.currentPageDriver = 'addingMoto';
           userBase!.isActivatedAccount = false;
           userBase!.isVerifiedAccount = true;
@@ -57,7 +57,8 @@ class UploadImageController extends GetxController {
         });
       });
     } else {
-      userBase!.currentPageClient = 'homePage';
+
+      userBase!.currentPageClient = "homePage";
       userBase!.currentPageDriver = 'addingMoto';
       userBase!.isActivatedAccount = false;
       userBase!.isVerifiedAccount = true;

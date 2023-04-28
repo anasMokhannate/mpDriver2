@@ -3,7 +3,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
-import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/get_navigation.dart';
+import 'package:get/get_rx/src/rx_types/rx_types.dart';
+import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 
 import '../../utils/alert_dialog.dart';
 import '../../utils/colors.dart';
@@ -89,6 +92,8 @@ class CompleteProfileController extends GetxController {
         userBase!.identityCardNumber = cni.text;
         userBase!.sexe = sexe!.value;
         userBase!.currentCity = selected;
+        print(
+                'user from memory (before complete profile): ${userBase?.email} ${userBase?.authType}');
         if (userBase!.authType == "Phone") {
           print("heeeeeeeeeeeeeeeeeeeeeere 22222");
           userBase!.currentPageClient = "uploadImage";
