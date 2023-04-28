@@ -91,14 +91,13 @@ class VerfiyNumberController extends GetxController {
           );
           await saveCurrentUser(userBase).then((value) async {
             print(value);
-          await createUser(userBase);
+            await createUser(userBase).then((value) {
+              loading.toggle();
+              update();
+              Get.offAll(() => CompleteProfile());
+            });
           });
         });
-loading.toggle();
-        update();
-        Get.offAll(() => CompleteProfile());
-        
-        
       } catch (e) {
         showAlertDialogOneButton(
             context, "Code requis", "Veuillez entrer le bon code.", "Ok");
@@ -116,7 +115,7 @@ loading.toggle();
   void onInit() async {
     super.onInit();
     phoneNumber = await SessionManager().get('phone');
-    print (phoneNumber);
+    print(phoneNumber);
     password = await SessionManager().get('password');
     print(password);
     email = await SessionManager().get('email');
@@ -126,5 +125,4 @@ loading.toggle();
     startTimer();
     update();
   }
-  
 }
