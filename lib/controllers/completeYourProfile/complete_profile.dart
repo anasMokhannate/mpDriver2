@@ -84,7 +84,7 @@ class CompleteProfileController extends GetxController {
       if (value) {
         loading.toggle();
         update();
-
+        print("heeeeeeeeeeeeeeeeeeeeeere 11111");
         userBase!.uid = FirebaseAuth.instance.currentUser!.uid;
         userBase!.fullName = fullname.text;
         userBase!.email = email.text;
@@ -95,17 +95,19 @@ class CompleteProfileController extends GetxController {
         print(
                 'user from memory (before complete profile): ${userBase?.email} ${userBase?.authType}');
         if (userBase!.authType == "Phone") {
+          print("heeeeeeeeeeeeeeeeeeeeeere 22222");
           userBase!.currentPageClient = "uploadImage";
           userBase!.currentPageDriver = 'uploadImage';
           await saveCurrentUser(userBase!).then((value) async {
             print(
                 'user from memory (complete profile): ${userBase?.email} ${userBase?.authType}');
             await completeUser(userBase!).then((value) {
-              print("before loading");
+              print("heeeeeeeeeeeeeeeeeeeeeere 33333");
               loading.toggle();
               update();
-              print("after loading");
+              print("heeeeeeeeeeeeeeeeeeeeeere 44444");
               Get.to(() => UploadImage(), transition: Transition.rightToLeft);
+              
               // } else {
               //   showAlertDialogOneButton(
               //       context, "Erreur", "Réssayez plus tard", "Ok");

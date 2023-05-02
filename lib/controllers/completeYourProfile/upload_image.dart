@@ -57,6 +57,7 @@ class UploadImageController extends GetxController {
         });
       });
     } else {
+
       userBase!.currentPageClient = "homePage";
       userBase!.currentPageDriver = 'addingMoto';
       userBase!.isActivatedAccount = false;
@@ -78,5 +79,6 @@ class UploadImageController extends GetxController {
       userBase = value;
       update();
     });
+    
   }
 }

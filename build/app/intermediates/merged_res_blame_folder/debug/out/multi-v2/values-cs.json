@@ -1,27 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "C:\\Users\\Aymane\\Desktop\\flutter\\mpDriver2\\build\\app\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-cs\\values-cs.xml",
+            "outputFile": "C:\\src\\Projects\\MP-driver-2\\mpDriver2\\build\\app\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-cs\\values-cs.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\Aymane\\.gradle\\caches\\transforms-3\\a4793b089308a48314c434f5399593bb\\transformed\\jetified-facebook-login-15.0.2\\res\\values-cs\\values-cs.xml",
-                    "from": {
-                        "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24",
-                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
-                        "startOffsets": "55,198,326,458,570,663,757,833,922,1015,1131,1245,1340,1435,1540,1658,1741,1824,2020,2116,2220,2336,2445",
-                        "endColumns": "142,127,131,111,92,93,75,88,92,115,113,94,94,104,117,82,82,195,95,103,115,108,149",
-                        "endOffsets": "193,321,453,565,658,752,828,917,1010,1126,1240,1335,1430,1535,1653,1736,1819,2015,2111,2215,2331,2440,2590"
-                    },
-                    "to": {
-                        "startLines": "29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51",
-                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
-                        "startOffsets": "2798,2941,3069,3201,3313,3406,3500,3576,3665,3758,3874,3988,4083,4178,4283,4401,4484,4567,4763,4859,4963,5079,5188",
-                        "endColumns": "142,127,131,111,92,93,75,88,92,115,113,94,94,104,117,82,82,195,95,103,115,108,149",
-                        "endOffsets": "2936,3064,3196,3308,3401,3495,3571,3660,3753,3869,3983,4078,4173,4278,4396,4479,4562,4758,4854,4958,5074,5183,5333"
-                    }
-                },
-                {
-                    "source": "C:\\Users\\Aymane\\.gradle\\caches\\transforms-3\\7e0585237c23e523fd1fc419b295fab0\\transformed\\core-1.9.0\\res\\values-cs\\values-cs.xml",
+                    "source": "C:\\Users\\acer\\.gradle\\caches\\transforms-3\\7e0585237c23e523fd1fc419b295fab0\\transformed\\core-1.9.0\\res\\values-cs\\values-cs.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",
@@ -38,7 +21,24 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\Aymane\\.gradle\\caches\\transforms-3\\5cfdb2ce6517ad4cad1f3be5c7221343\\transformed\\appcompat-1.2.0\\res\\values-cs\\values-cs.xml",
+                    "source": "C:\\Users\\acer\\.gradle\\caches\\transforms-3\\6883f77015e0e5084bd938d3d63c40e2\\transformed\\jetified-play-services-basement-18.1.0\\res\\values-cs\\values.xml",
+                    "from": {
+                        "startLines": "4",
+                        "startColumns": "0",
+                        "startOffsets": "195",
+                        "endColumns": "138",
+                        "endOffsets": "333"
+                    },
+                    "to": {
+                        "startLines": "60",
+                        "startColumns": "4",
+                        "startOffsets": "6332",
+                        "endColumns": "142",
+                        "endOffsets": "6470"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\acer\\.gradle\\caches\\transforms-3\\5cfdb2ce6517ad4cad1f3be5c7221343\\transformed\\appcompat-1.2.0\\res\\values-cs\\values-cs.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
@@ -55,7 +55,24 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\Aymane\\.gradle\\caches\\transforms-3\\9326680ea2eea4833eb3e362bf0c3ffb\\transformed\\jetified-play-services-base-18.1.0\\res\\values-cs\\values.xml",
+                    "source": "C:\\Users\\acer\\.gradle\\caches\\transforms-3\\a4793b089308a48314c434f5399593bb\\transformed\\jetified-facebook-login-15.0.2\\res\\values-cs\\values-cs.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "55,198,326,458,570,663,757,833,922,1015,1131,1245,1340,1435,1540,1658,1741,1824,2020,2116,2220,2336,2445",
+                        "endColumns": "142,127,131,111,92,93,75,88,92,115,113,94,94,104,117,82,82,195,95,103,115,108,149",
+                        "endOffsets": "193,321,453,565,658,752,828,917,1010,1126,1240,1335,1430,1535,1653,1736,1819,2015,2111,2215,2331,2440,2590"
+                    },
+                    "to": {
+                        "startLines": "29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "2798,2941,3069,3201,3313,3406,3500,3576,3665,3758,3874,3988,4083,4178,4283,4401,4484,4567,4763,4859,4963,5079,5188",
+                        "endColumns": "142,127,131,111,92,93,75,88,92,115,113,94,94,104,117,82,82,195,95,103,115,108,149",
+                        "endOffsets": "2936,3064,3196,3308,3401,3495,3571,3660,3753,3869,3983,4078,4173,4278,4396,4479,4562,4758,4854,4958,5074,5183,5333"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\acer\\.gradle\\caches\\transforms-3\\9326680ea2eea4833eb3e362bf0c3ffb\\transformed\\jetified-play-services-base-18.1.0\\res\\values-cs\\values.xml",
                     "from": {
                         "startLines": "4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20",
                         "startColumns": "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
@@ -72,7 +89,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\Aymane\\.gradle\\caches\\transforms-3\\ee6de303f3f14dc1d3cfb386e2cab806\\transformed\\browser-1.4.0\\res\\values-cs\\values-cs.xml",
+                    "source": "C:\\Users\\acer\\.gradle\\caches\\transforms-3\\ee6de303f3f14dc1d3cfb386e2cab806\\transformed\\browser-1.4.0\\res\\values-cs\\values-cs.xml",
                     "from": {
                         "startLines": "2,3,4,5",
                         "startColumns": "4,4,4,4",
@@ -86,23 +103,6 @@
                         "startOffsets": "7590,7692,7795,7909",
                         "endColumns": "101,102,113,100",
                         "endOffsets": "7687,7790,7904,8005"
-                    }
-                },
-                {
-                    "source": "C:\\Users\\Aymane\\.gradle\\caches\\transforms-3\\6883f77015e0e5084bd938d3d63c40e2\\transformed\\jetified-play-services-basement-18.1.0\\res\\values-cs\\values.xml",
-                    "from": {
-                        "startLines": "4",
-                        "startColumns": "0",
-                        "startOffsets": "195",
-                        "endColumns": "138",
-                        "endOffsets": "333"
-                    },
-                    "to": {
-                        "startLines": "60",
-                        "startColumns": "4",
-                        "startOffsets": "6332",
-                        "endColumns": "142",
-                        "endOffsets": "6470"
                     }
                 }
             ]
