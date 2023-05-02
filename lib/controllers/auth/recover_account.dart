@@ -1,15 +1,14 @@
 import 'dart:async';
 
-import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:get/get.dart';
+import 'package:motopickupdriver/utils/alert_dialog.dart';
+import 'package:motopickupdriver/views/auth/login_page.dart';
 
 import '../../utils/models/user.dart';
 import '../../utils/queries.dart';
-import '../../views/completeYourProfile/complete_profile.dart';
-import '../../views/home_page.dart';
 
 class RecoverAccountController extends GetxController {
   TextEditingController code = TextEditingController();
@@ -36,11 +35,8 @@ class RecoverAccountController extends GetxController {
     super.onInit();
     verificationCode = Get.arguments;
     oldPhone = await SessionManager().get("oldPhone");
-    print("${oldPhone!} old phone");
     newPhone = await SessionManager().get("newPhone");
-    print("${newPhone!} new phone");
     password = await SessionManager().get("password");
-    print("${password!} password");
     userBase = MpUser.fromJson(await SessionManager().get("currentUser"));
     isTrue.toggle();
     startTimer();
@@ -83,37 +79,27 @@ class RecoverAccountController extends GetxController {
       update();
       try {
         await loginWithPhone(oldPhone).then((email) async {
-          print("emaiiiiiiiiiiiiiiiiiiiiiiiiiiiiil $email");
           PhoneAuthCredential phoneCredential = PhoneAuthProvider.credential(
               verificationId: verificationCode, smsCode: code.text);
 
           User? user = FirebaseAuth.instance.currentUser;
-          print("teeeeeeeeeeeeeeeeeeeeeset${user!.email!}");
-          user.updatePhoneNumber(phoneCredential).then((_) async {
-             print("${user.phoneNumber!} updated email");
-              userBase!.lastLoginDate = DateFormat("dd-MM-yyyy HH:mm", "Fr_fr")
-                  .format(DateTime.now());
-              userBase!.phoneNumber = newPhone;
-              await completeUser(userBase!);
-              await SessionManager().set('currentUser', userBase);
-              print("userAddeeeeeeeeeeeeeeeeeeeed ${userBase!.email!}");
-              if (userBase!.isVerifiedAccount == false) {
-                return Get.offAll(() => CompleteProfile(),
+
+          user!.updatePhoneNumber(phoneCredential).then((_) async {
+            userBase!.phoneNumber = newPhone;
+            await completeUser(userBase!).then((value) async {
+              await FirebaseAuth.instance.signOut().then((value) async {
+                await SessionManager().remove("currentUser");
+                Get.offAll(() => LoginPage(),
                     transition: Transition.rightToLeft);
-              }
-              Get.offAll(() => const HomePage(),
-                  transition: Transition.rightToLeft);
+              });
             });
           });
-        }
-      catch (e) {
-        print(e.toString());
-        Get.snackbar('Error', 'Please enter code teeeeeeeeeeeeeeest');
+        });
+      } catch (e) {
+         showAlertDialogOneButton(context, "Erreur", "Une erreur est déclenchée, veilliez réessayer plus tard.", "Ok");
       }
     } else {
-      Get.snackbar('Error', 'Please enter code');
+      showAlertDialogOneButton(context, "Code", "Code est obligatoire", "Ok");
     }
   }
 }
-
-

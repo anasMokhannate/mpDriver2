@@ -48,7 +48,7 @@ class LoginController extends GetxController {
           if (email != null) {
             await getProvider(email).then((provider) async {
               if (provider == "Phone") {
-                try {
+                // try {
                   await FirebaseAuth.instance
                       .signInWithEmailAndPassword(
                           email: email, password: password.text)
@@ -62,15 +62,16 @@ class LoginController extends GetxController {
                       update();
                     });
                   });
-                } catch (e) {
-                  showAlertDialogOneButton(
-                      context,
-                      "Mot de passe incorrect",
-                      "Votre mot de passe est incorrect, Veuillez réessayer",
-                      "Ok");
-                  loading.toggle();
-                  update();
-                }
+                // } catch (e) {
+                //   print("erroooooooooooooooooooooooor $e");
+                //   showAlertDialogOneButton(
+                //       context,
+                //       "Mot de passe incorrect",
+                //       "Votre mot de passe est incorrect, Veuillez réessayer",
+                //       "Ok");
+                //   loading.toggle();
+                //   update();
+                // }
               } else {
                 loading.toggle();
                 update();

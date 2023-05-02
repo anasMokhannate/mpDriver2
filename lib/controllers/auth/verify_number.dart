@@ -92,9 +92,10 @@ class VerfiyNumberController extends GetxController {
           await saveCurrentUser(userBase).then((value) async {
             print(value);
             await createUser(userBase).then((value) {
+              
+              Get.offAll(() => CompleteProfile());
               loading.toggle();
               update();
-              Get.offAll(() => CompleteProfile());
             });
           });
         });
