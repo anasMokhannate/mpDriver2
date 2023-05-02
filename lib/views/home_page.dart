@@ -64,7 +64,7 @@ class _HomePageState extends State<HomePage> {
                         await getCurrentUser().then((value) async {
                           controller.userBase = value;
                           await saveCurrentUser(controller.userBase!);
-                          print("this is the total orders${controller.userBase!.totalOrders}");
+                          // print("this is the total orders${controller.userBase!.totalOrders}");
                         });
                       },
                       child: Icon(

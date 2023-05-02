@@ -8,6 +8,12 @@
       "languageVersion": "2.16"
     },
     {
+      "name": "achievement_view",
+      "rootUri": "file:///C:/Users/Aymane/AppData/Local/Pub/Cache/hosted/pub.dev/achievement_view-1.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.15"
+    },
+    {
       "name": "archive",
       "rootUri": "file:///C:/Users/Aymane/AppData/Local/Pub/Cache/hosted/pub.dev/archive-3.3.6",
       "packageUri": "lib/",
@@ -1022,7 +1028,7 @@
       "languageVersion": "2.17"
     }
   ],
-  "generated": "2023-04-27T14:19:06.171992Z",
+  "generated": "2023-05-02T12:51:25.534463Z",
   "generator": "pub",
   "generatorVersion": "2.19.6"
 }

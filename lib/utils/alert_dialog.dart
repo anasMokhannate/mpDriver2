@@ -2,6 +2,7 @@
 
 import 'dart:io';
 
+import 'package:achievement_view/achievement_view.dart';
 import 'package:boxicons/boxicons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -361,7 +362,7 @@ paiment(BuildContext context, functionYes) {
 
 
 
-/*void showAchievementView(BuildContext context, title, text) {
+void showAchievementView(BuildContext context, title, text) {
   AchievementView(context,
       title: title,
       subTitle: text,
@@ -385,4 +386,3 @@ paiment(BuildContext context, functionYes) {
     //AchievementState.closed
   }).show();
 }
- */

@@ -4,7 +4,8 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:motopickupdriver/utils/queries.dart';
+import 'package:motopickupdriver/utils/services.dart';
 
 import '../utils/models/user.dart';
 
@@ -47,8 +48,7 @@ class HomePageController extends GetxController {
   double ttime = 0.0;
 
   getOrdersPlanned() async {
-    if (userBase!.plannedDelivery != 0 ||
-        userBase!.plannedTrip != 0) {
+    if (userBase!.plannedDelivery != 0 || userBase!.plannedTrip != 0) {
       isPlanned = true;
     } else {
       isPlanned = false;
@@ -115,24 +115,25 @@ class HomePageController extends GetxController {
 
   @override
   void onInit() async {
-    // super.onInit();
-    // await getCurrentUser().then((value) async {
-    //  await  initOneSignal();
-    //   userBase = value;
-    //   print(userBase);
-    //   updateFcm(userBase!);
-    //   saveCurrentUser(value!);
-    //   await getConfigParams().then((value) => cities = value);
-    //   await getOrdersPlanned();
-    //   await _getUserLocation();
-    //   isTrue.toggle();
-    //   update();
-    // });
+    super.onInit();
+    await getUserFromMemory().then((value) async {
+      await initOneSignal();
+      userBase = value;
+      print(userBase);
+      updateFcm();
+      saveCurrentUser(value!);
+      await getConfigParams().then((value) => cities = value);
+      await getOrdersPlanned();
+      await _getUserLocation();
+      isTrue.toggle();
+      update();
+    });
   }
 
   void goOnline() {}
 
-  void setRoad(documentSnapshot, documentSnapshot2, documentSnapshot3, documentSnapshot4) {}
+  void setRoad(documentSnapshot, documentSnapshot2, documentSnapshot3,
+      documentSnapshot4) {}
 
   void stopTimer() {}
 

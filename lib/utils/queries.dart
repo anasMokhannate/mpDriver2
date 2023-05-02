@@ -19,6 +19,20 @@ Future<String> checkPhoneNumber(phoneNo) async {
   return message;
 }
 
+Future getConfigParams() async {
+  List cities = [];
+  await FirebaseFirestore.instance
+      .collection('config')
+      .doc('config-params')
+      .snapshots()
+      .first
+      .then((value) {
+    cities = value.get('available_cities');
+  });
+
+  return cities;
+}
+
 Future<bool> checkEmail(email) async {
   bool message = false;
   //String message = "not-found";
@@ -55,8 +69,7 @@ Future createUser(MpUser user) async {
   final docUser =
       FirebaseFirestore.instance.collection('mp_users').doc(user.uid);
   await docUser.set(user.toJson()).then((value) => 'null',
-      onError: (error) =>
-          '${error}erroooooooooooooooooooooooooooooor');
+      onError: (error) => '${error}erroooooooooooooooooooooooooooooor');
   Get.snackbar('title', 'User created');
 }
 

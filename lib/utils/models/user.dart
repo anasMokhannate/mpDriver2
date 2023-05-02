@@ -45,7 +45,7 @@ class MpUser {
 
   int? totalOrders;
   int? reportedTimes;
-  List<String>? fcmList;
+  List? fcmList;
   String? currentOrderDriver;
   String? currentOrderCustomer;
   String? currentPageClient;
