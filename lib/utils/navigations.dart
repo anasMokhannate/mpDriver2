@@ -2,6 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/get_navigation.dart';
 import 'package:in_app_update/in_app_update.dart';
 import 'package:motopickupdriver/utils/queries.dart';
 import 'package:motopickupdriver/utils/services.dart';
@@ -130,6 +132,10 @@ Future<bool> checkForUpdate() async {
   });
 
   return updateStatus;
+}
+
+goBackOff(Widget target) {
+  Get.offAll(() => target, transition: Transition.leftToRight);
 }
 
 void showSnack(String text) {

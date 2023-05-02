@@ -128,7 +128,7 @@ updateFcm() async {
   MpUser value = MpUser.fromJson(await SessionManager().get('currentUser'));
   String fcm = await SessionManager().get('driver_fcm');
   await FirebaseFirestore.instance
-      .collection('drivers')
+      .collection('mp_users')
       .doc(value.uid)
       .update({'driver_fcm': fcm});
   // value.driver_fcm = fcm;

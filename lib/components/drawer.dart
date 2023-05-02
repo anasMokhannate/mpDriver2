@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 import 'package:motopickupdriver/utils/colors.dart';
 import 'package:motopickupdriver/utils/functions.dart';
 import 'package:motopickupdriver/utils/typography.dart';
+import 'package:motopickupdriver/views/profile/main_page.dart';
 import 'package:motopickupdriver/views/using_condition_screen.dart';
 
 import '../controllers/settings_page.dart';
@@ -29,10 +30,10 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
   @override
   Widget build(BuildContext context) {
     print("hell");
-    double starss = widget.currentUser!.note! /
-(widget.currentUser!.totalOrders == 0
-            ? 1
-            : widget.currentUser!.totalOrders!);
+//     double starss = widget.currentUser!.note! /
+// (widget.currentUser!.totalOrders == 0
+//             ? 1
+//             : widget.currentUser!.totalOrders!);
 
    
 
@@ -57,7 +58,7 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
             buildHeader(
               urlImage: widget.currentUser!.profilePicture!,
               name: widget.currentUser!.fullName!,
-              stars: starss.round(),
+              stars: 4,
               onClicked: () {},
             ),
             Divider(
@@ -79,8 +80,7 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                     icon: Boxicons.bx_user,
                     onClicked: () {
                       Navigator.pop(context);
-                      // Get.offAll(() => ProfilePage(),
-                      //     transition: Transition.rightToLeft);
+                      Get.to(ProfilePage());
                     },
                   ),
                   buildMenuItem(

@@ -49,6 +49,7 @@ class LoginController extends GetxController {
             await getProvider(email).then((provider) async {
               if (provider == "Phone") {
                 // try {
+                // try {
                   await FirebaseAuth.instance
                       .signInWithEmailAndPassword(
                           email: email, password: password.text)
