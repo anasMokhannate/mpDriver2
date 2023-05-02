@@ -18,7 +18,6 @@ import 'package:motopickupdriver/controllers/home_page.dart';
 import 'package:motopickupdriver/utils/alert_dialog.dart';
 import 'package:motopickupdriver/utils/buttons.dart';
 import 'package:motopickupdriver/utils/colors.dart';
-import 'package:motopickupdriver/utils/queries.dart';
 import 'package:motopickupdriver/utils/typography.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -64,7 +63,8 @@ class _HomePageState extends State<HomePage> {
                         await getCurrentUser().then((value) async {
                           controller.userBase = value;
                           await saveCurrentUser(controller.userBase!);
-                          // print("this is the total orders${controller.userBase!.totalOrders}");
+                          print(
+                              "this is the total orders${controller.userBase!.totalOrders}");
                         });
                       },
                       child: Icon(
@@ -171,13 +171,11 @@ class _HomePageState extends State<HomePage> {
                                             if (!documentSnapshot[
                                                         'drivers_declined']
                                                     .contains(controller
-                                                        .userBase!
-                                                        .uid) &&
+                                                        .userBase!.uid) &&
                                                 !documentSnapshot[
                                                         'drivers_accepted']
                                                     .contains((controller
-                                                        .userBase!
-                                                        .uid))) {
+                                                        .userBase!.uid))) {
                                               print(documentSnapshot['user']
                                                   ['customer_note']);
                                               double distance =
@@ -252,8 +250,7 @@ class _HomePageState extends State<HomePage> {
                                                     FirebaseFirestore.instance
                                                         .collection('drivers')
                                                         .doc(controller
-                                                            .userBase!
-                                                            .uid)
+                                                            .userBase!.uid)
                                                         .update({
                                                       "is_on_order": true
                                                     });
@@ -334,10 +331,8 @@ class _HomePageState extends State<HomePage> {
                                                               'nbre_km_depart_destination']) /
                                                       50 <
                                                   1
-                                              ? "${controller.ttime
-                                                      .toStringAsFixed(1)} minutes"
-                                              : "${controller.ttime
-                                                      .toStringAsFixed(1)} heures";
+                                              ? "${controller.ttime.toStringAsFixed(1)} minutes"
+                                              : "${controller.ttime.toStringAsFixed(1)} heures";
 
                                           return Column(
                                             crossAxisAlignment:
@@ -590,8 +585,7 @@ class _HomePageState extends State<HomePage> {
                                                             .collection(
                                                                 'drivers')
                                                             .doc(controller
-                                                                .userBase!
-                                                                .uid)
+                                                                .userBase!.uid)
                                                             .update({
                                                           "is_on_order": false
                                                         });
@@ -796,8 +790,7 @@ class _HomePageState extends State<HomePage> {
                                                           .instance
                                                           .collection('drivers')
                                                           .doc(controller
-                                                              .userBase!
-                                                              .uid)
+                                                              .userBase!.uid)
                                                           .update({
                                                           "is_on_order": false,
                                                           "driver_cancelled_trip":
@@ -808,8 +801,7 @@ class _HomePageState extends State<HomePage> {
                                                           .instance
                                                           .collection('drivers')
                                                           .doc(controller
-                                                              .userBase!
-                                                              .uid)
+                                                              .userBase!.uid)
                                                           .update({
                                                           "is_on_order": false,
                                                           "driver_cancelled_delivery":
@@ -1276,7 +1268,9 @@ class _HomePageState extends State<HomePage> {
                                                                     "voyage a commencée",
                                                                     "votre chauffeur arrivera dans ${double.parse(documentSnapshot['nbre_km_depart_destination']) / 50 < 1 ? "${ttime.toStringAsFixed(1)} minutes" : "${ttime.toStringAsFixed(1)} heures"}  ");
                                                                 plannedNotif(
-                                                                    [fcm],
+                                                                    [
+                                                                      fcm
+                                                                    ],
                                                                     "Votre Motopickup vous attend.",
                                                                     "",
                                                                     DateTime.now().add(Duration(
