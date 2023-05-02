@@ -6,7 +6,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:loading_overlay/loading_overlay.dart';
-import 'package:motopickupdriver/components/connectivityWrapper.dart';
 import 'package:motopickupdriver/controllers/profile/edit_image.dart';
 import 'package:motopickupdriver/utils/buttons.dart';
 import 'package:motopickupdriver/utils/colors.dart';
@@ -29,7 +28,7 @@ class EditImage extends StatelessWidget {
             strokeWidth: 6.0,
             valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
           ),
-          child: connectivityWrapper(
+          child: 
             Scaffold(
               appBar: AppBar(
                 leading: InkWell(
@@ -105,7 +104,6 @@ class EditImage extends StatelessWidget {
             ),
           ),
         ),
-      ),
-    );
+      );
   }
 }

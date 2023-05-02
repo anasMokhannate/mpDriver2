@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:loading_overlay/loading_overlay.dart';
-import 'package:motopickupdriver/components/connectivityWrapper.dart';
 import 'package:motopickupdriver/components/inputs.dart';
 import 'package:motopickupdriver/utils/buttons.dart';
 import 'package:motopickupdriver/utils/colors.dart';
@@ -29,7 +28,7 @@ class ChangePassword extends StatelessWidget {
             strokeWidth: 6.0,
             valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
           ),
-          child: connectivityWrapper(
+          child:
             Scaffold(
               appBar: AppBar(
                 leading: InkWell(
@@ -105,7 +104,6 @@ class ChangePassword extends StatelessWidget {
             ),
           ),
         ),
-      ),
-    );
+      );
   }
 }
