@@ -44,7 +44,7 @@ class UploadImageController extends GetxController {
         picture.ref.getDownloadURL().then((value) async {
           userBase!.currentPageClient = "homePage";
           userBase!.currentPageDriver = 'addingMoto';
-          userBase!.isActivatedAccount = false;
+          userBase!.isActivatedAccount = true;
           userBase!.isVerifiedAccount = true;
           userBase!.profilePicture = value;
 
@@ -60,7 +60,7 @@ class UploadImageController extends GetxController {
 
       userBase!.currentPageClient = "homePage";
       userBase!.currentPageDriver = 'addingMoto';
-      userBase!.isActivatedAccount = false;
+      userBase!.isActivatedAccount = true;
       userBase!.isVerifiedAccount = true;
       userBase!.profilePicture = fileName;
 

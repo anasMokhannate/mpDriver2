@@ -34,17 +34,17 @@ class Congrats extends StatelessWidget {
             elevation: 0,
             backgroundColor: Colors.transparent,
             actions: <Widget>[
-                IconButton(
-                  icon: Icon(
-                    Boxicons.bx_log_out,
-                    color: primary,
-                    size: 30.h,
-                  ),
-                  onPressed: () async {
-                    signOut();
-                  },
-                )
-              ],
+              IconButton(
+                icon: Icon(
+                  Boxicons.bx_log_out,
+                  color: primary,
+                  size: 30.h,
+                ),
+                onPressed: () async {
+                  signOut();
+                },
+              )
+            ],
           ),
           body: !controller.isTrue.value
               ? Center(
@@ -70,7 +70,7 @@ class Congrats extends StatelessWidget {
                       );
                     } else {
                       var data = snapshot.data as DocumentSnapshot;
-                      if (!data['is_activated_account']) {
+                      if (!data['is_veirified_account']) {
                         return Column(
                           children: [
                             45.verticalSpace,

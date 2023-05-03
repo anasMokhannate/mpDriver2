@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:loading_indicator/loading_indicator.dart';
-import 'package:motopickupdriver/components/connectivityWrapper.dart';
 import 'package:motopickupdriver/controllers/profile/edit_info.dart';
 import 'package:motopickupdriver/utils/buttons.dart';
 import 'package:motopickupdriver/utils/colors.dart';
@@ -25,7 +24,7 @@ class EditInfo extends StatelessWidget {
       child: SafeArea(
         child: GetBuilder<EditInfoController>(
           init: EditInfoController(),
-          builder: (value) => connectivityWrapper(
+          builder: (value) => 
             Scaffold(
               backgroundColor: scaffold,
               appBar: !controller.isTrue.value
@@ -147,7 +146,6 @@ class EditInfo extends StatelessWidget {
             ),
           ),
         ),
-      ),
-    );
+      );
   }
 }

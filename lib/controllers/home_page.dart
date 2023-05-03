@@ -120,7 +120,7 @@ class HomePageController extends GetxController {
       await initOneSignal();
       userBase = value;
       print(userBase);
-      updateFcm();
+      updateFcm(userBase!);
       saveCurrentUser(value!);
       await getConfigParams().then((value) => cities = value);
       await getOrdersPlanned();

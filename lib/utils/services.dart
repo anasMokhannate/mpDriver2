@@ -124,15 +124,17 @@ Future<void> initOneSignal() async {
   await OneSignal.shared.getDeviceState();
 }
 
-updateFcm() async {
-  MpUser value = MpUser.fromJson(await SessionManager().get('currentUser'));
-  String fcm = await SessionManager().get('driver_fcm');
-  await FirebaseFirestore.instance
+updateFcm(MpUser user) async {
+  List fcmList = [];
+  await SessionManager().get('customer_fcm').then((value) {
+    fcmList.add(value);
+    FirebaseFirestore.instance
       .collection('mp_users')
-      .doc(value.uid)
-      .update({'driver_fcm': fcm});
-  // value.driver_fcm = fcm;
-  await SessionManager().set('currentUser', value);
+      .doc(user.uid)
+      .update({"fcmList": fcmList});
+  });
+  // user.fcmList!.add(fcm);
+  await saveCurrentUser(user);
 }
 
 sendNotification(fcm, heading, content) async {

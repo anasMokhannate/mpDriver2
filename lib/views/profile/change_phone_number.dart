@@ -7,7 +7,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:loading_overlay/loading_overlay.dart';
-import 'package:motopickupdriver/components/connectivityWrapper.dart';
 import 'package:motopickupdriver/controllers/profile/change_phone_number.dart';
 import 'package:motopickupdriver/utils/buttons.dart';
 import 'package:motopickupdriver/utils/colors.dart';
@@ -29,7 +28,7 @@ class ChangePhoneNumber extends StatelessWidget {
             strokeWidth: 6.0,
             valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
           ),
-          child: connectivityWrapper(
+          child: 
             Scaffold(
               appBar: AppBar(
                 leading: InkWell(
@@ -127,7 +126,6 @@ class ChangePhoneNumber extends StatelessWidget {
             ),
           ),
         ),
-      ),
-    );
+      );
   }
 }

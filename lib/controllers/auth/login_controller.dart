@@ -49,6 +49,7 @@ class LoginController extends GetxController {
             await getProvider(email).then((provider) async {
               if (provider == "Phone") {
                 // try {
+                // try {
                   await FirebaseAuth.instance
                       .signInWithEmailAndPassword(
                           email: email, password: password.text)
@@ -63,6 +64,7 @@ class LoginController extends GetxController {
                     });
                   });
                 // } catch (e) {
+                //   print("erroooooooooooooooooooooooor $e");
                 //   showAlertDialogOneButton(
                 //       context,
                 //       "Mot de passe incorrect",

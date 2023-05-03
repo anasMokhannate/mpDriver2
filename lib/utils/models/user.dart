@@ -1,5 +1,3 @@
-import 'config-params.dart';
-import 'moto.dart';
 
 class MpUser {
   String? fullName;
