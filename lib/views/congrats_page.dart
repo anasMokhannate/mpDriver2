@@ -13,6 +13,8 @@ import 'package:motopickupdriver/utils/services.dart';
 import 'package:motopickupdriver/utils/typography.dart';
 import 'package:motopickupdriver/views/home_page.dart';
 
+import '../utils/queries.dart';
+
 class Congrats extends StatelessWidget {
   Congrats({Key? key}) : super(key: key);
   var controller = Get.put(CongratsController());
@@ -70,8 +72,7 @@ class Congrats extends StatelessWidget {
                       );
                     } else {
                       var data = snapshot.data as DocumentSnapshot;
-                      //TODO is_activated_account
-                      if (!data['is_veirified_account']) {
+                      if (!data['is_activated_account']) {
                         return Column(
                           children: [
                             45.verticalSpace,
@@ -138,8 +139,16 @@ class Congrats extends StatelessWidget {
                             PrimaryButton(
                               text: 'Continuer',
                               function: () async {
-                                Get.offAll(() => const HomePage(),
-                                    transition: Transition.rightToLeft);
+                                controller.userBase!.currentPageDriver =
+                                    "homePage";
+                                await saveCurrentUser(controller.userBase!)
+                                    .then((value) async {
+                                  await completeUser(controller.userBase!)
+                                      .then((value) async {
+                                    Get.offAll(() => const HomePage(),
+                                        transition: Transition.rightToLeft);
+                                  });
+                                });
                               },
                             )
                           ],

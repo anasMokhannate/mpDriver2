@@ -126,7 +126,7 @@ class ProfilePage extends StatelessWidget {
                           function: () {
                             Get.to(() => const ChangeCard(),
                                 transition: Transition.rightToLeft);
-                            Get.delete<ProfilePageController>();
+                           // Get.delete<ProfilePageController>();
                           },
                         ),
                         controller.userBase!.authType == "Phone"

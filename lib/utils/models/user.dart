@@ -119,7 +119,7 @@ class MpUser {
       longitude: json?['longitude'],
       isDeletedAccount: json?['is_deleted_account'],
       isActivatedAccount: json?['is_activated_account'],
-      isVerifiedAccount: json?['is_verified_account'],
+      isVerifiedAccount: json?['is_verified_account'] ?? false,
       isBlacklistedAccount: json?['is_blacklisted_account'],
       isOnline: json?['is_online'],
       isOnOrder: json?['is_on_order'],

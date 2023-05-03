@@ -156,16 +156,25 @@ class ChangePhoneNumberController extends GetxController {
                           },
                           codeAutoRetrievalTimeout: (verificatioId) async {});
                     });
-                  } catch (e) {
-                    loading.toggle();
-                    update();
-
+                  } on FirebaseAuthException catch (e) {
+                  if (e.code == "user-not-found") {
                     showAlertDialogOneButton(
                         context,
-                        "Numéro de téléphone ou mot de passe incorrect",
-                        "Vos informations sont incorrectes, Veuillez réessayer",
+                        "L'utilisateur n'existe pas",
+                        "Il n'y a pas d'utilisateur avec ce numéro de téléphone, veuillez créer un nouveau compte.",
                         "Ok");
+                    loading.toggle();
+                    update();
+                  } else if (e.code == "wrong-password") {
+                    showAlertDialogOneButton(
+                        context,
+                        "Mot de passe incorrect",
+                        "Votre mot de passe est incorrect, Veuillez réessayer",
+                        "Ok");
+                    loading.toggle();
+                    update();
                   }
+                }
                 }
               });
             }

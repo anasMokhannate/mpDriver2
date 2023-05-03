@@ -5,11 +5,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:motopickupdriver/utils/colors.dart';
 import 'package:motopickupdriver/utils/typography.dart';
-import 'package:motopickupdriver/views/auth/login_page.dart';
+import 'package:motopickupdriver/views/welcome_page.dart';
 
 // * Function For Sign out
 Future<Future> logout(context) async {
@@ -41,13 +40,12 @@ Future<Future> logout(context) async {
           ).tr(),
           onPressed: () async {
             await FirebaseAuth.instance.signOut();
-            String fcm= await SessionManager().get('driver_fcm')??'';
+            String fcm = await SessionManager().get('driver_fcm')??'';
             await GoogleSignIn(scopes: ['profile', 'email']).signOut();
             await SessionManager().remove("currentUser");
-            await SessionManager().destroy();
-            await GetStorage().erase();
+            // await SessionManager().destroy();
             await SessionManager().set('driver_fcm', fcm);
-            Get.offAll(() => LoginPage());
+            Get.offAll(() => WelcomeScreen());
           },
         )
       ],

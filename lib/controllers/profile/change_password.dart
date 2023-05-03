@@ -76,12 +76,25 @@ class ChangePasswordController extends GetxController {
                   "Votre mot de passe a été mis à jour avec succès.");
             });
           });
-        } catch (e) {
-          loading.toggle();
-          update();
-          showAlertDialogOneButton(context, "Mot de passe incorrect",
-              "Vous aver entré un mot de passe incorrecte.", "Ok");
-        }
+        }  on FirebaseAuthException catch (e) {
+                  if (e.code == "user-not-found") {
+                    showAlertDialogOneButton(
+                        context,
+                        "L'utilisateur n'existe pas",
+                        "Il n'y a pas d'utilisateur avec ce numéro de téléphone, veuillez créer un nouveau compte.",
+                        "Ok");
+                    loading.toggle();
+                    update();
+                  } else if (e.code == "wrong-password") {
+                    showAlertDialogOneButton(
+                        context,
+                        "Mot de passe incorrect",
+                        "Votre mot de passe est incorrect, Veuillez réessayer",
+                        "Ok");
+                    loading.toggle();
+                    update();
+                  }
+                }
       }
     });
   }

@@ -94,7 +94,7 @@ class AddingMotoController extends GetxController {
         }
 
         userBase!.motos!.add(moto.toJson());
-        userBase!.currentPageDriver = "addingOhotoMoto";
+        userBase!.currentPageDriver = "addingPhotoMoto";
         saveCurrentUser(userBase!);
         completeUser(userBase!);
 

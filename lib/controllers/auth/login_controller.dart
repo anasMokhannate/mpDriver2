@@ -48,8 +48,7 @@ class LoginController extends GetxController {
           if (email != null) {
             await getProvider(email).then((provider) async {
               if (provider == "Phone") {
-                // try {
-                // try {
+                try {
                   await FirebaseAuth.instance
                       .signInWithEmailAndPassword(
                           email: email, password: password.text)
@@ -63,16 +62,25 @@ class LoginController extends GetxController {
                       update();
                     });
                   });
-                // } catch (e) {
-                //   print("erroooooooooooooooooooooooor $e");
-                //   showAlertDialogOneButton(
-                //       context,
-                //       "Mot de passe incorrect",
-                //       "Votre mot de passe est incorrect, Veuillez réessayer",
-                //       "Ok");
-                //   loading.toggle();
-                //   update();
-                // }
+                } on FirebaseAuthException catch (e) {
+                  if (e.code == "user-not-found") {
+                    showAlertDialogOneButton(
+                        context,
+                        "L'utilisateur n'existe pas",
+                        "Il n'y a pas d'utilisateur avec ce numéro de téléphone, veuillez créer un nouveau compte.",
+                        "Ok");
+                    loading.toggle();
+                    update();
+                  } else if (e.code == "wrong-password") {
+                    showAlertDialogOneButton(
+                        context,
+                        "Mot de passe incorrect",
+                        "Votre mot de passe est incorrect, Veuillez réessayer",
+                        "Ok");
+                    loading.toggle();
+                    update();
+                  }
+                }
               } else {
                 loading.toggle();
                 update();

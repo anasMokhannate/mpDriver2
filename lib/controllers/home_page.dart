@@ -119,6 +119,8 @@ class HomePageController extends GetxController {
     await getUserFromMemory().then((value) async {
       await initOneSignal();
       userBase = value;
+
+      userBase!.totalOrders = 0;
       print(userBase);
       updateFcm(userBase!);
       saveCurrentUser(value!);
