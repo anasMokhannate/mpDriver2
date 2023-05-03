@@ -70,6 +70,7 @@ class Congrats extends StatelessWidget {
                       );
                     } else {
                       var data = snapshot.data as DocumentSnapshot;
+                      //TODO is_activated_account
                       if (!data['is_veirified_account']) {
                         return Column(
                           children: [

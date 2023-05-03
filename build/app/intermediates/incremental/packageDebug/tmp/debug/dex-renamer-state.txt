@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-#Tue May 02 15:55:29 WEST 2023
-=======
-#Tue May 02 15:40:01 WEST 2023
->>>>>>> df1d7046e10635e2f7b02a750bf5bb6c017e1ef5
+#Wed May 03 11:42:46 WEST 2023
 path.4=4/classes.dex
 path.3=1/classes.dex
 path.2=0/classes.dex

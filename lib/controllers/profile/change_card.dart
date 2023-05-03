@@ -94,11 +94,7 @@ class ChangeCardController extends GetxController {
     if (cardExpire == 'Date d’expiration' ||
         licenceExpire == 'Date d’expiration' ||
         assuranceExpire == 'Date d’expiration' ||
-        griseExpire == 'Date d’expiration' ||
-        cardFile == null ||
-        cardAssurance == null ||
-        cardGrise == null ||
-        cardLicence == null) {
+        griseExpire == 'Date d’expiration') {
       isValid = false;
       showAlertDialogOneButton(context, 'Données requises',
           'Vous devez entrer toutes les données requises.', 'Ok');
@@ -229,8 +225,34 @@ class ChangeCardController extends GetxController {
     super.onInit();
     await getUserFromMemory().then((value) async {
       userBase = value;
-    });
+      // cardFile = XFile(value!.identityCardPicture!);
+      // card = File(cardFile!.path);
+      // cardLicence = XFile(value.drivingLicencePicture!);
+      // licence = File(cardLicence!.path);
+      // cardAssurance = XFile(value.assurancePicture!);
+      // assurance = File(cardAssurance!.path);
+      // cardGrise = XFile(value.carteGrisePicture!);
+      // grise = File(cardGrise!.path);
+      // cardAnthropometrique = XFile(value.anthropometrique!);
+      // anthropometrique = File(cardAnthropometrique!.path);
 
-    update();
+      // cardFile = XFile("");
+      // cardLicence = XFile("");
+      // cardAssurance = XFile("");
+      // cardGrise = XFile("");
+      // cardAnthropometrique = XFile("");
+
+      cardExpire = value!.identityCardExpirationDate!;
+      licenceExpire = value.drivingLicenceExpirationDate!;
+      assuranceExpire = value.assuranceExpirationDate!;
+      griseExpire = value.carteGriseExpirationDate!;
+
+      card = File(value.identityCardPicture!);
+      licence = File(value.drivingLicencePicture!);
+      assurance = File(value.assurancePicture!);
+      grise = File(value.carteGrisePicture!);
+      anthropometrique = File(value.anthropometrique!);
+      update();
+    });
   }
 }

@@ -83,37 +83,17 @@ class _ChangeCardState extends State<ChangeCard> {
                             color: Colors.grey.withOpacity(0.4),
                             borderRadius: BorderRadius.circular(12),
                           ),
-                          child: controller.cardFile == null
-                              ? Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      Boxicons.bxs_cloud_upload,
-                                      color: light,
-                                      size: 85.sp,
-                                    ),
-                                    5.verticalSpace,
-                                    Padding(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 15.w),
-                                      child: Text(
-                                        "Téléchargez votre carte d'identité",
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            color: light,
-                                            fontFamily: 'LatoBold',
-                                            fontSize: 14.sp),
-                                      ),
+                          child: ClipRRect(
+                              borderRadius: BorderRadius.circular(12),
+                              child: controller.cardFile == null
+                                  ? Image.network(
+                                      controller.userBase!.identityCardPicture!,
+                                      fit: BoxFit.cover,
                                     )
-                                  ],
-                                )
-                              : ClipRRect(
-                                  borderRadius: BorderRadius.circular(12),
-                                  child: Image.file(
-                                    controller.card!,
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
+                                  : Image.file(
+                                      controller.card!,
+                                      fit: BoxFit.cover,
+                                    )),
                         ),
                       ),
                     ),
@@ -132,7 +112,7 @@ class _ChangeCardState extends State<ChangeCard> {
                               DateFormat('yyyy-MM-dd').format(date).toString();
                           controller.update();
                         },
-                        currentTime: DateTime.now(),
+                        currentTime: DateTime.tryParse(controller.cardExpire),
                         locale: context.locale.toString() == 'fr'
                             ? LocaleType.fr
                             : LocaleType.ar,
@@ -154,37 +134,18 @@ class _ChangeCardState extends State<ChangeCard> {
                             color: Colors.grey.withOpacity(0.4),
                             borderRadius: BorderRadius.circular(12),
                           ),
-                          child: controller.cardLicence == null
-                              ? Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      Boxicons.bxs_cloud_upload,
-                                      color: light,
-                                      size: 85.sp,
-                                    ),
-                                    5.verticalSpace,
-                                    Padding(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 15.w),
-                                      child: Text(
-                                        "Téléchargez votre permis de conduite",
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            color: light,
-                                            fontFamily: 'LatoBold',
-                                            fontSize: 14.sp),
-                                      ),
+                          child: ClipRRect(
+                              borderRadius: BorderRadius.circular(12),
+                              child: controller.cardLicence == null
+                                  ? Image.network(
+                                      controller
+                                          .userBase!.drivingLicencePicture!,
+                                      fit: BoxFit.cover,
                                     )
-                                  ],
-                                )
-                              : ClipRRect(
-                                  borderRadius: BorderRadius.circular(12),
-                                  child: Image.file(
-                                    controller.licence!,
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
+                                  : Image.file(
+                                      controller.licence!,
+                                      fit: BoxFit.cover,
+                                    )),
                         ),
                       ),
                     ),
@@ -203,7 +164,8 @@ class _ChangeCardState extends State<ChangeCard> {
                               DateFormat('yyyy-MM-dd').format(date).toString();
                           controller.update();
                         },
-                        currentTime: DateTime.now(),
+                        currentTime:
+                            DateTime.tryParse(controller.licenceExpire),
                         locale: context.locale.toString() == 'fr'
                             ? LocaleType.fr
                             : LocaleType.ar,
@@ -225,37 +187,17 @@ class _ChangeCardState extends State<ChangeCard> {
                             color: Colors.grey.withOpacity(0.4),
                             borderRadius: BorderRadius.circular(12),
                           ),
-                          child: controller.cardAssurance == null
-                              ? Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      Boxicons.bxs_cloud_upload,
-                                      color: light,
-                                      size: 85.sp,
-                                    ),
-                                    5.verticalSpace,
-                                    Padding(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 15.w),
-                                      child: Text(
-                                        "Téléchargez votre assurance",
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            color: light,
-                                            fontFamily: 'LatoBold',
-                                            fontSize: 14.sp),
-                                      ),
+                          child: ClipRRect(
+                              borderRadius: BorderRadius.circular(12),
+                              child: controller.cardAssurance == null
+                                  ? Image.network(
+                                      controller.userBase!.assurancePicture!,
+                                      fit: BoxFit.cover,
                                     )
-                                  ],
-                                )
-                              : ClipRRect(
-                                  borderRadius: BorderRadius.circular(12),
-                                  child: Image.file(
-                                    controller.assurance!,
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
+                                  : Image.file(
+                                      controller.assurance!,
+                                      fit: BoxFit.cover,
+                                    )),
                         ),
                       ),
                     ),
@@ -274,7 +216,8 @@ class _ChangeCardState extends State<ChangeCard> {
                               DateFormat('yyyy-MM-dd').format(date).toString();
                           controller.update();
                         },
-                        currentTime: DateTime.now(),
+                        currentTime:
+                            DateTime.tryParse(controller.assuranceExpire),
                         locale: context.locale.toString() == 'fr'
                             ? LocaleType.fr
                             : LocaleType.ar,
@@ -296,37 +239,17 @@ class _ChangeCardState extends State<ChangeCard> {
                             color: Colors.grey.withOpacity(0.4),
                             borderRadius: BorderRadius.circular(12),
                           ),
-                          child: controller.cardGrise == null
-                              ? Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      Boxicons.bxs_cloud_upload,
-                                      color: light,
-                                      size: 85.sp,
-                                    ),
-                                    5.verticalSpace,
-                                    Padding(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 15.w),
-                                      child: Text(
-                                        "Téléchargez votre carte grise",
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            color: light,
-                                            fontFamily: 'LatoBold',
-                                            fontSize: 14.sp),
-                                      ),
+                          child: ClipRRect(
+                              borderRadius: BorderRadius.circular(12),
+                              child: controller.cardGrise == null
+                                  ? Image.network(
+                                      controller.userBase!.carteGrisePicture!,
+                                      fit: BoxFit.cover,
                                     )
-                                  ],
-                                )
-                              : ClipRRect(
-                                  borderRadius: BorderRadius.circular(12),
-                                  child: Image.file(
-                                    controller.grise!,
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
+                                  : Image.file(
+                                      controller.grise!,
+                                      fit: BoxFit.cover,
+                                    )),
                         ),
                       ),
                     ),
@@ -345,7 +268,7 @@ class _ChangeCardState extends State<ChangeCard> {
                               DateFormat('yyyy-MM-dd').format(date).toString();
                           controller.update();
                         },
-                        currentTime: DateTime.now(),
+                        currentTime: DateTime.tryParse(controller.griseExpire),
                         locale: context.locale.toString() == 'fr'
                             ? LocaleType.fr
                             : LocaleType.ar,
@@ -367,37 +290,17 @@ class _ChangeCardState extends State<ChangeCard> {
                             color: Colors.grey.withOpacity(0.4),
                             borderRadius: BorderRadius.circular(12),
                           ),
-                          child: controller.cardAnthropometrique == null
-                              ? Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      Boxicons.bxs_cloud_upload,
-                                      color: light,
-                                      size: 85.sp,
-                                    ),
-                                    5.verticalSpace,
-                                    Padding(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 15.w),
-                                      child: Text(
-                                        "Téléchargez votre carte Anthropometrique",
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            color: light,
-                                            fontFamily: 'LatoBold',
-                                            fontSize: 14.sp),
-                                      ),
+                          child: ClipRRect(
+                              borderRadius: BorderRadius.circular(12),
+                              child: controller.cardAnthropometrique == null
+                                  ? Image.network(
+                                      controller.userBase!.anthropometrique!,
+                                      fit: BoxFit.cover,
                                     )
-                                  ],
-                                )
-                              : ClipRRect(
-                                  borderRadius: BorderRadius.circular(12),
-                                  child: Image.file(
-                                    controller.anthropometrique!,
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
+                                  : Image.file(
+                                      controller.anthropometrique!,
+                                      fit: BoxFit.cover,
+                                    )),
                         ),
                       ),
                     ),
