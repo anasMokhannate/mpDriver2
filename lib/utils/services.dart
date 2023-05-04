@@ -106,7 +106,7 @@ Future<void> initOneSignal() async {
   OneSignal.shared.setSubscriptionObserver((changes) async {
     osUserID = changes.to.userId ?? '';
     String playerid = osUserID;
-    await SessionManager().set('driver_fcm', playerid);
+    await SessionManager().set('user_fcm', playerid);
   });
   await OneSignal.shared.promptUserForPushNotificationPermission(
     fallbackToSettings: true,
@@ -126,7 +126,7 @@ Future<void> initOneSignal() async {
 
 updateFcm(MpUser user) async {
   List fcmList = [];
-  await SessionManager().get('customer_fcm').then((value) {
+  await SessionManager().get('user_fcm').then((value) {
     fcmList.add(value);
     FirebaseFirestore.instance
       .collection('mp_users')

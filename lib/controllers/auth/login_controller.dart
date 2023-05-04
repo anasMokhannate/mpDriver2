@@ -55,11 +55,13 @@ class LoginController extends GetxController {
                       .then((credential) async {
                     User? currUser = FirebaseAuth.instance.currentUser;
                     await getUser(currUser!.uid).then((mpUser) async {
-                      await saveCurrentUser(mpUser);
-                      mainPage = await initWidget();
-                      Get.offAll(mainPage);
-                      loading.toggle();
-                      update();
+                      updateFcm(mpUser);
+                      await saveCurrentUser(mpUser).then((value) async {
+                        mainPage = await initWidget();
+                        Get.offAll(mainPage);
+                        loading.toggle();
+                        update();
+                      });
                     });
                   });
                 } on FirebaseAuthException catch (e) {

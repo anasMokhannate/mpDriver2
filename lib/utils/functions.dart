@@ -40,11 +40,11 @@ Future<Future> logout(context) async {
           ).tr(),
           onPressed: () async {
             await FirebaseAuth.instance.signOut();
-            String fcm = await SessionManager().get('driver_fcm')??'';
+            // String fcm = await SessionManager().get('user_fcm')??'';
             await GoogleSignIn(scopes: ['profile', 'email']).signOut();
             await SessionManager().remove("currentUser");
             // await SessionManager().destroy();
-            await SessionManager().set('driver_fcm', fcm);
+            // await SessionManager().set('user_fcm', fcm);
             Get.offAll(() => WelcomeScreen());
           },
         )

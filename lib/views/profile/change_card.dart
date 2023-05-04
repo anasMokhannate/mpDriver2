@@ -27,7 +27,7 @@ class _ChangeCardState extends State<ChangeCard> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: GetBuilder<ChangeCardController>(
+      child:  GetBuilder<ChangeCardController>(
         init: ChangeCardController(),
         builder: (value) => LoadingOverlay(
           isLoading: controller.loading.value,
