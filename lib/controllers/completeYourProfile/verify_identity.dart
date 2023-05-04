@@ -167,7 +167,6 @@ class VerifyIdentityController extends GetxController {
                 .then((p1) {
               p1.ref.getDownloadURL().then((value) async {
                 userBase!.anthropometrique = value;
-                userBase!.isVerifiedAccount = true;
                 userBase!.currentPageDriver = 'congratsPage';
                 userBase!.isDriver = true;
                 // if (isCoursier == true && isDriver == false) {
@@ -194,7 +193,7 @@ class VerifyIdentityController extends GetxController {
               });
             });
           } else {
-            userBase!.isVerifiedAccount = true;
+            // userBase!.isVerifiedAccount = true;
             // if (isCoursier == true && isDriver == false) {
             //   userBase!.is_driver = 1;
             // }
@@ -204,16 +203,18 @@ class VerifyIdentityController extends GetxController {
             // if (isCoursier == true && isDriver == true) {
             //   userBase!.is_driver = 3;
             // }
-            userBase!.isActivatedAccount = false;
+            // userBase!.isActivatedAccount = false;
             DateFormat dateFormat = DateFormat("yyyy-MM-dd ");
 
             String datenow = dateFormat.format(DateTime.now());
             userBase!.lastDocumentUpdateDate = datenow;
-            await saveCurrentUser(userBase!);
-            completeUser(userBase!).then((value) {
-              Get.offAll(() => Congrats(), transition: Transition.rightToLeft);
-              loading.toggle();
-              update();
+            await saveCurrentUser(userBase!).then((value) {
+              completeUser(userBase!).then((value) {
+                Get.offAll(() => Congrats(),
+                    transition: Transition.rightToLeft);
+                loading.toggle();
+                update();
+              });
             });
           }
         });

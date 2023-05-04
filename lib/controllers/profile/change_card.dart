@@ -203,7 +203,7 @@ class ChangeCardController extends GetxController {
           // if (isCoursier == true && isDriver == true) {
           //   userBase!.is_driver = 3;
           // }
-          userBase!.isActivatedAccount = false;
+          // userBase!.isActivatedAccount = false;
           DateFormat dateFormat = DateFormat("yyyy-MM-dd ");
 
           String datenow = dateFormat.format(DateTime.now());

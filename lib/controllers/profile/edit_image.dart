@@ -43,7 +43,6 @@ class EditImageController extends GetxController {
           .then((picture) {
         picture.ref.getDownloadURL().then((value) async {
           userBase!.profilePicture = value;
-          userBase!.isVerifiedAccount = true;
           await saveCurrentUser(userBase!);
           completeUser(userBase!).then((value) {
             Get.offAll(() => ProfilePage(), transition: Transition.leftToRight);

@@ -90,12 +90,11 @@ class VerfiyNumberController extends GetxController {
             isVerifiedAccount: true,
           );
           await saveCurrentUser(userBase).then((value) async {
-            print(value);
             await createUser(userBase).then((value) {
-              
-              Get.offAll(() => CompleteProfile());
-              loading.toggle();
+                loading.toggle();
               update();
+              Get.offAll(() => CompleteProfile());
+            
             });
           });
         });
@@ -116,11 +115,8 @@ class VerfiyNumberController extends GetxController {
   void onInit() async {
     super.onInit();
     phoneNumber = await SessionManager().get('phone');
-    print(phoneNumber);
     password = await SessionManager().get('password');
-    print(password);
     email = await SessionManager().get('email');
-    print(email);
     verificationCode = Get.arguments;
     isTrue = false.obs;
     startTimer();
