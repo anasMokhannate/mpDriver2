@@ -114,7 +114,9 @@ class WelcomeController extends GetxController {
   @override
   void onInit() async {
     super.onInit();
-    // TODO: implement onInit
+    await SessionManager().get("hasAccepted").then((value) {
+      print('Conditions d\'utilisation : $value ');
+    });
     await getUserFromMemory().then((value) {
       print('user from memory (welcome 1): ${value?.email} ${value?.authType}');
     });

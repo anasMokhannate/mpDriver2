@@ -10,11 +10,12 @@ import 'package:motopickupdriver/utils/colors.dart';
 import 'package:motopickupdriver/utils/functions.dart';
 import 'package:motopickupdriver/utils/typography.dart';
 import 'package:motopickupdriver/views/profile/main_page.dart';
-import 'package:motopickupdriver/views/using_condition_screen.dart';
+import 'package:motopickupdriver/views/onboarding/using_condition_screen.dart';
 
 import '../controllers/settings_page.dart';
 import '../utils/models/user.dart';
 import '../views/policy_screen.dart';
+import '../views/using_condition_screen.dart';
 
 class NavigationDrawerWidget extends StatefulWidget {
   MpUser? currentUser;
@@ -126,7 +127,7 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                     onClicked: () {
                       Navigator.pop(context);
 
-                      Get.to(() => const UsingConditionScreen(),
+                      Get.to(() => const UsingConditionScreenHome(),
                           transition: Transition.rightToLeft);
                     },
                   ),
