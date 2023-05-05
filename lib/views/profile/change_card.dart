@@ -27,7 +27,7 @@ class _ChangeCardState extends State<ChangeCard> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child:  GetBuilder<ChangeCardController>(
+      child: GetBuilder<ChangeCardController>(
         init: ChangeCardController(),
         builder: (value) => LoadingOverlay(
           isLoading: controller.loading.value,
@@ -64,11 +64,18 @@ class _ChangeCardState extends State<ChangeCard> {
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 20.w),
                     child: Text(
-                      'Confirmer votre identité',
+                      'Changer vos informations',
                       style: primaryHeadlineTextStyle,
                     ),
                   ),
                   20.verticalSpace,
+                  Padding(
+                    padding: EdgeInsets.all(20.h),
+                    child: Text(
+                      "Carte d'identité",
+                      style: linkTextStyle,
+                    ),
+                  ),
                   InkWell(
                     onTap: () {
                       controller.selectImageCard();
@@ -120,6 +127,13 @@ class _ChangeCardState extends State<ChangeCard> {
                     ),
                   ),
                   10.verticalSpace,
+                  Padding(
+                    padding: EdgeInsets.all(20.h),
+                    child: Text(
+                      "Permis de conduire",
+                      style: linkTextStyle,
+                    ),
+                  ),
                   InkWell(
                     onTap: () {
                       controller.selectImageLicence();
@@ -173,6 +187,13 @@ class _ChangeCardState extends State<ChangeCard> {
                     ),
                   ),
                   10.verticalSpace,
+                  Padding(
+                    padding: EdgeInsets.all(20.h),
+                    child: Text(
+                      "Assurance",
+                      style: linkTextStyle,
+                    ),
+                  ),
                   InkWell(
                     onTap: () {
                       controller.selectImageAssurance();
@@ -225,6 +246,13 @@ class _ChangeCardState extends State<ChangeCard> {
                     ),
                   ),
                   10.verticalSpace,
+                  Padding(
+                    padding: EdgeInsets.all(20.h),
+                    child: Text(
+                      "Carte grise",
+                      style: linkTextStyle,
+                    ),
+                  ),
                   InkWell(
                     onTap: () {
                       controller.selectImageGrise();
@@ -276,6 +304,13 @@ class _ChangeCardState extends State<ChangeCard> {
                     ),
                   ),
                   10.verticalSpace,
+                  Padding(
+                    padding: EdgeInsets.all(20.h),
+                    child: Text(
+                      "Carte Anthropometrique",
+                      style: linkTextStyle,
+                    ),
+                  ),
                   InkWell(
                     onTap: () {
                       controller.selectImageAnthropometrique();

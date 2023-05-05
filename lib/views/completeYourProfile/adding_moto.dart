@@ -10,6 +10,7 @@ import 'package:motopickupdriver/components/inputs.dart';
 import 'package:motopickupdriver/controllers/completeYourProfile/adding_moto.dart';
 import 'package:motopickupdriver/utils/buttons.dart';
 import 'package:motopickupdriver/utils/colors.dart';
+import 'package:motopickupdriver/utils/functions.dart';
 import 'package:motopickupdriver/utils/services.dart';
 import 'package:motopickupdriver/utils/typography.dart';
 
@@ -48,7 +49,7 @@ class AddingMoto extends StatelessWidget {
                     size: 30.h,
                   ),
                   onPressed: () async {
-                    signOut();
+                    logout(context);
                   },
                 )
               ],

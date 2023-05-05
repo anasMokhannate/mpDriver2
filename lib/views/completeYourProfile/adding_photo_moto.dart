@@ -10,6 +10,8 @@ import 'package:motopickupdriver/utils/buttons.dart';
 import 'package:motopickupdriver/utils/colors.dart';
 import 'package:motopickupdriver/utils/typography.dart';
 
+import '../../utils/functions.dart';
+
 class AddingPhotoMoto extends StatelessWidget {
   AddingPhotoMoto({Key? key}) : super(key: key);
   var controller = Get.put(AddingPhotoMotoController());
@@ -29,14 +31,26 @@ class AddingPhotoMoto extends StatelessWidget {
           ),
           child: Scaffold(
             appBar: AppBar(
-              leading: InkWell(
-                onTap: () => Get.back(),
-                child: Icon(
-                  Boxicons.bx_arrow_back,
-                  color: primary,
-                  size: 30.h,
-                ),
-              ),
+              // leading: InkWell(
+              //   onTap: () => Get.back(),
+              //   child: Icon(
+              //     Boxicons.bx_arrow_back,
+              //     color: primary,
+              //     size: 30.h,
+              //   ),
+              // ),
+              actions: <Widget>[
+                IconButton(
+                  icon: Icon(
+                    Boxicons.bx_log_out,
+                    color: primary,
+                    size: 30.h,
+                  ),
+                  onPressed: () async {
+                    logout(context);
+                  },
+                )
+              ],
               toolbarHeight: 80.h,
               title: Image.asset(
                 'assets/images/logoMoto_colored.png',
