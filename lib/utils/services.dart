@@ -186,6 +186,7 @@ signOut() async {
   await FirebaseAuth.instance.signOut().then((value) async {
     await GoogleSignIn().signOut().then((value) {
       SessionManager().remove("currentUser");
+      
       Get.offAll(() => WelcomeScreen());
     });
   });

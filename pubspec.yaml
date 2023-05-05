@@ -79,6 +79,7 @@ dependencies:
   in_app_update: ^4.0.1
   firebase_performance: ^0.9.0+14  
   flutter_background: ^1.2.0
+  cached_network_image: ^3.2.3
 
 dev_dependencies:
   flutter_test:

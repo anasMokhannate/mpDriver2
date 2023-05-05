@@ -6,7 +6,8 @@ import 'package:get/get.dart';
 import 'package:motopickupdriver/utils/colors.dart';
 import 'package:motopickupdriver/views/onboarding/first_onboarding.dart';
 import 'package:motopickupdriver/views/onboarding/second_onboarding.dart';
-import 'package:motopickupdriver/views/welcome_page.dart';
+
+import 'using_condition_screen.dart';
 
 class OnBoardingPage extends StatefulWidget {
   const OnBoardingPage({Key? key}) : super(key: key);
@@ -41,7 +42,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
   void next() {
     if (index == _pages.length - 1) {
       SessionManager().set('first_time', false);
-      Get.offAll(() => WelcomeScreen());
+      Get.offAll(() => const UsingConditionScreen());
     } else {
       _pageController.nextPage(duration: _duration, curve: _curve);
     }

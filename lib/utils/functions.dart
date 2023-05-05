@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:motopickupdriver/utils/colors.dart';
 import 'package:motopickupdriver/utils/typography.dart';
-import 'package:motopickupdriver/views/welcome_page.dart';
+import 'package:motopickupdriver/views/onboarding/using_condition_screen.dart';
 
 // * Function For Sign out
 Future<Future> logout(context) async {
@@ -43,9 +43,12 @@ Future<Future> logout(context) async {
             // String fcm = await SessionManager().get('user_fcm')??'';
             await GoogleSignIn(scopes: ['profile', 'email']).signOut();
             await SessionManager().remove("currentUser");
+            await SessionManager().get("hasAccepted").then((value){
+              value = false;
+               Get.offAll(() => const UsingConditionScreen());
+            });
             // await SessionManager().destroy();
             // await SessionManager().set('user_fcm', fcm);
-            Get.offAll(() => WelcomeScreen());
           },
         )
       ],

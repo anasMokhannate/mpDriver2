@@ -1,6 +1,7 @@
 // ignore_for_file: must_be_immutable, deprecated_member_use
 
 import 'package:boxicons/boxicons.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
@@ -27,7 +28,7 @@ class _ChangeCardState extends State<ChangeCard> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child:  GetBuilder<ChangeCardController>(
+      child: GetBuilder<ChangeCardController>(
         init: ChangeCardController(),
         builder: (value) => LoadingOverlay(
           isLoading: controller.loading.value,
@@ -64,11 +65,18 @@ class _ChangeCardState extends State<ChangeCard> {
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 20.w),
                     child: Text(
-                      'Confirmer votre identité',
+                      'Changer vos informations',
                       style: primaryHeadlineTextStyle,
                     ),
                   ),
                   20.verticalSpace,
+                  Padding(
+                    padding: EdgeInsets.all(20.h),
+                    child: Text(
+                      "Carte d'identité",
+                      style: linkTextStyle,
+                    ),
+                  ),
                   InkWell(
                     onTap: () {
                       controller.selectImageCard();
@@ -86,9 +94,20 @@ class _ChangeCardState extends State<ChangeCard> {
                           child: ClipRRect(
                               borderRadius: BorderRadius.circular(12),
                               child: controller.cardFile == null
-                                  ? Image.network(
-                                      controller.userBase!.identityCardPicture!,
+                                  // ? Image.network(
+                                  //     controller.userBase!.identityCardPicture!,
+                                  //     fit: BoxFit.cover,
+                                  //   )
+                                  ? CachedNetworkImage(
+                                      imageUrl: controller
+                                          .userBase!.identityCardPicture!,
                                       fit: BoxFit.cover,
+                                      progressIndicatorBuilder: (context, url,
+                                              downloadProgress) =>
+                                          CircularProgressIndicator(
+                                              value: downloadProgress.progress),
+                                      errorWidget: (context, url, error) =>
+                                          const Icon(Icons.error),
                                     )
                                   : Image.file(
                                       controller.card!,
@@ -120,6 +139,13 @@ class _ChangeCardState extends State<ChangeCard> {
                     ),
                   ),
                   10.verticalSpace,
+                  Padding(
+                    padding: EdgeInsets.all(20.h),
+                    child: Text(
+                      "Permis de conduire",
+                      style: linkTextStyle,
+                    ),
+                  ),
                   InkWell(
                     onTap: () {
                       controller.selectImageLicence();
@@ -137,10 +163,21 @@ class _ChangeCardState extends State<ChangeCard> {
                           child: ClipRRect(
                               borderRadius: BorderRadius.circular(12),
                               child: controller.cardLicence == null
-                                  ? Image.network(
-                                      controller
+                                  // ? Image.network(
+                                  //     controller
+                                  //         .userBase!.drivingLicencePicture!,
+                                  //     fit: BoxFit.cover,
+                                  //   )
+                                  ? CachedNetworkImage(
+                                      imageUrl: controller
                                           .userBase!.drivingLicencePicture!,
                                       fit: BoxFit.cover,
+                                      progressIndicatorBuilder: (context, url,
+                                              downloadProgress) =>
+                                          CircularProgressIndicator(
+                                              value: downloadProgress.progress),
+                                      errorWidget: (context, url, error) =>
+                                          const Icon(Icons.error),
                                     )
                                   : Image.file(
                                       controller.licence!,
@@ -173,6 +210,13 @@ class _ChangeCardState extends State<ChangeCard> {
                     ),
                   ),
                   10.verticalSpace,
+                  Padding(
+                    padding: EdgeInsets.all(20.h),
+                    child: Text(
+                      "Assurance",
+                      style: linkTextStyle,
+                    ),
+                  ),
                   InkWell(
                     onTap: () {
                       controller.selectImageAssurance();
@@ -190,9 +234,20 @@ class _ChangeCardState extends State<ChangeCard> {
                           child: ClipRRect(
                               borderRadius: BorderRadius.circular(12),
                               child: controller.cardAssurance == null
-                                  ? Image.network(
-                                      controller.userBase!.assurancePicture!,
+                                  // ? Image.network(
+                                  //     controller.userBase!.assurancePicture!,
+                                  //     fit: BoxFit.cover,
+                                  //   )
+                                  ? CachedNetworkImage(
+                                      imageUrl: controller
+                                          .userBase!.assurancePicture!,
                                       fit: BoxFit.cover,
+                                      progressIndicatorBuilder: (context, url,
+                                              downloadProgress) =>
+                                          CircularProgressIndicator(
+                                              value: downloadProgress.progress),
+                                      errorWidget: (context, url, error) =>
+                                          const Icon(Icons.error),
                                     )
                                   : Image.file(
                                       controller.assurance!,
@@ -225,6 +280,13 @@ class _ChangeCardState extends State<ChangeCard> {
                     ),
                   ),
                   10.verticalSpace,
+                  Padding(
+                    padding: EdgeInsets.all(20.h),
+                    child: Text(
+                      "Carte grise",
+                      style: linkTextStyle,
+                    ),
+                  ),
                   InkWell(
                     onTap: () {
                       controller.selectImageGrise();
@@ -242,9 +304,20 @@ class _ChangeCardState extends State<ChangeCard> {
                           child: ClipRRect(
                               borderRadius: BorderRadius.circular(12),
                               child: controller.cardGrise == null
-                                  ? Image.network(
-                                      controller.userBase!.carteGrisePicture!,
+                                  // ? Image.network(
+                                  //     controller.userBase!.carteGrisePicture!,
+                                  //     fit: BoxFit.cover,
+                                  //   )
+                                  ? CachedNetworkImage(
+                                      imageUrl: controller
+                                          .userBase!.carteGrisePicture!,
                                       fit: BoxFit.cover,
+                                      progressIndicatorBuilder: (context, url,
+                                              downloadProgress) =>
+                                          CircularProgressIndicator(
+                                              value: downloadProgress.progress),
+                                      errorWidget: (context, url, error) =>
+                                          const Icon(Icons.error),
                                     )
                                   : Image.file(
                                       controller.grise!,
@@ -276,6 +349,13 @@ class _ChangeCardState extends State<ChangeCard> {
                     ),
                   ),
                   10.verticalSpace,
+                  Padding(
+                    padding: EdgeInsets.all(20.h),
+                    child: Text(
+                      "Carte Anthropometrique",
+                      style: linkTextStyle,
+                    ),
+                  ),
                   InkWell(
                     onTap: () {
                       controller.selectImageAnthropometrique();
@@ -293,9 +373,20 @@ class _ChangeCardState extends State<ChangeCard> {
                           child: ClipRRect(
                               borderRadius: BorderRadius.circular(12),
                               child: controller.cardAnthropometrique == null
-                                  ? Image.network(
-                                      controller.userBase!.anthropometrique!,
+                                  // ? Image.network(
+                                  //     controller.userBase!.anthropometrique!,
+                                  //     fit: BoxFit.cover,
+                                  //   )
+                                  ? CachedNetworkImage(
+                                      imageUrl: controller
+                                          .userBase!.anthropometrique!,
                                       fit: BoxFit.cover,
+                                      progressIndicatorBuilder: (context, url,
+                                              downloadProgress) =>
+                                          CircularProgressIndicator(
+                                              value: downloadProgress.progress),
+                                      errorWidget: (context, url, error) =>
+                                          const Icon(Icons.error),
                                     )
                                   : Image.file(
                                       controller.anthropometrique!,

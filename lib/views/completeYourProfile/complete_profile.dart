@@ -12,8 +12,9 @@ import 'package:motopickupdriver/components/inputs.dart';
 import 'package:motopickupdriver/controllers/completeYourProfile/complete_profile.dart';
 import 'package:motopickupdriver/utils/buttons.dart';
 import 'package:motopickupdriver/utils/colors.dart';
-import 'package:motopickupdriver/utils/services.dart';
 import 'package:motopickupdriver/utils/typography.dart';
+
+import '../../utils/functions.dart';
 
 class CompleteProfile extends StatelessWidget {
   CompleteProfile({Key? key}) : super(key: key);
@@ -49,7 +50,7 @@ class CompleteProfile extends StatelessWidget {
                     size: 30.h,
                   ),
                   onPressed: () async {
-                    signOut();
+                    logout(context);
                   },
                 )
               ],

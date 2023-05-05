@@ -10,6 +10,7 @@ import 'package:motopickupdriver/utils/services.dart';
 import 'package:motopickupdriver/views/completeYourProfile/adding_photo_moto.dart';
 import 'package:motopickupdriver/views/completeYourProfile/complete_profile.dart';
 import 'package:motopickupdriver/views/onboarding/onboarding_page.dart';
+import 'package:motopickupdriver/views/onboarding/using_condition_screen.dart';
 
 import '../views/auth/register_page.dart';
 import '../views/completeYourProfile/adding_moto.dart';
@@ -23,9 +24,11 @@ import 'models/user.dart';
 Future<Widget?> initWidget() async {
   Widget? mainPage;
   bool isFirstTime = await SessionManager().get('first_time') ?? true;
+  bool hasAccepted = await SessionManager().get('hasAccepted') ?? true;
+
   if (isFirstTime) {
     mainPage = const OnBoardingPage();
-  } else {
+  } else  {
     await getUserFromMemory().then((value) async {
       if (value == null) {
         mainPage = WelcomeScreen();

@@ -117,8 +117,8 @@ Future<String?> loginWithPhone(phone) async {
       email = value.docs.first.get('email');
     }
   });
-  print(email);
-  return email!;
+
+  return email;
 }
 
 // Future<MpUser?> getUserByPhone(phone) async {
