@@ -10,6 +10,7 @@ import 'package:motopickupdriver/utils/alert_dialog.dart';
 import 'package:motopickupdriver/utils/models/user.dart';
 import 'package:motopickupdriver/utils/queries.dart';
 import 'package:motopickupdriver/utils/services.dart';
+import 'package:motopickupdriver/views/congrats_page.dart';
 import 'package:motopickupdriver/views/profile/main_page.dart';
 
 class ChangeCardController extends GetxController {
@@ -22,7 +23,7 @@ class ChangeCardController extends GetxController {
   MpUser? userBase;
   bool isOpen = false, isCoursier = false, isDriver = false;
   XFile? cardFile, cardLicence, cardAssurance, cardGrise, cardAnthropometrique;
-  String cardExpire = 'Date d\'expiration',
+  String cardExpire = "Date d'expiration",
       licenceExpire = "Date d'expiration",
       assuranceExpire = "Date d'expiration",
       griseExpire = "Date d'expiration";
@@ -33,6 +34,7 @@ class ChangeCardController extends GetxController {
   selectImageCard() async {
     try {
       cardFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+      // print("abc ${cardFile?.name ?? "sss"}");
       if (cardFile != null) {
         card = File(cardFile!.path);
         cardEdited = true;
@@ -121,136 +123,114 @@ class ChangeCardController extends GetxController {
     return isValid;
   }
 
-  Future chooseImages() async {
+  uploadImages() async {
+    FirebaseStorage fs = FirebaseStorage.instance;
+    bool isEdited = false;
+    // print("abc before uploadImages: ");
+    // print("abc i $cardEdited ${userBase?.identityCardPicture}");
+    // print("abc l $licenceEdited ${userBase?.drivingLicencePicture}");
+    // print("abc as $assuranceEdited ${userBase?.assurancePicture}");
+    // print("abc g $griseEdited ${userBase?.carteGrisePicture}");
+    // print("abc an $antropometriqueEdited ${userBase?.anthropometrique}");
+
     if (cardEdited) {
       print('card edited');
-      await FirebaseStorage.instance
+      await fs
           .ref('user-images/${cardFile!.name}')
           .putFile(card!)
-          .then((p0) {
-        p0.ref.getDownloadURL().then((value) async {
+          .then((p0) async {
+        print('card editedd');
+        await p0.ref.getDownloadURL().then((value) async {
+          print('card editeddd');
           // currCard = value;
           userBase!.identityCardPicture = value;
           userBase!.identityCardExpirationDate = cardExpire;
+          isEdited = true;
         });
       });
     }
-    // await FirebaseStorage.instance
-    //     .ref('user-images/${cardFile!.name}')
-    //     .putFile(card!)
-    //     .then((p0) {
-    //   p0.ref.getDownloadURL().then((value) async {
-    //     userBase!.identityCardPicture = value;
-    //     userBase!.identityCardExpirationDate = cardExpire;
-    //   });
-    // });
 
     if (licenceEdited) {
-      await FirebaseStorage.instance
+      await fs
           .ref('user-images/${cardLicence!.name}')
           .putFile(licence!)
-          .then((p4) {
-        p4.ref.getDownloadURL().then((value) async {
+          .then((p4) async {
+        await p4.ref.getDownloadURL().then((value) async {
           // currLicence = value;
           userBase!.drivingLicencePicture = value;
           userBase!.drivingLicenceExpirationDate = licenceExpire;
+          isEdited = true;
         });
       });
     }
 
     if (assuranceEdited) {
-      await FirebaseStorage.instance
+      await fs
           .ref('user-images/${cardAssurance!.name}')
           .putFile(assurance!)
-          .then((p0) {
-        p0.ref.getDownloadURL().then((value) async {
+          .then((p0) async {
+        await p0.ref.getDownloadURL().then((value) async {
           // currAssurance = value;
           userBase!.assurancePicture = value;
           userBase!.assuranceExpirationDate = assuranceExpire;
+          isEdited = true;
         });
       });
     }
+
     if (griseEdited) {
-      await FirebaseStorage.instance
+      await fs
           .ref('user-images/${cardGrise!.name}')
           .putFile(grise!)
-          .then((p2) {
-        p2.ref.getDownloadURL().then((value) async {
+          .then((p2) async {
+        await p2.ref.getDownloadURL().then((value) async {
           // currGrise = value;
           userBase!.carteGrisePicture = value;
           userBase!.carteGriseExpirationDate = griseExpire;
+          isEdited = true;
         });
       });
     }
+
     if (antropometriqueEdited) {
-      await FirebaseStorage.instance
+      await fs
           .ref('user-images/${cardAnthropometrique!.name}')
           .putFile(anthropometrique!)
           .then((p1) async {
-        p1.ref.getDownloadURL().then((value) async {
+        await p1.ref.getDownloadURL().then((value) async {
           // currAnthropometrique = value;
           userBase!.anthropometrique = value;
+          isEdited = true;
         });
-
-        // userBase!.isVerifiedAccount = true;
-        // if (isCoursier == true && isDriver == false) {
-        //   userBase!.isDriver = 1;
-        // }
-        // if (isCoursier == false && isDriver == true) {
-        //   userBase!.is_driver = 2;
-        // }
-        // if (isCoursier == true && isDriver == true) {
-        //   userBase!.is_driver = 3;
-        // }
-        // userBase!.isActivatedAccount = false;
       });
-
-      //   // userBase!.is_verified_account = true;
-      //   // if (isCoursier == true && isDriver == false) {
-      //   //   userBase!.is_driver = 1;
-      //   // }
-      //   // if (isCoursier == false && isDriver == true) {
-      //   //   userBase!.is_driver = 2;
-      //   // }
-      //   // if (isCoursier == true && isDriver == true) {
-      //   //   userBase!.is_driver = 3;
-      //   // }
-      //   // userBase!.isActivatedAccount = false;
-      //   DateFormat dateFormat = DateFormat("yyyy-MM-dd ");
-
-      //   String datenow = dateFormat.format(DateTime.now());
-
-      //   userBase!.lastDocumentUpdateDate = datenow;
-      //   await saveCurrentUser(userBase!);
-      //   completeUser(userBase!).then((value) {
-      //     Get.offAll(() => Congrats(), transition: Transition.rightToLeft);
-      //     loading.toggle();
-      //     update();
-      //   });
-      // }
     }
+
+    return isEdited;
   }
 
-  uploadImage() async {
+  updateUserImages() async {
     DateFormat dateFormat = DateFormat("yyyy-MM-dd");
 
     String datenow = dateFormat.format(DateTime.now());
 
     userBase!.lastDocumentUpdateDate = datenow;
-    // userBase!.identityCardPicture = currCard;
-    // userBase!.drivingLicencePicture = currLicence;
-    // userBase!.assurancePicture = currAssurance;
-    // userBase!.carteGrisePicture = currGrise;
-    // userBase!.anthropometrique = currAnthropometrique;
+    userBase!.isActivatedAccount = false;
+    userBase!.currentPageDriver = "congratsPage";
+
+    print("abc i $cardEdited ${userBase?.identityCardPicture}");
+    print("abc l $licenceEdited ${userBase?.drivingLicencePicture}");
+    print("abc as $assuranceEdited ${userBase?.assurancePicture}");
+    print("abc g $griseEdited ${userBase?.carteGrisePicture}");
+    print("abc an $antropometriqueEdited ${userBase?.anthropometrique}");
 
     print('imaage 0  : ${userBase!.anthropometrique}');
     await saveCurrentUser(userBase!).then((value) async {
       print('imaage 1  : ${userBase!.anthropometrique}');
       await completeUser(userBase!).then((value) {
         print('imaage 2  : ${userBase!.anthropometrique}');
-        Get.offAll(() => ProfilePage(), transition: Transition.rightToLeft);
         loading.toggle();
         update();
+        Get.offAll(() => Congrats(), transition: Transition.rightToLeft);
       });
     });
   }
@@ -262,8 +242,22 @@ class ChangeCardController extends GetxController {
     } else {
       loading.toggle();
       update();
-      await chooseImages().then((_) {
-        uploadImage();
+      await uploadImages().then((isEdited) async {
+        // print("abc after uploadImages: ");
+        // print("abc i $cardEdited ${userBase?.identityCardPicture}");
+        // print("abc l $licenceEdited ${userBase?.drivingLicencePicture}");
+        // print("abc as $assuranceEdited ${userBase?.assurancePicture}");
+        // print("abc g $griseEdited ${userBase?.carteGrisePicture}");
+        // print("abc an $antropometriqueEdited ${userBase?.anthropometrique}");
+        if (isEdited) {
+          print("card ed1");
+          updateUserImages();
+        } else {
+          print("card ed2");
+          loading.toggle();
+          update();
+          Get.offAll(() => ProfilePage(), transition: Transition.rightToLeft);
+        }
       });
     }
   }

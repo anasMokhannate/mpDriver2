@@ -32,7 +32,7 @@ Future<Widget?> initWidget() async {
       } else {
         MpUser user = value;
         await getUser(user.uid).then((userFromDb) {
-          print('object ${userFromDb.currentPageDriver}');
+          print('object ${user.uid} ${userFromDb.currentPageDriver}');
           switch (userFromDb.currentPageDriver) {
             case 'homePage':
               mainPage = const HomePage();

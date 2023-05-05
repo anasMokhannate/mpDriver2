@@ -82,6 +82,8 @@ class WelcomeController extends GetxController {
               await completeUser(mpUser).then((value) async {
                 await saveCurrentUser(mpUser).then((value) async {
                   await initWidget().then((mainPage) {
+                    loading.toggle();
+                    update();
                     Get.offAll(
                       () => mainPage as Widget,
                       transition: Transition.rightToLeft,
@@ -114,6 +116,8 @@ class WelcomeController extends GetxController {
   @override
   void onInit() async {
     super.onInit();
+    // loading.value = false;
+    // update();
     // TODO: implement onInit
     await getUserFromMemory().then((value) {
       print('user from memory (welcome 1): ${value?.email} ${value?.authType}');
