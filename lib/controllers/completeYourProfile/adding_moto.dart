@@ -51,11 +51,11 @@ class AddingMotoController extends GetxController {
         .doc('config-params')
         .get();
 
-    MotoType motoTypeT1 = MotoType.fromJson(value.get('T1'));
+    // MotoType motoTypeT1 = MotoType.fromJson(value.get('T1'));
     MotoType motoTypeT2 = MotoType.fromJson(value.get('T2'));
     MotoType motoTypeT3 = MotoType.fromJson(value.get('T3'));
 
-    typeItems.add(ListItem('T1', motoTypeT1.name));
+    // typeItems.add(ListItem('T1', motoTypeT1.name));
     typeItems.add(ListItem('T2', motoTypeT2.name));
     typeItems.add(ListItem('T3', motoTypeT3.name));
     update();

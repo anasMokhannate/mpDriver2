@@ -11,6 +11,7 @@ import 'package:motopickupdriver/utils/functions.dart';
 import 'package:motopickupdriver/utils/typography.dart';
 import 'package:motopickupdriver/views/profile/main_page.dart';
 import 'package:motopickupdriver/views/onboarding/using_condition_screen.dart';
+import 'package:motopickupdriver/views/settings_page.dart';
 
 import '../controllers/settings_page.dart';
 import '../utils/models/user.dart';
@@ -98,8 +99,8 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                     icon: FontAwesomeIcons.gear,
                     onClicked: () {
                       Navigator.pop(context);
-                      // Get.to(() => SettingScreen(),
-                      //     transition: Transition.rightToLeft);
+                      Get.to(() => SettingScreen(),
+                          transition: Transition.rightToLeft);
                     },
                   ),
                   buildMenuItem(

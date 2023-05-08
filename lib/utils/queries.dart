@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
+import 'package:motopickupdriver/utils/models/emergency.dart';
 
 import 'models/user.dart';
 
@@ -165,3 +166,10 @@ Future<bool> isUserExist(uid) async {
   return exist;
 }
 //===================================== Google Facebook Auth===============================================
+
+Future createEmergency(Emergency emergency) async {
+  final docUser =
+      FirebaseFirestore.instance.collection('emergency').doc(emergency.user);
+
+  await docUser.set(emergency.toJson());
+}
