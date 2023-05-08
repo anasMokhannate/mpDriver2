@@ -10,11 +10,11 @@ import 'package:motopickupdriver/utils/colors.dart';
 import 'package:motopickupdriver/utils/functions.dart';
 import 'package:motopickupdriver/utils/typography.dart';
 import 'package:motopickupdriver/views/profile/main_page.dart';
-import 'package:motopickupdriver/views/onboarding/using_condition_screen.dart';
 import 'package:motopickupdriver/views/settings_page.dart';
 
 import '../controllers/settings_page.dart';
 import '../utils/models/user.dart';
+import '../views/help_center.dart';
 import '../views/policy_screen.dart';
 import '../views/using_condition_screen.dart';
 
@@ -36,8 +36,6 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
 // (widget.currentUser!.totalOrders == 0
 //             ? 1
 //             : widget.currentUser!.totalOrders!);
-
-   
 
     return Drawer(
       backgroundColor: Colors.transparent,
@@ -108,8 +106,8 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                     icon: Boxicons.bx_help_circle,
                     onClicked: () {
                       Navigator.pop(context);
-                      // Get.to(() => HelpCenter(),
-                      //     transition: Transition.rightToLeft);
+                      Get.to(() => HelpCenter(),
+                          transition: Transition.rightToLeft);
                     },
                   ),
                   buildMenuItem(
@@ -133,18 +131,17 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                     },
                   ),
                   GetBuilder<SettingController>(
-                    init: SettingController(),
-                    builder: (controller) {
-                      return buildMenuItem(
-                        text: "Supprimer mon compte",
-                        icon: Boxicons.bx_trash,
-                        onClicked: () {
-                          Navigator.pop(context);
-                          controller.delete(context);
-                        },
-                      );
-                    }
-                  ),
+                      init: SettingController(),
+                      builder: (controller) {
+                        return buildMenuItem(
+                          text: "Supprimer mon compte",
+                          icon: Boxicons.bx_trash,
+                          onClicked: () {
+                            Navigator.pop(context);
+                            controller.delete(context);
+                          },
+                        );
+                      }),
                 ],
               ),
             ),
