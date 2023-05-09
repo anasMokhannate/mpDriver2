@@ -12,6 +12,7 @@ import 'package:motopickupdriver/utils/typography.dart';
 import 'package:motopickupdriver/views/my_command.dart';
 import 'package:motopickupdriver/views/profile/main_page.dart';
 import 'package:motopickupdriver/views/settings_page.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../controllers/settings_page.dart';
 import '../utils/models/user.dart';
@@ -143,6 +144,40 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                           },
                         );
                       }),
+                  5.verticalSpace,
+                  Divider(
+                    color: light,
+                    thickness: 3.h,
+                  ),
+                  5.verticalSpace,
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 80.w),
+                    child: Row(children: [
+                      IconButton(
+                          onPressed: () {
+                            final uri = Uri.parse(
+                                "https://www.facebook.com/Motopickupafrica?mibextid=ZbWKwL");
+                            launchUrl(uri);
+                          },
+                          icon: const Icon(
+                            Icons.facebook,
+                            color: light,
+                            size: 40,
+                          )),
+                      15.horizontalSpace,
+                      IconButton(
+                          onPressed: () {
+                            final uri = Uri.parse(
+                                "https://instagram.com/motopickupafrica?igshid=ZmRlMzRkMDU=");
+                            launchUrl(uri);
+                          },
+                          icon: const Icon(
+                            Boxicons.bxl_instagram,
+                            color: light,
+                            size: 40,
+                          )),
+                    ]),
+                  ),
                 ],
               ),
             ),
