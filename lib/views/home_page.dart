@@ -2,7 +2,6 @@
 
 import 'package:boxicons/boxicons.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_switch/flutter_switch.dart';
@@ -16,7 +15,6 @@ import 'package:motopickupdriver/utils/alert_dialog.dart';
 import 'package:motopickupdriver/utils/buttons.dart';
 import 'package:motopickupdriver/utils/colors.dart';
 import 'package:motopickupdriver/utils/typography.dart';
-import 'package:motopickupdriver/views/order_information.dart';
 
 import '../utils/services.dart';
 
@@ -114,100 +112,97 @@ class _HomePageState extends State<HomePage> {
                     ),
                   )
                 : controller.status
-                    ? !controller.isActiveOne
-                        ? StreamBuilder(
-                            stream: controller.geo!
-                                .collection(
-                                    collectionRef: FirebaseFirestore.instance
-                                        .collection("mp_orders"))
-                                .within(
-                                    center: controller.center!,
-                                    radius: 10000,
-                                    field: "order_pickup_location",
-                                    strictMode: true),
+                    ? StreamBuilder(
+                        stream: controller.geo!
+                            .collection(
+                                collectionRef: FirebaseFirestore.instance
+                                    .collection("mp_orders"))
+                            .within(
+                                center: controller.center!,
+                                radius: 10000,
+                                field: "order_pickup_location",
+                                strictMode: true),
 
-                            // stream: FirebaseFirestore.instance
-                            //     .collection("orders")
-                            //     // .where('order_city',
-                            //     //     isEqualTo: controller.city)
-                            //     // .where('is_succeed', isEqualTo: false)
-                            //     // .where('is_canceled_by_customer',
-                            //     //     isEqualTo: false)
-                            //     // .where('created_at',
-                            //     //     isEqualTo:
-                            //     //         DateFormat('yyyy-MM-dd HH')
-                            //     //             .format(DateTime.now()))
-                            //     .snapshots(),
-                            builder: (context,
-                                AsyncSnapshot<List<DocumentSnapshot>>
-                                    snapshot) {
-                              print("abc ${snapshot.toString()}");
-                              if (!snapshot.hasData) {
-                                return const Text('hasntData');
-                                return Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Center(
-                                      child: Image.asset(
-                                        'assets/images/empty.png',
-                                        width: 310.w,
+                        // stream: FirebaseFirestore.instance
+                        //     .collection("orders")
+                        //     // .where('order_city',
+                        //     //     isEqualTo: controller.city)
+                        //     // .where('is_succeed', isEqualTo: false)
+                        //     // .where('is_canceled_by_customer',
+                        //     //     isEqualTo: false)
+                        //     // .where('created_at',
+                        //     //     isEqualTo:
+                        //     //         DateFormat('yyyy-MM-dd HH')
+                        //     //             .format(DateTime.now()))
+                        //     .snapshots(),
+                        builder: (context,
+                            AsyncSnapshot<List<DocumentSnapshot>> snapshot) {
+                          print("abc ${snapshot.toString()}");
+                          if (!snapshot.hasData) {
+                            // return const Text('hasntData');
+                            return Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Center(
+                                  child: Image.asset(
+                                    'assets/images/empty.png',
+                                    width: 310.w,
+                                  ),
+                                ),
+                                Center(
+                                  child: Text(
+                                    "Il n'y a pas encore de commandes",
+                                    style: TextStyle(
+                                      fontSize: 18.sp,
+                                      color: primary,
+                                      height: 1.2,
+                                      fontFamily: "LatoSemiBold",
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            );
+                          } else {
+                            if (snapshot.data!.isEmpty) {
+                              // return const Text('isEmpty');
+                              return Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Center(
+                                    child: Image.asset(
+                                      'assets/images/empty.png',
+                                      width: 310.w,
+                                    ),
+                                  ),
+                                  Center(
+                                    child: Text(
+                                      "Il n'y a pas encore de commandes",
+                                      style: TextStyle(
+                                        fontSize: 18.sp,
+                                        color: primary,
+                                        height: 1.2,
+                                        fontFamily: "LatoSemiBold",
                                       ),
                                     ),
-                                    Center(
-                                      child: Text(
-                                        "Il n'y a pas encore de commandes",
-                                        style: TextStyle(
-                                          fontSize: 18.sp,
-                                          color: primary,
-                                          height: 1.2,
-                                          fontFamily: "LatoSemiBold",
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                );
-                              } else {
-                                if (snapshot.data!.isEmpty) {
-                                  return const Text('isEmpty');
-                                  return Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Center(
-                                        child: Image.asset(
-                                          'assets/images/empty.png',
-                                          width: 310.w,
-                                        ),
-                                      ),
-                                      Center(
-                                        child: Text(
-                                          "Il n'y a pas encore de commandes",
-                                          style: TextStyle(
-                                            fontSize: 18.sp,
-                                            color: primary,
-                                            height: 1.2,
-                                            fontFamily: "LatoSemiBold",
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  );
-                                } else {
-                                  return ListView.builder(
-                                    shrinkWrap: true,
-                                    physics: const BouncingScrollPhysics(),
-                                    itemCount: snapshot.data!.length,
-                                    itemBuilder: (context, index) {
-                                      final DocumentSnapshot documentSnapshot =
-                                          snapshot.data![index];
-                                      if (!documentSnapshot['driver_declined']
-                                              .contains(
-                                                  controller.userBase!.uid) &&
-                                          !documentSnapshot['driver_accepted']
-                                              .contains(
-                                                  (controller.userBase!.uid))) {
-                                        print(documentSnapshot['customer']
-                                            ['note']);
-                                        double distance = Geolocator.distanceBetween(
+                                  ),
+                                ],
+                              );
+                            } else {
+                              return ListView.builder(
+                                shrinkWrap: true,
+                                physics: const BouncingScrollPhysics(),
+                                itemCount: snapshot.data!.length,
+                                itemBuilder: (context, index) {
+                                  final DocumentSnapshot documentSnapshot =
+                                      snapshot.data![index];
+                                  if (!documentSnapshot['driver_declined']
+                                          .contains(controller.userBase!.uid) &&
+                                      !documentSnapshot['driver_accepted']
+                                          .contains(
+                                              (controller.userBase!.uid))) {
+                                    print(documentSnapshot['customer']['note']);
+                                    double distance =
+                                        Geolocator.distanceBetween(
                                             documentSnapshot[
                                                         "order_pickup_location"]
                                                     ["geopoint"]
@@ -218,233 +213,99 @@ class _HomePageState extends State<HomePage> {
                                                 .longitude,
                                             controller.latitude!,
                                             controller.longtitude!);
-                                        //TODO: < instead of >
-                                        // if ((distance / 1000) >
-                                        //         documentSnapshot['km_radius'] &&
-                                        //     controller.isWithOrder == false) {
-                                        controller.stars =
+                                    //TODO: < instead of >
+                                    // if ((distance / 1000) >
+                                    //         documentSnapshot['km_radius'] &&
+                                    //     controller.isWithOrder == false) {
+                                    controller.stars =
+                                        documentSnapshot['customer']['note'] /
                                             documentSnapshot['customer']
-                                                    ['note'] /
-                                                documentSnapshot['customer']
-                                                    ['total_orders'];
-                                        // controller.showCard=true;
+                                                ['total_orders'];
+                                    // controller.showCard=true;
+                                    // controller.update();
+                                    return OrdersCard(
+                                      status: 1,
+                                      photo: documentSnapshot["customer"]
+                                          ["profile_picture"],
+                                      username: documentSnapshot["customer"]
+                                          ["full_name"],
+                                      orderType: documentSnapshot["order_type"]
+                                          .toString(),
+                                      from: documentSnapshot["address_from"],
+                                      to: documentSnapshot["address_to"],
+                                      idOrder: documentSnapshot["order_id"],
+                                      drive: controller.userBase!,
+                                      distance:
+                                          (distance / 1000).toStringAsFixed(2),
+                                      stars: controller.stars,
+                                      accepte: () async {
+                                        FirebaseFirestore.instance
+                                            .collection('mp_users')
+                                            .doc(controller.userBase!.uid)
+                                            .update({"is_on_order": true});
+
+                                        FirebaseFirestore.instance
+                                            .collection("mp_orders")
+                                            .doc(documentSnapshot["order_id"])
+                                            .update({
+                                          "driver_accepted":
+                                              FieldValue.arrayUnion([
+                                            controller.userBase!.toJson()
+                                          ])
+                                        });
+
+                                        // controller.showCard=false;
                                         // controller.update();
-                                        return OrdersCard(
-                                          status: 1,
-                                          photo: documentSnapshot["customer"]
-                                              ["profile_picture"],
-                                          username: documentSnapshot["customer"]
-                                              ["full_name"],
-                                          orderType:
-                                              documentSnapshot["order_type"]
-                                                  .toString(),
-                                          from:
-                                              documentSnapshot["address_from"],
-                                          to: documentSnapshot["address_to"],
-                                          idOrder: documentSnapshot["order_id"],
-                                          drive: controller.userBase!,
-                                          distance: (distance / 1000)
-                                              .toStringAsFixed(2),
-                                          stars: controller.stars,
-                                          accepte: () async {
-                                            FirebaseFirestore.instance
-                                                .collection('mp_users')
-                                                .doc(controller.userBase!.uid)
-                                                .update({"is_on_order": true});
+                                        // String fcm =
+                                        //     documentSnapshot["customer"]
+                                        //         ["current_fcm"];
+                                        // sendNotification([
+                                        //   fcm
+                                        // ], "Votre commande est en attente de confirmation",
+                                        //     "");
+                                        controller.isOnOrder = true;
+                                        controller.isWithOrder = true;
+                                        // String fcmDriver =
+                                        //     await SessionManager()
+                                        //         .get('user_fcm');
+                                        // FirebaseFirestore.instance
+                                        //     .collection('mp_orders')
+                                        //     .doc(documentSnapshot[
+                                        //         "order_id"])
+                                        //     .update(({
+                                        //       "driver_fcm": fcmDriver,
+                                        //     }));
 
-                                            FirebaseFirestore.instance
-                                                .collection("mp_orders")
-                                                .doc(controller.orderID!)
-                                                .update({
-                                              "driver_accepted": [
-                                                controller.userBase
-                                              ]
-                                            });
-
-                                            // controller.showCard=false;
-                                            // controller.update();
-                                            String fcm =
-                                                documentSnapshot["customer"]
-                                                    ["current_fcm"];
-                                            sendNotification([
-                                              fcm
-                                            ], "Votre commande est en attente de confirmation",
-                                                "");
-                                            controller.isOnOrder = true;
-                                            controller.isWithOrder = true;
-                                            // String fcmDriver =
-                                            //     await SessionManager()
-                                            //         .get('user_fcm');
-                                            // FirebaseFirestore.instance
-                                            //     .collection('mp_orders')
-                                            //     .doc(documentSnapshot[
-                                            //         "order_id"])
-                                            //     .update(({
-                                            //       "driver_fcm": fcmDriver,
-                                            //     }));
-
-                                            // controller.setRoad(
-                                            //     documentSnapshot[
-                                            //             "order_pickup_location"]
-                                            //         ["latitude"],
-                                            //     documentSnapshot[
-                                            //             "order_pickup_location"]
-                                            //         ["longitude"],
-                                            //     documentSnapshot[
-                                            //             "order_arrival_location"]
-                                            //         ["latitude"],
-                                            //     documentSnapshot[
-                                            //             "order_arrival_location"]
-                                            //         ["longitude"]);
-                                            // addDriverToOrder(
-                                            //     controller.userBase!,
-                                            //     documentSnapshot[
-                                            //         "order_id"]);
-                                            controller.orderID =
-                                                documentSnapshot["order_id"];
-                                            controller.update();
-                                          },
-                                        );
-                                        // }
-                                      } else {
-                                        return const Text('B');
-                                      }
-                                      return null;
-                                    },
-                                  );
-                                }
-                              }
-                            },
-                          )
-                        : StreamBuilder(
-                            stream: FirebaseFirestore.instance
-                                .collection('orders')
-                                .where('driver_uid',
-                                    isEqualTo: controller.userBase!.uid)
-                                .where('status', isEqualTo: 3)
-                                .snapshots(),
-                            builder: (context,
-                                AsyncSnapshot<QuerySnapshot> snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return Center(
-                                  child: SizedBox(
-                                    width: 225.w,
-                                    child: const LoadingIndicator(
-                                        indicatorType:
-                                            Indicator.ballScaleMultiple,
-                                        colors: [primary],
-                                        strokeWidth: 2,
-                                        backgroundColor: Colors.transparent,
-                                        pathBackgroundColor: Colors.black),
-                                  ),
-                                );
-                              }
-                              if (!snapshot.hasData) {
-                                return Column(
-                                  children: [
-                                    Center(
-                                      child: Image.asset(
-                                        'assets/images/empty.png',
-                                        width: 310.w,
-                                      ),
-                                    ),
-                                    Center(
-                                      child: Text(
-                                        "Il n'y a pas encore de commandes",
-                                        style: TextStyle(
-                                          fontSize: 18.sp,
-                                          color: primary,
-                                          height: 1.2,
-                                          fontFamily: "LatoSemiBold",
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                );
-                              } else if (snapshot.data!.docs.isEmpty) {
-                                return Column(
-                                  children: [
-                                    Center(
-                                      child: Image.asset(
-                                        'assets/images/empty.png',
-                                        width: 310.w,
-                                      ),
-                                    ),
-                                    Center(
-                                      child: Text(
-                                        "Il n'y a pas encore de commandes",
-                                        style: TextStyle(
-                                          fontSize: 18.sp,
-                                          color: primary,
-                                          height: 1.2,
-                                          fontFamily: "LatoSemiBold",
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                );
-                              } else if (snapshot.hasData) {
-                                List<DocumentSnapshot> documentSnapshot =
-                                    snapshot.data!.docs
-                                        .where((element) =>
-                                            element['order_pickup_time']
-                                                .compareTo(DateFormat(
-                                                        "yyyy-MM-dd HH:mm")
-                                                    .format(DateTime.now())) >=
-                                            0)
-                                        .toList();
-                                documentSnapshot.sort(
-                                  (a, b) {
-                                    return b['order_pickup_time']
-                                        .compareTo(a['order_pickup_time']);
-                                  },
-                                );
-                                return SizedBox(
-                                  height: 386.h,
-                                  child: ListView.separated(
-                                      shrinkWrap: true,
-                                      itemBuilder: (context, index) {
-                                        return CommandCard(
-                                          date: documentSnapshot[index]
-                                              ['order_pickup_time'],
-                                          prix: snapshot
-                                              .data!
-                                              .docs[index]
-                                                  ['order_purchase_amount']
-                                              .toString(),
-                                          from: documentSnapshot[index]
-                                              ['address_from'],
-                                          to: documentSnapshot[index]
-                                              ['address_to'],
-                                          status: documentSnapshot[index]
-                                              ['status'],
-                                          onTap: () {
-                                            Get.to(
-                                                () => OrderInformation(
-                                                      order: documentSnapshot[
-                                                          index],
-                                                    ),
-                                                transition:
-                                                    Transition.rightToLeft,
-                                                arguments: [
-                                                  documentSnapshot[index]
-                                                          ['order_id']
-                                                      .toString()
-                                                ]);
-                                          },
-                                        );
+                                        // controller.setRoad(
+                                        //     documentSnapshot[
+                                        //             "order_pickup_location"]
+                                        //         ["latitude"],
+                                        //     documentSnapshot[
+                                        //             "order_pickup_location"]
+                                        //         ["longitude"],
+                                        //     documentSnapshot[
+                                        //             "order_arrival_location"]
+                                        //         ["latitude"],
+                                        //     documentSnapshot[
+                                        //             "order_arrival_location"]
+                                        //         ["longitude"]);
+                                        // addDriverToOrder(
+                                        //     controller.userBase!,
+                                        //     documentSnapshot[
+                                        //         "order_id"]);
+                                        controller.update();
                                       },
-                                      separatorBuilder: (context, index) {
-                                        return Container();
-                                      },
-                                      itemCount: documentSnapshot.length),
-                                );
-                              } else {
-                                return const Text('');
-                              }
-                            },
-                          )
+                                    );
+                                    // }
+                                  } else {
+                                    return const Text('B');
+                                  }
+                                },
+                              );
+                            }
+                          }
+                        },
+                      )
 
                     //===================================================== Map =====================================================
 

@@ -47,8 +47,6 @@ class HomePageController extends GetxController {
 
   var stars;
 
-  String? orderID;
-
   bool isOnOrder = false, startCourse = false, isWithOrder = false;
 
   double ttime = 0.0;
