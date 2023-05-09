@@ -120,12 +120,12 @@ class SettingController extends GetxController {
       await FirebaseAuth.instance.currentUser!.delete().then((value) {
         deleteUser(userBase!, reason.text).then((value) async {
           await FirebaseAuth.instance.signOut();
-          String fcm = await SessionManager().get('driver_fcm') ?? '';
+         // String fcm = await SessionManager().get('driver_fcm') ?? '';
           await GoogleSignIn(scopes: ['profile', 'email']).signOut();
           await SessionManager().remove("currentUser");
-          await SessionManager().destroy();
-          await GetStorage().erase();
-          await SessionManager().set('driver_fcm', fcm);
+          // await SessionManager().destroy();
+          
+         // await SessionManager().set('driver_fcm', fcm);
           isTrue.toggle();
           update();
           Get.offAll(() => WelcomeScreen());
@@ -175,7 +175,6 @@ class SettingController extends GetxController {
     await getUserFromMemory().then((value) async {
       userBase = value;
       isTrue = true.obs;
-      // tmpUser = MpUser.fromJson(await SessionManager().get('tmpUser'));
       checkNotification();
       update();
     });

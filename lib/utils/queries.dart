@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:get/get.dart';
 import 'package:motopickupdriver/utils/models/emergency.dart';
 
 import 'models/user.dart';
@@ -11,7 +10,7 @@ Future<String> checkPhoneNumber(phoneNo) async {
       .collection('mp_users')
       .where('phone_number', isEqualTo: phoneNo)
       // .where('auth_type', whereIn: ["Phone", "Facebook", "Google"])
-      // .where('is_deleted_account', isEqualTo: false)
+      .where('is_deleted_account', isEqualTo: false)
       .snapshots()
       .first
       .then((value) {
@@ -66,12 +65,9 @@ Future<MpUser> getUser(uid) async {
 }
 
 Future createUser(MpUser user) async {
-  Get.snackbar('Error', 'start of creating user');
   final docUser =
       FirebaseFirestore.instance.collection('mp_users').doc(user.uid);
-  await docUser.set(user.toJson()).then((value) => 'null',
-      onError: (error) => '${error}erroooooooooooooooooooooooooooooor');
-  Get.snackbar('title', 'User created');
+  await docUser.set(user.toJson());
 }
 
 Future deleteUser(MpUser user, reason) async {
