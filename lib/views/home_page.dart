@@ -5,7 +5,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
@@ -117,33 +116,34 @@ class _HomePageState extends State<HomePage> {
                 : controller.status
                     ? !controller.isActiveOne
                         ? StreamBuilder(
-                            // stream: controller.geo!
-                            //     .collection(
-                            //         collectionRef: FirebaseFirestore.instance
-                            //             .collection("mp_orders"))
-                            //     .within(
-                            //         center: controller.center!,
-                            //         radius: 15,
-                            //         field: 'order_pickup_location',
-                            //         strictMode: true),
+                            stream: controller.geo!
+                                .collection(
+                                    collectionRef: FirebaseFirestore.instance
+                                        .collection("mp_orders"))
+                                .within(
+                                    center: controller.center!,
+                                    radius: 10000,
+                                    field: "order_pickup_location",
+                                    strictMode: true),
 
-                            stream: FirebaseFirestore.instance
-                                .collection("orders")
-                                // .where('order_city',
-                                //     isEqualTo: controller.city)
-                                // .where('is_succeed', isEqualTo: false)
-                                // .where('is_canceled_by_customer',
-                                //     isEqualTo: false)
-                                // .where('created_at',
-                                //     isEqualTo:
-                                //         DateFormat('yyyy-MM-dd HH')
-                                //             .format(DateTime.now()))
-                                .snapshots(),
+                            // stream: FirebaseFirestore.instance
+                            //     .collection("orders")
+                            //     // .where('order_city',
+                            //     //     isEqualTo: controller.city)
+                            //     // .where('is_succeed', isEqualTo: false)
+                            //     // .where('is_canceled_by_customer',
+                            //     //     isEqualTo: false)
+                            //     // .where('created_at',
+                            //     //     isEqualTo:
+                            //     //         DateFormat('yyyy-MM-dd HH')
+                            //     //             .format(DateTime.now()))
+                            //     .snapshots(),
                             builder: (context,
-                                AsyncSnapshot<QuerySnapshot> snapshot) {
+                                AsyncSnapshot<List<DocumentSnapshot>>
+                                    snapshot) {
                               print("abc ${snapshot.toString()}");
                               if (!snapshot.hasData) {
-                                // return const Text('hasntData');
+                                return const Text('hasntData');
                                 return Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
@@ -167,8 +167,8 @@ class _HomePageState extends State<HomePage> {
                                   ],
                                 );
                               } else {
-                                if (snapshot.data!.docs.isEmpty) {
-                                  // return const Text('isEmpty');
+                                if (snapshot.data!.isEmpty) {
+                                  return const Text('isEmpty');
                                   return Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
@@ -195,106 +195,106 @@ class _HomePageState extends State<HomePage> {
                                   return ListView.builder(
                                     shrinkWrap: true,
                                     physics: const BouncingScrollPhysics(),
-                                    itemCount: snapshot.data!.docs.length,
+                                    itemCount: snapshot.data!.length,
                                     itemBuilder: (context, index) {
                                       final DocumentSnapshot documentSnapshot =
-                                          snapshot.data!.docs[index];
-                                      if (!documentSnapshot['drivers_declined']
+                                          snapshot.data![index];
+                                      if (!documentSnapshot['driver_declined']
                                               .contains(
                                                   controller.userBase!.uid) &&
-                                          !documentSnapshot['drivers_accepted']
+                                          !documentSnapshot['driver_accepted']
                                               .contains(
                                                   (controller.userBase!.uid))) {
-                                        print(documentSnapshot['user']
-                                            ['customer_note']);
-                                        double distance =
-                                            Geolocator.distanceBetween(
-                                                documentSnapshot[
+                                        print(documentSnapshot['customer']
+                                            ['note']);
+                                        double distance = Geolocator.distanceBetween(
+                                            documentSnapshot[
                                                         "order_pickup_location"]
-                                                    ['latitude'],
-                                                documentSnapshot[
+                                                    ["geopoint"]
+                                                .latitude,
+                                            documentSnapshot[
                                                         "order_pickup_location"]
-                                                    ['longitude'],
-                                                controller.latitude!,
-                                                controller.longtitude!);
+                                                    ["geopoint"]
+                                                .longitude,
+                                            controller.latitude!,
+                                            controller.longtitude!);
                                         //TODO: < instead of >
-                                        if ((distance / 1000) >
-                                                documentSnapshot['km_radius'] &&
-                                            controller.isWithOrder == false) {
-                                          controller.stars =
-                                              documentSnapshot['user']
-                                                      ['customer_note'] /
-                                                  documentSnapshot['user']
-                                                      ['customer_total_orders'];
-                                          // controller.showCard=true;
-                                          // controller.update();
-                                          return OrdersCard(
-                                            status: documentSnapshot["status"],
-                                            photo: documentSnapshot["user"]
-                                                ["customer_picture"],
-                                            username: documentSnapshot["user"]
-                                                ["customer_full_name"],
-                                            orderType:
-                                                documentSnapshot["order_type"]
-                                                    .toString(),
-                                            from: documentSnapshot[
-                                                "address_from"],
-                                            to: documentSnapshot["address_to"],
-                                            idOrder:
-                                                documentSnapshot["order_id"],
-                                            drive: controller.userBase!,
-                                            distance: (distance / 1000)
-                                                .toStringAsFixed(2),
-                                            stars: controller.stars,
-                                            accepte: () async {
-                                              // controller.showCard=false;
-                                              // controller.update();
-                                              String fcm = documentSnapshot[
-                                                  "customer_fcm"];
-                                              sendNotification([
-                                                fcm
-                                              ], "Votre commande est en attente de confirmation",
-                                                  "");
-                                              controller.isOnOrder = true;
-                                              controller.isWithOrder = true;
-                                              String fcmDriver =
-                                                  await SessionManager()
-                                                      .get('user_fcm');
-                                              FirebaseFirestore.instance
-                                                  .collection('orders')
-                                                  .doc(documentSnapshot[
-                                                      "order_id"])
-                                                  .update(({
-                                                    "driver_fcm": fcmDriver,
-                                                  }));
-                                              FirebaseFirestore.instance
-                                                  .collection('drivers')
-                                                  .doc(controller.userBase!.uid)
-                                                  .update(
-                                                      {"is_on_order": true});
-                                              controller.setRoad(
-                                                  documentSnapshot[
-                                                          "order_pickup_location"]
-                                                      ["latitude"],
-                                                  documentSnapshot[
-                                                          "order_pickup_location"]
-                                                      ["longitude"],
-                                                  documentSnapshot[
-                                                          "order_arrival_location"]
-                                                      ["latitude"],
-                                                  documentSnapshot[
-                                                          "order_arrival_location"]
-                                                      ["longitude"]);
-                                              // addDriverToOrder(
-                                              //     controller.userBase!,
-                                              //     documentSnapshot[
-                                              //         "order_id"]);
-                                              controller.orderID =
-                                                  documentSnapshot["order_id"];
-                                              controller.update();
-                                            },
-                                          );
-                                        }
+                                        // if ((distance / 1000) >
+                                        //         documentSnapshot['km_radius'] &&
+                                        //     controller.isWithOrder == false) {
+                                        controller.stars =
+                                            documentSnapshot['customer']
+                                                    ['note'] /
+                                                documentSnapshot['customer']
+                                                    ['total_orders'];
+                                        // controller.showCard=true;
+                                        // controller.update();
+                                        return OrdersCard(
+                                          status: 1,
+                                          photo: documentSnapshot["customer"]
+                                              ["profile_picture"],
+                                          username: documentSnapshot["customer"]
+                                              ["full_name"],
+                                          orderType:
+                                              documentSnapshot["order_type"]
+                                                  .toString(),
+                                          from:
+                                              documentSnapshot["address_from"],
+                                          to: documentSnapshot["address_to"],
+                                          idOrder: documentSnapshot["order_id"],
+                                          drive: controller.userBase!,
+                                          distance: (distance / 1000)
+                                              .toStringAsFixed(2),
+                                          stars: controller.stars,
+                                          accepte: () async {
+                                            // controller.showCard=false;
+                                            // controller.update();
+                                            String fcm =
+                                                documentSnapshot["customer"]
+                                                    ["current_fcm"];
+                                            sendNotification([
+                                              fcm
+                                            ], "Votre commande est en attente de confirmation",
+                                                "");
+                                            controller.isOnOrder = true;
+                                            controller.isWithOrder = true;
+                                            // String fcmDriver =
+                                            //     await SessionManager()
+                                            //         .get('user_fcm');
+                                            // FirebaseFirestore.instance
+                                            //     .collection('mp_orders')
+                                            //     .doc(documentSnapshot[
+                                            //         "order_id"])
+                                            //     .update(({
+                                            //       "driver_fcm": fcmDriver,
+                                            //     }));
+                                            FirebaseFirestore.instance
+                                                .collection('mp_users')
+                                                .doc(controller.userBase!.uid)
+                                                .update({"is_on_order": true});
+                                            // controller.setRoad(
+                                            //     documentSnapshot[
+                                            //             "order_pickup_location"]
+                                            //         ["latitude"],
+                                            //     documentSnapshot[
+                                            //             "order_pickup_location"]
+                                            //         ["longitude"],
+                                            //     documentSnapshot[
+                                            //             "order_arrival_location"]
+                                            //         ["latitude"],
+                                            //     documentSnapshot[
+                                            //             "order_arrival_location"]
+                                            //         ["longitude"]);
+                                            // addDriverToOrder(
+                                            //     controller.userBase!,
+                                            //     documentSnapshot[
+                                            //         "order_id"]);
+                                            controller.orderID =
+                                                documentSnapshot["order_id"];
+                                            controller.update();
+                                          },
+                                        );
+                                        // }
                                       } else {
                                         return const Text('B');
                                       }
