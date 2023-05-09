@@ -247,6 +247,20 @@ class _HomePageState extends State<HomePage> {
                                               .toStringAsFixed(2),
                                           stars: controller.stars,
                                           accepte: () async {
+                                            FirebaseFirestore.instance
+                                                .collection('mp_users')
+                                                .doc(controller.userBase!.uid)
+                                                .update({"is_on_order": true});
+
+                                            FirebaseFirestore.instance
+                                                .collection("mp_orders")
+                                                .doc(controller.orderID!)
+                                                .update({
+                                              "driver_accepted": [
+                                                controller.userBase
+                                              ]
+                                            });
+
                                             // controller.showCard=false;
                                             // controller.update();
                                             String fcm =
@@ -268,10 +282,7 @@ class _HomePageState extends State<HomePage> {
                                             //     .update(({
                                             //       "driver_fcm": fcmDriver,
                                             //     }));
-                                            FirebaseFirestore.instance
-                                                .collection('mp_users')
-                                                .doc(controller.userBase!.uid)
-                                                .update({"is_on_order": true});
+
                                             // controller.setRoad(
                                             //     documentSnapshot[
                                             //             "order_pickup_location"]

@@ -47,7 +47,7 @@ class HomePageController extends GetxController {
 
   var stars;
 
-  var orderID;
+  String? orderID;
 
   bool isOnOrder = false, startCourse = false, isWithOrder = false;
 
