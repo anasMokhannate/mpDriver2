@@ -125,13 +125,21 @@ Future<void> initOneSignal() async {
 }
 
 updateFcm(MpUser user) async {
-  List fcmList = [];
+  bool fcmFound = false;
+  List fcmList = user.fcmList ?? [];
   await SessionManager().get('user_fcm').then((value) {
-    fcmList.add(value);
-    FirebaseFirestore.instance
-      .collection('mp_users')
-      .doc(user.uid)
-      .update({"fcmList": fcmList});
+    for (String fcm in fcmList) {
+      if (fcm == value) {
+        fcmFound = true;
+      }
+    }
+    if (!fcmFound) {
+      fcmList.add(value);
+      FirebaseFirestore.instance
+          .collection('mp_users')
+          .doc(user.uid)
+          .update({"fcmList": fcmList});
+    }
   });
   // user.fcmList!.add(fcm);
   await saveCurrentUser(user);
@@ -181,12 +189,11 @@ plannedNotif(fcm, heading, content, whenDate) async {
   ));
 }
 
-
 signOut() async {
   await FirebaseAuth.instance.signOut().then((value) async {
     await GoogleSignIn().signOut().then((value) {
       SessionManager().remove("currentUser");
-      
+
       Get.offAll(() => WelcomeScreen());
     });
   });

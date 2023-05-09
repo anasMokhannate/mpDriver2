@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:geoflutterfire2/geoflutterfire2.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:motopickupdriver/utils/colors.dart';
@@ -31,6 +32,7 @@ void main() async {
   await handlerPermission();
   await initOneSignal();
   await checkIsFirstTime();
+  GeoFlutterFire geo;
   Widget? mainPage;
   await initWidget().then((page) {
     mainPage = page;

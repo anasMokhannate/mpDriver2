@@ -116,6 +116,7 @@ class WelcomeController extends GetxController {
   @override
   void onInit() async {
     super.onInit();
+    
     await SessionManager().get("hasAccepted").then((value) {
       print('Conditions d\'utilisation : $value ');
     });

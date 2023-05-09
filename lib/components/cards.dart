@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:motopickupdriver/utils/colors.dart';
-import 'package:motopickupdriver/utils/queries.dart';
 import 'package:motopickupdriver/utils/typography.dart';
 
 import '../utils/models/user.dart';
@@ -512,14 +511,23 @@ class _CommandCardState extends State<CommandCard> {
                       ),
                     ),
                     const Spacer(),
-                    Text(
-                      'De : ${widget.from}',
-                      style: bodyTextStyle,
+                    SizedBox(
+                      width: 150.w,
+                      child: Text(
+                        'De : ${widget.from}',
+                        style: bodyTextStyle,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
+                      ),
                     ),
                     10.verticalSpace,
-                    Text(
-                      'À : ${widget.to}',
-                      style: bodyTextStyle,
+                    SizedBox(
+                      width: 150.w,
+                      child: Text(
+                        'À : ${widget.to}',
+                        style: bodyTextStyle,
+                        maxLines: 1,
+                      ),
                     ),
                   ],
                 ),
@@ -571,15 +579,19 @@ class _OrdersCardState extends State<OrdersCard> {
   String timeText = "";
   @override
   Widget build(BuildContext context) {
-  time = double.parse(widget.distance) / 50 < 1 ? double.parse(widget.distance) / 50 *60 : double.parse(widget.distance) / 50 ; 
-    timeText =   double.parse(widget.distance) / 50 < 1 ? "${time.toStringAsFixed(1)} minutes"   :   "${time.toStringAsFixed(1)} heures";
+    time = double.parse(widget.distance) / 50 < 1
+        ? double.parse(widget.distance) / 50 * 60
+        : double.parse(widget.distance) / 50;
+    timeText = double.parse(widget.distance) / 50 < 1
+        ? "${time.toStringAsFixed(1)} minutes"
+        : "${time.toStringAsFixed(1)} heures";
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
       child: Container(
         height: 230.h,
         width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(5),
+          borderRadius: BorderRadius.circular(10),
           color: Colors.white,
           border: Border.all(color: border),
         ),
@@ -590,7 +602,7 @@ class _OrdersCardState extends State<OrdersCard> {
               Row(
                 children: [
                   SizedBox(
-                    height: 60.h,
+                    height: 50.h,
                     width: 50.h,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(360),
@@ -629,41 +641,40 @@ class _OrdersCardState extends State<OrdersCard> {
                             widget.stars >= 1
                                 ? Boxicons.bxs_star
                                 : Boxicons.bx_star,
-                                size: 17.sp,
+                            size: 17.sp,
                             color: primary,
                           ),
                           Icon(
                             widget.stars >= 2
                                 ? Boxicons.bxs_star
                                 : Boxicons.bx_star,
-                                  size: 17.sp,
+                            size: 17.sp,
                             color: primary,
                           ),
                           Icon(
                             widget.stars >= 3
                                 ? Boxicons.bxs_star
                                 : Boxicons.bx_star,
-                                  size: 17.sp,
+                            size: 17.sp,
                             color: primary,
                           ),
                           Icon(
                             widget.stars >= 4
                                 ? Boxicons.bxs_star
                                 : Boxicons.bx_star,
-                                  size: 17.sp,
+                            size: 17.sp,
                             color: primary,
                           ),
                           Icon(
                             widget.stars >= 5
                                 ? Boxicons.bxs_star
                                 : Boxicons.bx_star,
-                                  size: 17.sp,
+                            size: 17.sp,
                             color: primary,
                           )
                         ],
                       ),
                       5.verticalSpace,
-
                       Row(
                         children: [
                           Icon(
@@ -674,27 +685,34 @@ class _OrdersCardState extends State<OrdersCard> {
                             color: primary,
                           ),
                           15.horizontalSpace,
-                       widget.status!=3?   Text(
-                            widget.orderType != "1" ? "Course" : "Voyage",
-                            style: TextStyle(
-                              fontSize: 14.sp,
-                              color: primary,
-                              fontFamily: 'LatoSemiBold',
-                            ),
-                          ):Text(
-                            widget.orderType != "1" ? "Course planifié" : "Voyage planifié",
-                            style: TextStyle(
-                              fontSize: 14.sp,
-                              color: primary,
-                              fontFamily: 'LatoSemiBold',
-                            ),
-                          ),
+                          widget.status != 3
+                              ? Text(
+                                  widget.orderType != "1" ? "Course" : "Voyage",
+                                  style: TextStyle(
+                                    fontSize: 14.sp,
+                                    color: primary,
+                                    fontFamily: 'LatoSemiBold',
+                                  ),
+                                )
+                              : Text(
+                                  widget.orderType != "1"
+                                      ? "Course planifié"
+                                      : "Voyage planifié",
+                                  style: TextStyle(
+                                    fontSize: 14.sp,
+                                    color: primary,
+                                    fontFamily: 'LatoSemiBold',
+                                  ),
+                                ),
                         ],
                       ),
                     ],
                   ),
                   const Spacer(),
-                  Text('${widget.distance} Km   ( $timeText )', style: bodyTextStyle),
+                  Text(
+                    '${widget.distance} Km\n( $timeText )',
+                    style: bodyTextStyle,
+                  ),
                 ],
               ),
               20.verticalSpace,
@@ -727,7 +745,7 @@ class _OrdersCardState extends State<OrdersCard> {
                       SizedBox(
                         width: 280.w,
                         child: Text(
-                          widget.from,
+                          "De : ${widget.from}",
                           overflow: TextOverflow.ellipsis,
                           style: bodyTextStyle,
                         ),
@@ -736,7 +754,7 @@ class _OrdersCardState extends State<OrdersCard> {
                       SizedBox(
                         width: 280.w,
                         child: Text(
-                          widget.to,
+                          "À : ${widget.to}",
                           overflow: TextOverflow.ellipsis,
                           style: bodyTextStyle,
                         ),
@@ -750,7 +768,7 @@ class _OrdersCardState extends State<OrdersCard> {
                 children: [
                   InkWell(
                     onTap: () {
-                    //  refuserOrder(widget.drive, widget.idOrder);
+                      //  refuserOrder(widget.drive, widget.idOrder);
                     },
                     child: Container(
                       height: 40.h,

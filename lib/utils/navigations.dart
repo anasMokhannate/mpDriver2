@@ -1,9 +1,11 @@
 // ignore_for_file: dead_code
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:in_app_update/in_app_update.dart';
 import 'package:motopickupdriver/utils/queries.dart';
 import 'package:motopickupdriver/utils/services.dart';
@@ -28,13 +30,13 @@ Future<Widget?> initWidget() async {
 
   if (isFirstTime) {
     mainPage = const OnBoardingPage();
-  } else  {
+  } else {
     await getUserFromMemory().then((value) async {
       if (value == null) {
         mainPage = WelcomeScreen();
       } else {
         MpUser user = value;
-        await getUser(user.uid).then((userFromDb) {
+        await getUser(user.uid).then((userFromDb) async {
           print('object ${user.uid} ${userFromDb.currentPageDriver}');
           switch (userFromDb.currentPageDriver) {
             case 'homePage':
@@ -62,7 +64,13 @@ Future<Widget?> initWidget() async {
               mainPage = Congrats();
               break;
             default:
-              mainPage = WelcomeScreen();
+              await FirebaseAuth.instance.signOut();
+              // String fcm = await SessionManager().get('user_fcm')??'';
+              await GoogleSignIn(scopes: ['profile', 'email']).signOut();
+              await SessionManager().remove("currentUser");
+              await SessionManager().set("hasAccepted", false);
+              mainPage = const UsingConditionScreen();
+              break;
           }
         });
       }
