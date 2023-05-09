@@ -19,7 +19,6 @@ class HomePageController extends GetxController {
   GeoFlutterFire? geo = GeoFlutterFire();
   Stream<List<DocumentSnapshot>>? stream;
   GeoFirePoint? center;
-  // // final radius = BehaviorSubject<double>.seeded(1.0);
   // Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
   MpUser? userBase;
 
@@ -248,6 +247,7 @@ class HomePageController extends GetxController {
       await getUserLocation();
       userBase!.totalOrders = 0;
 
+      print("hhhhh: ${userBase!.latitude} ${userBase!.longitude}");
       center = GeoFlutterFire().point(
           latitude: userBase!.latitude!, longitude: userBase!.longitude!);
       // stream = geo!
@@ -264,7 +264,7 @@ class HomePageController extends GetxController {
       saveCurrentUser(value!);
       await getConfigParams().then((value) => cities = value);
       await getOrdersPlanned();
-      await _getUserLocation();
+      // await _getUserLocation();
       isTrue.toggle();
       update();
     });
