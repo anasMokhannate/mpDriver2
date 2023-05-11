@@ -43,7 +43,7 @@ class HomePageController extends GetxController {
 
   String? city;
 
-  double? latitude, longtitude;
+  double? latitude, longitude;
 
   var stars;
 
@@ -79,9 +79,8 @@ class HomePageController extends GetxController {
             userBase!.currentCity!,
             localeIdentifier: "fr_FR");
         List<Placemark>? placemarks;
-        if (userBase!.latitude != 0 && userBase!.longitude != 0) {
-          placemarks = await placemarkFromCoordinates(
-              userBase!.latitude!, userBase!.longitude!);
+        if (latitude != 0 && longitude != 0) {
+          placemarks = await placemarkFromCoordinates(latitude!, longitude!);
 
           add = '${placemarks.first.locality}, ${placemarks.first.country}';
           isAvailable = cities!.contains(placemarks.first.locality);
@@ -164,13 +163,13 @@ class HomePageController extends GetxController {
       primary,
     );
     kGooglePlex = CameraPosition(
-      target: LatLng(latitude!, longtitude!),
+      target: LatLng(latitude!, longitude!),
       zoom: 18,
     );
     Polyline polylineDriver = await PolylineService().drawPolyline(
       LatLng(
         latitude!,
-        longtitude!,
+        longitude!,
       ),
       LatLng(
         startLatitude,
@@ -196,16 +195,17 @@ class HomePageController extends GetxController {
       zoom: 12,
     );
     latitude = position.latitude;
-    longtitude = position.longitude;
+    longitude = position.longitude;
     List<Placemark> placemarks = await placemarkFromCoordinates(
         position.latitude, position.longitude,
         localeIdentifier: "fr_FR");
     city = placemarks.first.locality;
     city = removeDiacritics(city ?? "");
-    userBase!.latitude = latitude!;
-    userBase!.longitude = longtitude!;
+    userBase!.location =
+        GeoFlutterFire().point(latitude: latitude!, longitude: longitude!).data;
+    await completeUser(userBase!);
     kGooglePlex = CameraPosition(
-      target: LatLng(latitude!, longtitude!),
+      target: LatLng(latitude!, longitude!),
       zoom: 16,
     );
     // markers.add(
@@ -244,10 +244,7 @@ class HomePageController extends GetxController {
       status = userBase!.isOnline ?? false;
       await getUserLocation();
       userBase!.totalOrders = 0;
-
-      print("hhhhh: ${userBase!.latitude} ${userBase!.longitude}");
-      center = GeoFlutterFire().point(
-          latitude: userBase!.latitude!, longitude: userBase!.longitude!);
+      center = GeoFirePoint(latitude!, longitude!);
       // stream = geo!
       //     .collection(
       //         collectionRef: FirebaseFirestore.instance.collection("mp_orders"))

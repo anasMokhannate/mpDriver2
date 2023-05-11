@@ -113,15 +113,21 @@ class _HomePageState extends State<HomePage> {
                   )
                 : controller.status
                     ? StreamBuilder(
-                        stream: controller.geo!
-                            .collection(
-                                collectionRef: FirebaseFirestore.instance
-                                    .collection("mp_orders"))
-                            .within(
-                                center: controller.center!,
-                                radius: 10000,
-                                field: "order_pickup_location",
-                                strictMode: true),
+                        stream: FirebaseFirestore.instance
+                            .collection('mp_orders')
+                            .where('drivers_concerned',
+                                arrayContains: controller.userBase!.uid)
+                            .snapshots(),
+
+                        // controller.geo!
+                        //     .collection(
+                        //         collectionRef: FirebaseFirestore.instance
+                        //             .collection("mp_orders"))
+                        //     .within(
+                        //         center: controller.center!,
+                        //         radius: 10000,
+                        //         field: "order_pickup_location",
+                        //         strictMode: true),
 
                         // stream: FirebaseFirestore.instance
                         //     .collection("orders")
@@ -136,7 +142,8 @@ class _HomePageState extends State<HomePage> {
                         //     //             .format(DateTime.now()))
                         //     .snapshots(),
                         builder: (context,
-                            AsyncSnapshot<List<DocumentSnapshot>> snapshot) {
+                            AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
+                                snapshot) {
                           print("abc ${snapshot.toString()}");
                           if (!snapshot.hasData) {
                             // return const Text('hasntData');
@@ -163,7 +170,7 @@ class _HomePageState extends State<HomePage> {
                               ],
                             );
                           } else {
-                            if (snapshot.data!.isEmpty) {
+                            if (snapshot.data!.docs.isEmpty) {
                               // return const Text('isEmpty');
                               return Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -191,13 +198,13 @@ class _HomePageState extends State<HomePage> {
                               return ListView.builder(
                                 shrinkWrap: true,
                                 physics: const BouncingScrollPhysics(),
-                                itemCount: snapshot.data!.length,
+                                itemCount: snapshot.data!.docs.length,
                                 itemBuilder: (context, index) {
                                   final DocumentSnapshot documentSnapshot =
-                                      snapshot.data![index];
-                                  if (!documentSnapshot['driver_declined']
+                                      snapshot.data!.docs[index];
+                                  if (!documentSnapshot['drivers_declined']
                                           .contains(controller.userBase!.uid) &&
-                                      !documentSnapshot['driver_accepted']
+                                      !documentSnapshot['drivers_accepted']
                                           .contains(
                                               (controller.userBase!.uid))) {
                                     print(documentSnapshot['customer']['note']);
@@ -212,7 +219,7 @@ class _HomePageState extends State<HomePage> {
                                                     ["geopoint"]
                                                 .longitude,
                                             controller.latitude!,
-                                            controller.longtitude!);
+                                            controller.longitude!);
                                     //TODO: < instead of >
                                     // if ((distance / 1000) >
                                     //         documentSnapshot['km_radius'] &&
@@ -248,7 +255,7 @@ class _HomePageState extends State<HomePage> {
                                             .collection("mp_orders")
                                             .doc(documentSnapshot["order_id"])
                                             .update({
-                                          "driver_accepted":
+                                          "drivers_accepted":
                                               FieldValue.arrayUnion([
                                             controller.userBase!.toJson()
                                           ])
