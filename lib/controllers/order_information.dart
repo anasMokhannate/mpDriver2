@@ -35,20 +35,20 @@ class OrderInformationController extends GetxController {
   getClientData() async {
     String id = "";
     var docSnapshot = await FirebaseFirestore.instance
-        .collection('orders')
+        .collection('mp_orders')
         .doc(orderId)
         .get();
     if (docSnapshot.exists) {
       Map<String, dynamic>? data = docSnapshot.data();
-      id = data!['customer_uid'];
+      id = data!["customer"]['uid'];
       update();
+      docSnapshot =
+          await FirebaseFirestore.instance.collection('mp_users').doc(id).get();
     }
-    docSnapshot =
-        await FirebaseFirestore.instance.collection('users').doc(id).get();
     if (docSnapshot.exists) {
       Map<String, dynamic>? data = docSnapshot.data();
-      clientNumber = data!['customer_phone_number'];
-      startsmean = data['customer_note'] / data['customer_total_orders'];
+      clientNumber = data!['phone_number'];
+      startsmean = data['note'] / data['total_orders'];
       update();
     }
   }
@@ -59,7 +59,7 @@ class OrderInformationController extends GetxController {
     await getTime();
     await getUserFromMemory().then((value) async {
       userBase = value;
-      orderId = Get.arguments[0];
+      // orderId = Get.arguments[0];
       await getClientData();
       isTrue = true.obs;
       update();

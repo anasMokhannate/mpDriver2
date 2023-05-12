@@ -1,5 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 class MpUser {
   String? fullName;
   String? uid;
@@ -11,7 +9,7 @@ class MpUser {
   String? registrationDate;
   String? lastLoginDate;
   String? currentCity;
-  Map<String,dynamic>? location;
+  Map<String, dynamic>? location;
   bool? isDeletedAccount;
   bool? isActivatedAccount;
   bool? isVerifiedAccount;

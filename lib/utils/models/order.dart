@@ -106,10 +106,10 @@ class Order {
   String? orderId;
   int? orderType;
   String? orderCity;
-  Map<String, Object>? orderPickupLocation;
+  Map<String, dynamic>? orderPickupLocation;
   String? orderPickupTime;
   String? orderArrivalTime;
-  Map<String, Object>? orderArrivalLocation;
+  Map<String, dynamic>? orderArrivalLocation;
   String? orderComments;
   double? orderPurchaseAmount;
   bool? isPlanned;
@@ -137,8 +137,8 @@ class Order {
   Map<String, dynamic>? driver;
   double kmRadius;
   bool? isSucceded;
-  List<String>? driversAccepted;
-  List<String>? driversDeclined;
+  List<dynamic>? driversAccepted;
+  List<dynamic>? driversDeclined;
   bool? isStart;
   bool? isHere;
   String? createdAt;

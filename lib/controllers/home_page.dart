@@ -1,5 +1,7 @@
 // ignore_for_file: file_names, unused_element
 
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:diacritic/diacritic.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +12,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:motopickupdriver/utils/colors.dart';
+import 'package:motopickupdriver/utils/models/order.dart' as Orderr;
 import 'package:motopickupdriver/utils/queries.dart';
 import 'package:motopickupdriver/utils/services.dart';
 
@@ -21,6 +24,7 @@ class HomePageController extends GetxController {
   GeoFirePoint? center;
   // Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
   MpUser? userBase;
+  StreamSubscription<Position>? positionStream;
 
   RxBool isTrue = false.obs;
   String address = 'Nous ne pouvons pas obtenir votre position actuelle';
@@ -52,6 +56,7 @@ class HomePageController extends GetxController {
   double ttime = 0.0;
 
   bool isActiveOne = false;
+  Orderr.Order order = Orderr.Order();
 
   getOrdersPlanned() async {
     if (userBase!.plannedDelivery != 0 || userBase!.plannedTrip != 0) {
@@ -61,60 +66,27 @@ class HomePageController extends GetxController {
     }
   }
 
-  Future<void> _getUserLocation() async {
-    try {
-      if (userBase!.currentCity == '') {
-        Position position = await Geolocator.getCurrentPosition(
-            desiredAccuracy: LocationAccuracy.high);
-        List<Placemark> placemarks = await placemarkFromCoordinates(
-            position.latitude, position.longitude,
-            localeIdentifier: "fr_FR");
-        address = '${placemarks.first.locality}, ${placemarks.first.country}';
-        isAvailable = cities!.contains(placemarks.first.locality);
-        print(
-            ' $isAvailable  ${placemarks.first.locality}, ${placemarks.first.country}');
-      } else {
-        String add = '';
-        List<Location> locations = await locationFromAddress(
-            userBase!.currentCity!,
-            localeIdentifier: "fr_FR");
-        List<Placemark>? placemarks;
-        if (latitude != 0 && longitude != 0) {
-          placemarks = await placemarkFromCoordinates(latitude!, longitude!);
-
-          add = '${placemarks.first.locality}, ${placemarks.first.country}';
-          isAvailable = cities!.contains(placemarks.first.locality);
-          print(
-              ' $isAvailable  ${placemarks.first.locality}, ${placemarks.first.country}');
-        } else {
-          placemarks = await placemarkFromCoordinates(
-              locations.first.latitude, locations.first.longitude,
-              localeIdentifier: "fr_FR");
-          add = '${placemarks.first.locality}';
-
-          isAvailable = cities!.contains(placemarks.first.locality);
-
-          print(
-              ' $isAvailable  ${placemarks.first.locality}, ${placemarks.first.country}');
-        }
-        print(cities);
-        address = add;
-        print(
-            ' $isAvailable  ${placemarks.first.locality}, ${placemarks.first.country}');
+  void startLocationUpdates() {
+    positionStream = Geolocator.getPositionStream(
+      locationSettings: const LocationSettings(accuracy: LocationAccuracy.high),
+    ).listen((Position position) {
+      // Update the location in Firestore
+      if (userBase!.isOnline!) {
+        updateLocationInFirestore(position.latitude, position.longitude);
       }
-      Position position = await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.high);
-      List<Placemark> placemarks = await placemarkFromCoordinates(
-          position.latitude, position.longitude,
-          localeIdentifier: "fr_FR");
-      address = '${placemarks.first.locality}, ${placemarks.first.country}';
-      isAvailable = cities!.contains(placemarks.first.locality);
-      print(
-          ' $isAvailable  ${placemarks.first.locality}, ${placemarks.first.country}');
-    } catch (e) {
-      address = 'Nous ne pouvons pas obtenir votre position actuelle';
-    }
-    update();
+    });
+  }
+
+  updateLocationInFirestore(latitude, longitude) async {
+    print("$status status");
+    userBase!.location =
+        GeoFlutterFire().point(latitude: latitude!, longitude: longitude!).data;
+    await completeUser(userBase!);
+  }
+
+// Stop listening for location updates
+  void stopLocationUpdates() {
+    positionStream?.cancel();
   }
 
   void goOnline() {
@@ -123,6 +95,7 @@ class HomePageController extends GetxController {
         .collection('mp_users')
         .doc(userBase!.uid)
         .update(userBase!.toJson());
+    update();
   }
 
   Future<void> setRoad(
@@ -182,8 +155,6 @@ class HomePageController extends GetxController {
     update();
   }
 
-  void stopTimer() {}
-
   getUserLocation() async {
     motoIcon = await BitmapDescriptor.fromAssetImage(
         const ImageConfiguration(devicePixelRatio: 2),
@@ -200,6 +171,7 @@ class HomePageController extends GetxController {
         position.latitude, position.longitude,
         localeIdentifier: "fr_FR");
     city = placemarks.first.locality;
+    print("this is  $city  ${placemarks.first.street}");
     city = removeDiacritics(city ?? "");
     userBase!.location =
         GeoFlutterFire().point(latitude: latitude!, longitude: longitude!).data;
@@ -245,6 +217,7 @@ class HomePageController extends GetxController {
       await getUserLocation();
       userBase!.totalOrders = 0;
       center = GeoFirePoint(latitude!, longitude!);
+      startLocationUpdates();
       // stream = geo!
       //     .collection(
       //         collectionRef: FirebaseFirestore.instance.collection("mp_orders"))
