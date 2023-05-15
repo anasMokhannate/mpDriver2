@@ -11,6 +11,7 @@ import 'package:motopickupdriver/components/inputs.dart';
 import 'package:motopickupdriver/controllers/completeYourProfile/verify_identity.dart';
 import 'package:motopickupdriver/utils/buttons.dart';
 import 'package:motopickupdriver/utils/colors.dart';
+import 'package:motopickupdriver/utils/services.dart';
 import 'package:motopickupdriver/utils/typography.dart';
 
 class VerifyIdentity extends StatefulWidget {
@@ -129,6 +130,12 @@ class _VerifyIdentityState extends State<VerifyIdentity> {
                         onConfirm: (date) {
                           controller.cardExpire =
                               DateFormat('yyyy-MM-dd').format(date).toString();
+
+                          sendPlanifiedNotification(
+                              controller.userBase!.fcmList,
+                              'Expiration de votre carte d\'identité',
+                              'Votre carte d\'identité expire le ${controller.cardExpire}',
+                              DateTime.parse(controller.cardExpire));
                           controller.update();
                         },
                         currentTime: DateTime.now(),
@@ -200,6 +207,11 @@ class _VerifyIdentityState extends State<VerifyIdentity> {
                         onConfirm: (date) {
                           controller.licenceExpire =
                               DateFormat('yyyy-MM-dd').format(date).toString();
+                          sendPlanifiedNotification(
+                              controller.userBase!.fcmList,
+                              'Expiration de votre permis de conduite',
+                              'Votre permis de conduite expire le ${controller.licenceExpire}',
+                              DateTime.parse(controller.licenceExpire));
                           controller.update();
                         },
                         currentTime: DateTime.now(),
@@ -271,6 +283,12 @@ class _VerifyIdentityState extends State<VerifyIdentity> {
                         onConfirm: (date) {
                           controller.assuranceExpire =
                               DateFormat('yyyy-MM-dd').format(date).toString();
+                          sendPlanifiedNotification(
+                            controller.userBase!.fcmList,
+                            'Expiration de votre assurance',
+                            'Votre assurance expire le ${controller.assuranceExpire}',
+                            DateTime.parse(controller.assuranceExpire),
+                          );
                           controller.update();
                         },
                         currentTime: DateTime.now(),
@@ -342,6 +360,11 @@ class _VerifyIdentityState extends State<VerifyIdentity> {
                         onConfirm: (date) {
                           controller.griseExpire =
                               DateFormat('yyyy-MM-dd').format(date).toString();
+                          sendPlanifiedNotification(
+                              controller.userBase!.fcmList,
+                              'Expiration de votre carte grise',
+                              'Votre carte grise expire le ${controller.griseExpire}',
+                              DateTime.parse(controller.griseExpire));
                           controller.update();
                         },
                         currentTime: DateTime.now(),
@@ -537,8 +560,7 @@ class _VerifyIdentityState extends State<VerifyIdentity> {
                                                   color:
                                                       controller.isDriver.value
                                                           ? primary
-                                                          :
-                                                      Colors.transparent,
+                                                          : Colors.transparent,
                                                 ),
                                               ),
                                               15.horizontalSpace,
