@@ -60,8 +60,8 @@ class VerfiyNumberController extends GetxController {
 
   submit(context) async {
     if (code.text.isNotEmpty) {
-      // loading.toggle();
-      // update();
+      loading.toggle();
+      //update();
       try {
         PhoneAuthCredential credential = PhoneAuthProvider.credential(
             verificationId: verificationCode, smsCode: code.text);
@@ -91,10 +91,9 @@ class VerfiyNumberController extends GetxController {
           );
           await saveCurrentUser(userBase).then((value) async {
             await createUser(userBase).then((value) {
-                loading.toggle();
+              loading.toggle();
               update();
               Get.offAll(() => CompleteProfile());
-            
             });
           });
         });

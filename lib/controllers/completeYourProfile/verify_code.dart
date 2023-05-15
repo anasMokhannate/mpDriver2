@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:get/get.dart';
 
 import '../../utils/alert_dialog.dart';
@@ -42,12 +41,14 @@ class VerifyCodeController extends GetxController {
   @override
   void onInit() async {
     super.onInit();
-    currUser = MpUser.fromJson(await SessionManager().get("currentUser"));
-    phoneNumber = currUser!.phoneNumber!;
-    print(phoneNumber);
-    verificationCode = Get.arguments;
-    startTimer();
-    update();
+    await getUserFromMemory().then((value) {
+      currUser = value;
+      phoneNumber = currUser!.phoneNumber!;
+      print(phoneNumber);
+      verificationCode = Get.arguments;
+      startTimer();
+      update();
+    });
   }
 
   void submit(BuildContext context) {
