@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:motopickupdriver/utils/colors.dart';
+import 'package:motopickupdriver/utils/queries.dart';
 import 'package:motopickupdriver/utils/typography.dart';
 
 import '../utils/models/user.dart';
@@ -768,7 +769,7 @@ class _OrdersCardState extends State<OrdersCard> {
                 children: [
                   InkWell(
                     onTap: () {
-                      //  refuserOrder(widget.drive, widget.idOrder);
+                       refuserOrder(widget.drive, widget.idOrder);
                     },
                     child: Container(
                       height: 40.h,

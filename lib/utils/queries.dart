@@ -183,3 +183,36 @@ Future updateSuccedOrder(orderId) async {
       .doc(orderId)
       .update({"is_succeded": true, 'status': 1});
 }
+
+Future refuserOrder(MpUser driver, orderId) async {
+  FirebaseFirestore.instance.collection('mp_orders').doc(orderId).update(({
+        'is_canceled_by_driver': true,
+        'status': 0,
+        'drivers_declined': FieldValue.arrayUnion([driver.uid]),
+        'drivers_concerned': FieldValue.arrayRemove([driver.uid])
+      }));
+  String type = "";
+  var docSnapshot2 = await FirebaseFirestore.instance
+      .collection('mp_orders')
+      .doc(orderId)
+      .get();
+  if (docSnapshot2.exists) {
+    Map<String, dynamic>? data = docSnapshot2.data();
+    type = data!['order_type'].toString();
+    type != '0'
+        ? FirebaseFirestore.instance
+            .collection('mp_users')
+            .doc(driver.uid)
+            .update({
+            "is_on_order": false,
+            "driver_cancelled_trip": FieldValue.increment(1),
+          })
+        : FirebaseFirestore.instance
+            .collection('mp_users')
+            .doc(driver.uid)
+            .update({
+            "is_on_order": false,
+            "driver_cancelled_delivery": FieldValue.increment(1),
+          });
+  }
+}
