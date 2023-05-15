@@ -169,3 +169,17 @@ Future createEmergency(Emergency emergency) async {
 
   await docUser.set(emergency.toJson());
 }
+
+Future updateStatusOrder(orderId) async {
+  FirebaseFirestore.instance
+      .collection('mp_orders')
+      .doc(orderId)
+      .update({"is_start": true});
+}
+
+Future updateSuccedOrder(orderId) async {
+  FirebaseFirestore.instance
+      .collection('mp_orders')
+      .doc(orderId)
+      .update({"is_succeded": true, 'status': 1});
+}
