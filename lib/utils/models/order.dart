@@ -136,11 +136,13 @@ class Order {
   Map<String, dynamic>? customer;
   Map<String, dynamic>? driver;
   double kmRadius;
-  bool? isSucceded;
   List<dynamic>? driversAccepted;
   List<dynamic>? driversDeclined;
-  bool? isStart;
-  bool? isHere;
+  // bool? isStart;
+  // bool? isHere;
+  // bool? isSucceded;
+
+  String? status;
   String? createdAt;
 
   Order({
@@ -177,11 +179,11 @@ class Order {
     this.customer,
     this.driver,
     this.kmRadius = 0.0,
-    this.isSucceded,
+    
     this.driversAccepted,
     this.driversDeclined,
-    this.isStart,
-    this.isHere,
+    // 
+    this.status,
     this.createdAt,
   });
 
@@ -220,11 +222,12 @@ class Order {
       customer: json['customer'],
       driver: json['driver'],
       kmRadius: json['km_radius'],
-      isSucceded: json['is_succeded'],
+      status: json['status'],
       driversAccepted: json['drivers_accepted'],
       driversDeclined: json['drivers_declined'],
-      isStart: json['is_start'],
-      isHere: json['is_here'],
+      //  isSucceded: json['is_succeded'],
+      // isStart: json['is_start'],
+      // isHere: json['is_here'],
       createdAt: json['created_at'],
     );
   }
@@ -264,11 +267,12 @@ class Order {
     data['customer'] = customer;
     data['driver'] = driver;
     data['km_radius'] = kmRadius;
-    data['is_succeded'] = isSucceded;
+    data['status'] = status;
     data['drivers_accepted'] = driversAccepted;
     data['drivers_declined'] = driversDeclined;
-    data['is_start'] = isStart;
-    data['is_here'] = isHere;
+    //  data['is_succeded'] = isSucceded;
+    // data['is_start'] = isStart;
+    // data['is_here'] = isHere;
     data['created_at'] = createdAt;
     return data;
   }

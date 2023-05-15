@@ -30,7 +30,7 @@ class MpUser {
   String? identityCardNumber;
   String? identityCardPicture;
   String? identityCardExpirationDate;
-  String? drivingLicenceNumber;
+  // String? drivingLicenceNumber;
   String? drivingLicencePicture;
   String? drivingLicenceExpirationDate;
   String? assurancePicture;
@@ -48,6 +48,7 @@ class MpUser {
   String? currentPageDriver;
   String? authType;
   String? lastDocumentUpdateDate;
+  String? currentOrderId;
 
   MpUser(
       {this.fullName,
@@ -81,7 +82,7 @@ class MpUser {
       this.identityCardNumber,
       this.identityCardPicture,
       this.identityCardExpirationDate,
-      this.drivingLicenceNumber,
+      // this.drivingLicenceNumber,
       this.drivingLicencePicture,
       this.drivingLicenceExpirationDate,
       this.orderTotalAmount,
@@ -94,7 +95,8 @@ class MpUser {
       this.currentPageClient,
       this.currentPageDriver,
       this.lastDocumentUpdateDate,
-      this.authType});
+      this.authType,
+      this.currentOrderId});
 
   factory MpUser.fromJson(Map<String, dynamic>? json) {
     // fullName = json?['full_name'];
@@ -187,7 +189,7 @@ class MpUser {
         identityCardNumber: json?['identity_card_number'],
         identityCardPicture: json?['identity_card_picture'],
         identityCardExpirationDate: json?['identity_card_expiration_date'],
-        drivingLicenceNumber: json?['driving_licence_number'],
+        // drivingLicenceNumber: json?['driving_licence_number'],
         drivingLicencePicture: json?['driving_licence_picture'],
         drivingLicenceExpirationDate: json?['driving_licence_expiration_date'],
         orderTotalAmount: json?['order_total_amount'],
@@ -200,7 +202,8 @@ class MpUser {
         currentPageClient: json?['current_page_client'],
         currentPageDriver: json?['current_page_driver'],
         lastDocumentUpdateDate: json?['last_document_update_date'],
-        authType: json?['auth_type']);
+        authType: json?['auth_type'],
+        currentOrderId: json?['current_order_id']);
   }
 
   Map<String, dynamic> toJson() {
@@ -247,7 +250,7 @@ class MpUser {
     data['current_page_client'] = currentPageClient;
     data['current_page_driver'] = currentPageDriver;
     data['auth_type'] = authType;
-    data['driving_licence_number'] = drivingLicenceNumber;
+    // data['driving_licence_number'] = drivingLicenceNumber;
     data['driving_licence_picture'] = drivingLicencePicture;
     data['driving_licence_expiration_date'] = drivingLicenceExpirationDate;
     data['order_total_amount'] = orderTotalAmount;
@@ -260,7 +263,7 @@ class MpUser {
     data['identity_card_number'] = identityCardNumber;
     data['identity_card_picture'] = identityCardPicture;
     data['identity_card_expiration_date'] = identityCardExpirationDate;
-    data['driving_licence_number'] = drivingLicenceNumber;
+    // data['driving_licence_number'] = drivingLicenceNumber;
     data['driving_licence_picture'] = drivingLicencePicture;
     data['driving_licence_expiration_date'] = drivingLicenceExpirationDate;
     data['order_total_amount'] = orderTotalAmount;
@@ -271,6 +274,7 @@ class MpUser {
     data['current_order_driver'] = currentOrderDriver;
     data['current_order_customer'] = currentOrderCustomer;
     data['last_document_update_date'] = lastDocumentUpdateDate;
+    data['current_order_id'] = currentOrderId;
     return data;
   }
 

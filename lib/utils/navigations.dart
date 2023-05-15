@@ -13,6 +13,7 @@ import 'package:motopickupdriver/views/completeYourProfile/adding_photo_moto.dar
 import 'package:motopickupdriver/views/completeYourProfile/complete_profile.dart';
 import 'package:motopickupdriver/views/onboarding/onboarding_page.dart';
 import 'package:motopickupdriver/views/onboarding/using_condition_screen.dart';
+import 'package:motopickupdriver/views/order_informations.dart';
 
 import '../views/auth/register_page.dart';
 import '../views/completeYourProfile/adding_moto.dart';
@@ -40,7 +41,11 @@ Future<Widget?> initWidget() async {
           print('object ${user.uid} ${userFromDb.currentPageDriver}');
           switch (userFromDb.currentPageDriver) {
             case 'homePage':
-              mainPage = const HomePage();
+              if (user.isOnOrder!) {
+                mainPage = const OrderInformations();
+              }else {
+                mainPage = const HomePage();
+              }
               break;
             case 'completeProfile':
               mainPage = CompleteProfile();

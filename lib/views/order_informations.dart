@@ -22,6 +22,7 @@ import 'package:motopickupdriver/views/rate_client.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../utils/services.dart';
+import 'home_page.dart';
 
 class OrderInformations extends StatefulWidget {
   const OrderInformations({Key? key}) : super(key: key);
@@ -576,8 +577,8 @@ class _OrderInformationsState extends State<OrderInformations> {
                                                                 controller
                                                                     .update();
 
-                                                                // Get.offAll(() =>
-                                                                //     const HomePage());
+                                                                Get.offAll(() =>
+                                                                    const HomePage());
                                                               },
                                                               child: Container(
                                                                 height: 55.h,
