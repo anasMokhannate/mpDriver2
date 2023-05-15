@@ -23,6 +23,8 @@ class OrderInformationsController extends GetxController {
   String? city;
   double? latitude, longitude;
   CameraPosition? kGooglePlex;
+
+  double? distance, startlatitude, startlongitude, endlatitude, endlongitude;
   final Set<Marker> markers = {};
   final Set<Polyline> polylines = {};
   BitmapDescriptor? startIcon, endIcon, motoIcon;
@@ -31,12 +33,13 @@ class OrderInformationsController extends GetxController {
   bool isWithOrder = false;
   double stars = 0;
   List trajet = [];
+  String? driverId;
 // bool showCard=false;
   String? orderID;
 
   getWithOrder() async {
     var docSnapshot = await FirebaseFirestore.instance
-        .collection('drivers')
+        .collection('mp_users')
         .doc(userBase!.uid)
         .get();
     if (docSnapshot.exists) {
@@ -49,7 +52,7 @@ class OrderInformationsController extends GetxController {
   goOnline() async {
     userBase!.isOnline = status;
     FirebaseFirestore.instance
-        .collection('drivers')
+        .collection('mp_users')
         .doc(userBase!.uid)
         .update(userBase!.toJson());
   }
@@ -90,24 +93,24 @@ class OrderInformationsController extends GetxController {
     update();
   }
 
-  updateMyLocation(orderId) {
-    timer = Timer.periodic(const Duration(minutes: 1), (val) async {
-      getUserLocation();
-      trajet.add({
-        "latitude": latitude,
-        "longitude": longitude,
-      });
-      userBase!.location!["geopoint"].longitude = longitude!;
-      userBase!.location!["geopoint"].latitude = latitude!;
-      await FirebaseFirestore.instance
-          .collection('orders')
-          .doc(orderId)
-          .update({
-        'driver': userBase!.toJson(),
-        'trajet': FieldValue.arrayUnion(trajet)
-      });
-    });
-  }
+  // updateMyLocation(orderId) {
+  //   timer = Timer.periodic(const Duration(minutes: 1), (val) async {
+  //     getUserLocation();
+  //     trajet.add({
+  //       "latitude": latitude,
+  //       "longitude": longitude,
+  //     });
+  //     userBase!.location!["geopoint"].longitude = longitude!;
+  //     userBase!.location!["geopoint"].latitude = latitude!;
+  //     await FirebaseFirestore.instance
+  //         .collection('orders')
+  //         .doc(orderId)
+  //         .update({
+  //       'driver': userBase!.toJson(),
+  //       'trajet': FieldValue.arrayUnion(trajet)
+  //     });
+  //   });
+  // }
 
   // myLocationUpdateNotif() {
   //   Timer? timer3;
@@ -182,12 +185,23 @@ class OrderInformationsController extends GetxController {
     );
     polylines.clear();
     polylines.addAll([polyline, polylineDriver]);
+    // update();
+  }
+
+  Future<void> drawPolyline(LatLng from, LatLng to) async {
+    Polyline polyline = await PolylineService().drawPolyline(from, to, primary);
+    polylines.clear();
+    polylines.add(polyline);
+    PolylineService().distanceBetween(from, to).then((value) async {
+      distance = value;
+    });
     update();
   }
 
   @override
   void onInit() async {
     super.onInit();
+    print("driver id $driverId");
     await getCurrentUser().then((value) async {
       userBase = value;
       status = userBase!.isOnline ?? false;
@@ -198,9 +212,16 @@ class OrderInformationsController extends GetxController {
     orderID = Get.arguments;
     print("ssss $orderID");
     await getWithOrder();
+    startIcon = await BitmapDescriptor.fromAssetImage(
+        const ImageConfiguration(devicePixelRatio: 2),
+        'assets/images/marker_start.png');
+    endIcon = await BitmapDescriptor.fromAssetImage(
+        const ImageConfiguration(devicePixelRatio: 2),
+        'assets/images/marker_end.png');
     isTrue.toggle();
     // await myLocationUpdateNotif();
     // await updateMyLocation();
+
     update();
   }
 }

@@ -227,7 +227,7 @@ class _HomePageState extends State<HomePage> {
                                             controller.latitude!,
                                             controller.longitude!);
                                         //TODO: < instead of >
-                                        // if ((distance / 1000) >
+                                        //  if ((distance / 1000) >
                                         //         documentSnapshot['km_radius'] &&
                                         //     controller.isWithOrder == false) {
                                         controller.stars =
@@ -267,8 +267,8 @@ class _HomePageState extends State<HomePage> {
                                                 .update({
                                               "drivers_accepted":
                                                   FieldValue.arrayUnion([
-                                                // controller.userBase!.toJson(),
-                                                controller.userBase!.uid,
+                                                controller.userBase!.toJson(),
+                                                // controller.userBase!.uid,
                                               ])
                                             });
 
@@ -329,6 +329,7 @@ class _HomePageState extends State<HomePage> {
                                         );
                                         // }
                                       }
+                                      return null;
                                       // return null;
                                       // else {
                                       //   print("haaa");

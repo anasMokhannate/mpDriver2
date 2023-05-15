@@ -2,7 +2,6 @@
 
 import 'package:boxicons/boxicons.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -12,13 +11,14 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:loading_indicator/loading_indicator.dart';
-import 'package:motopickupdriver/components/cards.dart';
 import 'package:motopickupdriver/components/drawer.dart';
 import 'package:motopickupdriver/controllers/order_informations.dart';
 import 'package:motopickupdriver/utils/alert_dialog.dart';
 import 'package:motopickupdriver/utils/buttons.dart';
 import 'package:motopickupdriver/utils/colors.dart';
+import 'package:motopickupdriver/utils/queries.dart';
 import 'package:motopickupdriver/utils/typography.dart';
+import 'package:motopickupdriver/views/rate_client.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../utils/services.dart';
@@ -117,184 +117,823 @@ class _OrderInformationsState extends State<OrderInformations> {
                     ),
                   )
                 : controller.status
-                    ? Stack(
+                    ? Column(
                         children: [
                           GetBuilder<OrderInformationsController>(
-                            builder: (value) => GoogleMap(
-                              myLocationEnabled: true,
-                              mapType: MapType.normal,
-                              initialCameraPosition: controller.kGooglePlex!,
-                              markers: controller.markers,
-                              compassEnabled: false,
-                              polylines: controller.polylines,
-                              onMapCreated: (onMapCreated) {
-                                // controller.mapController = onMapCreated;
-                              },
-                            ),
-                          ),
-                          if (!controller.isOnOrder)
-                            Positioned(
-                              top: 200.h,
-                              child: Container(
-                                width: MediaQuery.of(context).size.width,
-                                color: Colors.transparent,
-                                child: StreamBuilder(
-                                  stream: FirebaseFirestore.instance
-                                      .collection("orders")
-                                      .where('order_city',
-                                          isEqualTo: controller.city)
-                                      .where('is_succeed', isEqualTo: false)
-                                      .where('is_canceled_by_customer',
-                                          isEqualTo: false)
-                                      .where('created_at',
-                                          isEqualTo: DateFormat('yyyy-MM-dd HH')
-                                              .format(DateTime.now()))
-                                      .snapshots(),
-                                  builder: (context,
-                                      AsyncSnapshot<QuerySnapshot> snapshot) {
-                                    print(snapshot.toString());
-                                    if (!snapshot.hasData) {
-                                      return const Text('');
-                                    } else {
-                                      if (snapshot.data!.docs.isEmpty) {
-                                        return const Text('');
-                                      } else {
-                                        return ListView.builder(
-                                          shrinkWrap: true,
-                                          physics:
-                                              const BouncingScrollPhysics(),
-                                          itemCount: snapshot.data!.docs.length,
-                                          itemBuilder: (context, index) {
-                                            final DocumentSnapshot
-                                                documentSnapshot =
-                                                snapshot.data!.docs[index];
-                                            if (!documentSnapshot[
-                                                        'drivers_declined']
-                                                    .contains(controller
-                                                        .userBase!.uid) &&
-                                                !documentSnapshot[
-                                                        'drivers_accepted']
-                                                    .contains((controller
-                                                        .userBase!.uid))) {
-                                              print(documentSnapshot['user']
-                                                  ['customer_note']);
-                                              double distance =
-                                                  Geolocator.distanceBetween(
-                                                      documentSnapshot[
-                                                              "order_pickup_location"]
-                                                          ['latitude'],
-                                                      documentSnapshot[
-                                                              "order_pickup_location"]
-                                                          ['longitude'],
-                                                      controller.latitude!,
-                                                      controller.longitude!);
-                                              if ((distance / 1000) <
-                                                      documentSnapshot[
-                                                          'km_radius'] &&
-                                                  controller.isWithOrder ==
-                                                      false) {
-                                                controller
-                                                    .stars = documentSnapshot[
-                                                            'user']
-                                                        ['customer_note'] /
-                                                    documentSnapshot['user'][
-                                                        'customer_total_orders'];
-                                                // controller.showCard=true;
-                                                // controller.update();
-                                                return OrdersCard(
-                                                  status: documentSnapshot[
-                                                      "status"],
-                                                  photo:
-                                                      documentSnapshot["user"]
-                                                          ["customer_picture"],
-                                                  username: documentSnapshot[
-                                                          "user"]
-                                                      ["customer_full_name"],
-                                                  orderType: documentSnapshot[
-                                                          "order_type"]
-                                                      .toString(),
-                                                  from: documentSnapshot[
-                                                      "address_from"],
-                                                  to: documentSnapshot[
-                                                      "address_to"],
-                                                  idOrder: documentSnapshot[
-                                                      "order_id"],
-                                                  drive: controller.userBase!,
-                                                  distance: (distance / 1000)
-                                                      .toStringAsFixed(2),
-                                                  stars: controller.stars,
-                                                  accepte: () async {
-                                                    // controller.showCard=false;
-                                                    // controller.update();
-                                                    String fcm =
-                                                        documentSnapshot[
-                                                            "customer_fcm"];
-                                                    sendNotification([
-                                                      fcm
-                                                    ], "Votre commande est en attente de confirmation",
-                                                        "");
-                                                    controller.isOnOrder = true;
-                                                    controller.isWithOrder =
-                                                        true;
-                                                    String fcmDriver =
-                                                        await SessionManager()
-                                                            .get('driver_fcm');
-                                                    FirebaseFirestore.instance
-                                                        .collection('orders')
-                                                        .doc(documentSnapshot[
-                                                            "order_id"])
-                                                        .update(({
-                                                          "driver_fcm":
-                                                              fcmDriver,
-                                                        }));
-                                                    FirebaseFirestore.instance
-                                                        .collection('drivers')
-                                                        .doc(controller
-                                                            .userBase!.uid)
-                                                        .update({
-                                                      "is_on_order": true
-                                                    });
-                                                    controller.setRoad(
-                                                        documentSnapshot[
-                                                                "order_pickup_location"]
-                                                            ["latitude"],
-                                                        documentSnapshot[
-                                                                "order_pickup_location"]
-                                                            ["longitude"],
-                                                        documentSnapshot[
-                                                                "order_arrival_location"]
-                                                            ["latitude"],
-                                                        documentSnapshot[
-                                                                "order_arrival_location"]
-                                                            ["longitude"]);
-                                                    // addDriverToOrder(
-                                                    //     controller.userBase!,
-                                                    //     documentSnapshot[
-                                                    //         "order_id"]);
-                                                    controller.orderID =
-                                                        documentSnapshot[
-                                                            "order_id"];
-                                                    controller.update();
-                                                  },
-                                                );
-                                              } else {
-                                                return const Text('');
-                                              }
-                                            } else {
-                                              return const Text('');
-                                            }
-                                          },
-                                        );
-                                      }
-                                    }
-                                  },
-                                ),
+                            builder: (value) => Expanded(
+                              child: GoogleMap(
+                                myLocationEnabled: true,
+                                mapType: MapType.normal,
+                                initialCameraPosition: controller.kGooglePlex!,
+                                markers: controller.markers,
+                                compassEnabled: false,
+                                polylines: controller.polylines,
+                                onMapCreated: (onMapCreated) {
+                                  // controller.mapController = onMapCreated;
+                                },
                               ),
                             ),
-                          if (controller.isOnOrder && !controller.startCourse)
-                            // else {
-                                        // print("haaa");
-                                        // controller.ttime = double.parse(
+                          ),
+                          Align(
+                            alignment: Alignment.bottomCenter,
+                            child: Wrap(
+                              children: [
+                                Container(
+                                  decoration:
+                                      const BoxDecoration(color: Colors.white),
+                                  child: StreamBuilder(
+                                    stream: FirebaseFirestore.instance
+                                        .collection("mp_orders")
+                                        .where("order_id",
+                                            isEqualTo: controller.orderID)
+                                        .snapshots(),
+                                    builder: (ctx,
+                                        AsyncSnapshot<
+                                                QuerySnapshot<
+                                                    Map<String, dynamic>>>
+                                            snapshot) {
+                                      if (!snapshot.hasData) {
+                                        return const Text('');
+                                      } else {
+                                        print("zzz ${controller.driverId}");
+                                        final DocumentSnapshot
+                                            documentSnapshot =
+                                            snapshot.data!.docs[0];
+
+                                        controller.driverId =
+                                            documentSnapshot["driver"]['uid'] ??
+                                                "";
+
+                                        controller.startlatitude =
+                                            documentSnapshot[
+                                                        "order_pickup_location"]
+                                                    ['geopoint']
+                                                .latitude;
+                                        controller.startlongitude =
+                                            documentSnapshot[
+                                                        "order_pickup_location"]
+                                                    ['geopoint']
+                                                .longitude;
+                                        controller
+                                            .endlatitude = documentSnapshot[
+                                                    "order_arrival_location"]
+                                                ['geopoint']
+                                            .latitude;
+                                        controller
+                                            .endlongitude = documentSnapshot[
+                                                    "order_arrival_location"]
+                                                ['geopoint']
+                                            .longitude;
+
+                                        controller.setRoad(
+                                            controller.startlatitude,
+                                            controller.startlongitude,
+                                            controller.endlatitude,
+                                            controller.endlongitude);
+
+                                        // controller.drawPolyline(
+                                        //     LatLng(controller.startlatitude!,
+                                        //         controller.startlongitude!),
+                                        //     LatLng(controller.endlatitude!,
+                                        //         controller.endlongitude!));
+
+                                        // controller.markers.add(
+                                        //   Marker(
+                                        //     markerId: const MarkerId('id-1'),
+                                        //     icon: controller.startIcon!,
+                                        //     position: LatLng(
+                                        //       controller.startlatitude!,
+                                        //       controller.startlongitude!,
+                                        //     ),
+                                        //   ),
+                                        // );
+                                        // controller.markers.add(
+                                        //   Marker(
+                                        //     markerId: const MarkerId('id-1'),
+                                        //     icon: controller.endIcon!,
+                                        //     position: LatLng(
+                                        //       controller.endlatitude!,
+                                        //       controller.endlongitude!,
+                                        //     ),
+                                        //   ),
+                                        // );
+
+                                        print(
+                                            "zzz ${documentSnapshot['order_id']}");
+                                        controller.ttime = double.parse(
+                                                        documentSnapshot[
+                                                            'nbre_km_depart_destination']) /
+                                                    50 <
+                                                1
+                                            ? double.parse(documentSnapshot[
+                                                    'nbre_km_depart_destination']) /
+                                                50 *
+                                                60
+                                            : double.parse(documentSnapshot[
+                                                    'nbre_km_depart_destination']) /
+                                                50;
+                                        String ttimeText = double.parse(
+                                                        documentSnapshot[
+                                                            'nbre_km_depart_destination']) /
+                                                    50 <
+                                                1
+                                            ? "${controller.ttime.toStringAsFixed(1)} minutes"
+                                            : "${controller.ttime.toStringAsFixed(1)} heures";
+
+                                        // return Text(
+                                        //     "data ${controller.order.orderId}");
+
+                                        return Align(
+                                          alignment: Alignment.bottomCenter,
+                                          child: Wrap(
+                                            children: [
+                                              Container(
+                                                  decoration:
+                                                      const BoxDecoration(
+                                                          color: Colors.white),
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      20.verticalSpace,
+                                                      // Container(
+                                                      //   height: 5.h,
+                                                      //   width: 220.w,
+                                                      //   decoration:
+                                                      //       BoxDecoration(
+                                                      //     color: Colors.grey,
+                                                      //     borderRadius:
+                                                      //         BorderRadius
+                                                      //             .circular(
+                                                      //                 360),
+                                                      //   ),
+                                                      // ),
+                                                      // 20.verticalSpace,
+                                                      Padding(
+                                                        padding: EdgeInsets
+                                                            .symmetric(
+                                                                horizontal:
+                                                                    20.w),
+                                                        child: Row(
+                                                          children: [
+                                                            SizedBox(
+                                                              width: 45.w,
+                                                              height: 45.w,
+                                                              child: ClipRRect(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            50.r),
+                                                                child: Image
+                                                                    .network(
+                                                                  documentSnapshot[
+                                                                          'customer']
+                                                                      [
+                                                                      'profile_picture'],
+                                                                  fit: BoxFit
+                                                                      .fill,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            10.horizontalSpace,
+                                                            Column(
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .start,
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .spaceBetween,
+                                                              children: [
+                                                                Text(
+                                                                  documentSnapshot[
+                                                                          'customer']
+                                                                      [
+                                                                      'full_name'],
+                                                                  style:
+                                                                      bodyTextStyle,
+                                                                ),
+                                                                Text(
+                                                                  documentSnapshot['order_type']
+                                                                              .toString() !=
+                                                                          "0"
+                                                                      ? "Voyage"
+                                                                      : "Course",
+                                                                  style:
+                                                                      bodyTextStyle,
+                                                                )
+                                                              ],
+                                                            ),
+                                                            const Spacer(),
+                                                            Container(
+                                                              height: 45.h,
+                                                              width: 45.h,
+                                                              margin: EdgeInsets
+                                                                  .only(
+                                                                      left:
+                                                                          6.w),
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                color: primary,
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                  50,
+                                                                ),
+                                                              ),
+                                                              child: IconButton(
+                                                                onPressed:
+                                                                    () async {
+                                                                  String
+                                                                      customerUid =
+                                                                      "";
+
+                                                                  var docSnapshot = await FirebaseFirestore
+                                                                      .instance
+                                                                      .collection(
+                                                                          'mp_orders')
+                                                                      .doc(documentSnapshot[
+                                                                          "order_id"])
+                                                                      .get();
+                                                                  if (docSnapshot
+                                                                      .exists) {
+                                                                    Map<String,
+                                                                            dynamic>?
+                                                                        data =
+                                                                        docSnapshot
+                                                                            .data();
+                                                                    customerUid =
+                                                                        data!["customer"]
+                                                                            [
+                                                                            'uid'];
+                                                                  }
+                                                                  String
+                                                                      phoneNo =
+                                                                      "";
+                                                                  docSnapshot = await FirebaseFirestore
+                                                                      .instance
+                                                                      .collection(
+                                                                          'mp_users')
+                                                                      .doc(
+                                                                          customerUid)
+                                                                      .get();
+                                                                  if (docSnapshot
+                                                                      .exists) {
+                                                                    Map<String,
+                                                                            dynamic>?
+                                                                        data =
+                                                                        docSnapshot
+                                                                            .data();
+                                                                    phoneNo = data![
+                                                                        'phone_number'];
+                                                                  }
+
+                                                                  await FlutterPhoneDirectCaller
+                                                                      .callNumber(
+                                                                          phoneNo);
+                                                                },
+                                                                icon:
+                                                                    const Icon(
+                                                                  Boxicons
+                                                                      .bx_phone_call,
+                                                                  color: Colors
+                                                                      .white,
+                                                                ),
+                                                                color: primary,
+                                                              ),
+                                                            ),
+                                                            Container(
+                                                              height: 45.h,
+                                                              width: 45.h,
+                                                              margin: EdgeInsets
+                                                                  .only(
+                                                                      left:
+                                                                          6.w),
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                color: primary,
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                  50,
+                                                                ),
+                                                              ),
+                                                              child: IconButton(
+                                                                onPressed:
+                                                                    () async {
+                                                                  String
+                                                                      customerUid =
+                                                                      "";
+
+                                                                  var docSnapshot = await FirebaseFirestore
+                                                                      .instance
+                                                                      .collection(
+                                                                          'orders')
+                                                                      .doc(documentSnapshot[
+                                                                          "order_id"])
+                                                                      .get();
+                                                                  if (docSnapshot
+                                                                      .exists) {
+                                                                    Map<String,
+                                                                            dynamic>?
+                                                                        data =
+                                                                        docSnapshot
+                                                                            .data();
+                                                                    customerUid =
+                                                                        data!["customer"]
+                                                                            [
+                                                                            'uid'];
+
+                                                                    print(
+                                                                        'haaa ');
+
+                                                                    String
+                                                                        phoneNo =
+                                                                        "";
+                                                                    docSnapshot = await FirebaseFirestore
+                                                                        .instance
+                                                                        .collection(
+                                                                            'mp_users')
+                                                                        .doc(
+                                                                            customerUid)
+                                                                        .get();
+                                                                    if (docSnapshot
+                                                                        .exists) {
+                                                                      Map<String,
+                                                                              dynamic>?
+                                                                          data =
+                                                                          docSnapshot
+                                                                              .data();
+                                                                      phoneNo =
+                                                                          data!["customer"]
+                                                                              [
+                                                                              'phone_number'];
+
+                                                                      print(
+                                                                          "haaa $phoneNo");
+                                                                      launchUrl(
+                                                                          Uri.parse(
+                                                                              "https://wa.me/$phoneNo"));
+                                                                    }
+                                                                  }
+                                                                },
+                                                                icon:
+                                                                    const Icon(
+                                                                  Boxicons
+                                                                      .bx_message_rounded,
+                                                                  color: Colors
+                                                                      .white,
+                                                                ),
+                                                                color: primary,
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                      20.verticalSpace,
+                                                      Padding(
+                                                        padding: EdgeInsets
+                                                            .symmetric(
+                                                                horizontal:
+                                                                    20.w),
+                                                        child: Row(
+                                                          children: [
+                                                            Row(
+                                                              children: [
+                                                                const Icon(
+                                                                  Boxicons
+                                                                      .bx_dollar,
+                                                                  color:
+                                                                      primary,
+                                                                ),
+                                                                10.horizontalSpace,
+                                                                Text(
+                                                                  '${documentSnapshot['order_purchase_amount']} MAD',
+                                                                  style:
+                                                                      bodyTextStyle,
+                                                                ),
+                                                              ],
+                                                            ),
+                                                            20.horizontalSpace,
+                                                            Row(
+                                                              children: [
+                                                                const Icon(
+                                                                  Boxicons
+                                                                      .bxs_map,
+                                                                  color:
+                                                                      primary,
+                                                                ),
+                                                                10.horizontalSpace,
+                                                                Text(
+                                                                  '${documentSnapshot['nbre_km_depart_destination']} Km   ($ttimeText)',
+                                                                  style:
+                                                                      bodyTextStyle,
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                      20.verticalSpace,
+
+                                                      //TODO: is canceled by customer
+                                                      documentSnapshot[
+                                                              'is_canceled_by_customer']
+                                                          ? InkWell(
+                                                              onTap: () {
+                                                                controller
+                                                                        .startCourse =
+                                                                    false;
+                                                                controller
+                                                                        .isWithOrder =
+                                                                    false;
+                                                                FirebaseFirestore
+                                                                    .instance
+                                                                    .collection(
+                                                                        'mp_users')
+                                                                    .doc(controller
+                                                                        .userBase!
+                                                                        .uid)
+                                                                    .update({
+                                                                  "is_on_order":
+                                                                      false
+                                                                });
+                                                                controller
+                                                                        .isOnOrder =
+                                                                    false;
+                                                                controller
+                                                                    .markers
+                                                                    .clear();
+                                                                controller
+                                                                    .polylines
+                                                                    .clear();
+                                                                // controller.stopTimer();
+                                                                controller
+                                                                    .update();
+
+                                                                // Get.offAll(() =>
+                                                                //     const HomePage());
+                                                              },
+                                                              child: Container(
+                                                                height: 55.h,
+                                                                width: 260.w,
+                                                                alignment:
+                                                                    Alignment
+                                                                        .center,
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                  color: Colors
+                                                                      .red,
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              360),
+                                                                ),
+                                                                child: Text(
+                                                                  'Client a annulé la commande',
+                                                                  style:
+                                                                      TextStyle(
+                                                                    fontSize:
+                                                                        15.sp,
+                                                                    color: Colors
+                                                                        .white,
+                                                                    fontFamily:
+                                                                        "LatoSemiBold",
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            )
+                                                          : controller
+                                                                  .isWithOrder
+                                                              ? InkWell(
+                                                                  onTap:
+                                                                      () async {
+                                                                    List<dynamic>
+                                                                        fcm =
+                                                                        documentSnapshot["customer"]
+                                                                            [
+                                                                            "fcmList"];
+
+                                                                    newOne() async {
+                                                                      double
+                                                                          distancee =
+                                                                          double.parse(documentSnapshot['nbre_km_depart_destination']) /
+                                                                              50;
+                                                                      print(controller
+                                                                          .ttime
+                                                                          .toInt());
+                                                                      sendNotification(
+                                                                          fcm
+                                                                              .map((item) => item.toString())
+                                                                              .toList(),
+                                                                          "voyage a commencée",
+                                                                          "votre chauffeur arrivera dans ${double.parse(documentSnapshot['nbre_km_depart_destination']) / 50 < 1 ? "${controller.ttime.toStringAsFixed(1)} minutes" : "${controller.ttime.toStringAsFixed(1)} heures"}  ");
+                                                                      plannedNotif(
+                                                                          fcm
+                                                                              .map((item) => item.toString())
+                                                                              .toList(),
+                                                                          "Votre Motopickup vous attend.",
+                                                                          "",
+                                                                          DateTime.now().add(Duration(minutes: controller.ttime.toInt())));
+                                                                      // double.parse(documentSnapshot['nbre_km_depart_destination']) /
+                                                                      //             50 <
+                                                                      //         1
+                                                                      // ? plannedNotif(
+                                                                      //     [
+                                                                      //         fcm
+                                                                      //       ],
+                                                                      //     "Votre Motopickup vous attend.",
+                                                                      //     " ",
+                                                                      //     DateTime.now().add(Duration(
+                                                                      //         minutes: ttime
+                                                                      //             .toInt())))
+                                                                      // : plannedNotif(
+                                                                      //     [
+                                                                      //         fcm
+                                                                      //       ],
+                                                                      //     "Votre Motopickup vous attend.",
+                                                                      //     " ",
+                                                                      //     DateTime.now().add(Duration(
+                                                                      //         hours:
+                                                                      //             ttime.toInt())));
+                                                                      await updateStatusOrder(
+                                                                          controller
+                                                                              .orderID);
+                                                                      // controller
+                                                                      //     .updateMyLocation(
+                                                                      //         documentSnapshot["order_id"]);
+                                                                      controller
+                                                                          .update();
+                                                                    }
+
+                                                                    documentSnapshot['is_start'] ==
+                                                                            false
+                                                                        ? newOne()
+                                                                        : paiment(
+                                                                            context,
+                                                                            () async {
+                                                                            // sendNotification(
+                                                                            //     [fcm],
+                                                                            //     "voyage est finis",
+                                                                            //     "au revoir");
+                                                                            updateSuccedOrder(controller.orderID);
+                                                                            controller.startCourse =
+                                                                                false;
+                                                                            controller.isOnOrder =
+                                                                                false;
+                                                                            controller.isWithOrder =
+                                                                                false;
+                                                                            FirebaseFirestore.instance.collection('mp_users').doc(controller.userBase!.uid).update({
+                                                                              "is_on_order": false
+                                                                            });
+                                                                            await controller.getWithOrder();
+                                                                            controller.markers.clear();
+                                                                            controller.polylines.clear();
+                                                                            await SessionManager().set("order_id",
+                                                                                controller.orderID);
+                                                                            await SessionManager().set("distance",
+                                                                                Geolocator.distanceBetween(documentSnapshot["order_pickup_location"]['geopoint'].latitude, documentSnapshot["order_pickup_location"]['geopoint'].longitude, controller.latitude!, controller.longitude!));
+                                                                            // controller
+                                                                            //     .stopTimer();
+                                                                            Get.delete<OrderInformations>();
+                                                                            Get.offAll(() =>
+                                                                                RateClient());
+                                                                          });
+                                                                    controller
+                                                                        .update();
+                                                                  },
+                                                                  child:
+                                                                      Container(
+                                                                    height:
+                                                                        55.h,
+                                                                    width:
+                                                                        260.w,
+                                                                    alignment:
+                                                                        Alignment
+                                                                            .center,
+                                                                    decoration:
+                                                                        BoxDecoration(
+                                                                      color: documentSnapshot['is_start'] ==
+                                                                              false
+                                                                          ? primary
+                                                                          : Colors
+                                                                              .red,
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                              360),
+                                                                    ),
+                                                                    child: Text(
+                                                                      documentSnapshot['is_start'] ==
+                                                                              false
+                                                                          ? documentSnapshot['order_type'] != 0
+                                                                              ? 'Commencez le voyage'
+                                                                              : 'Commencer la course'
+                                                                          : documentSnapshot['order_type'] != 0
+                                                                              ? 'Finir le voyage'
+                                                                              : 'Finir la course',
+                                                                      style:
+                                                                          TextStyle(
+                                                                        fontSize:
+                                                                            15.sp,
+                                                                        color: Colors
+                                                                            .white,
+                                                                        fontFamily:
+                                                                            "LatoSemiBold",
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                )
+                                                              : Column(
+                                                                  children: [
+                                                                      InkWell(
+                                                                        onTap:
+                                                                            () async {
+                                                                          if (documentSnapshot[
+                                                                              'is_planned']) {
+                                                                            print("zzz1");
+                                                                            controller.startCourse =
+                                                                                false;
+                                                                            controller.isOnOrder =
+                                                                                false;
+                                                                            controller.isWithOrder =
+                                                                                false;
+
+                                                                            documentSnapshot['order_type'].toString() != "0"
+                                                                                ? FirebaseFirestore.instance.collection('mp_users').doc(controller.userBase!.uid).update({
+                                                                                    "is_on_order": false,
+                                                                                    "driver_planned_trip": FieldValue.increment(1)
+                                                                                  })
+                                                                                : FirebaseFirestore.instance.collection('mp_users').doc(controller.userBase!.uid).update({
+                                                                                    "is_on_order": false,
+                                                                                    "driver_planned_delivery": FieldValue.increment(1)
+                                                                                  });
+                                                                            controller.markers.clear();
+                                                                            controller.polylines.clear();
+                                                                            controller.update();
+                                                                            // Get.offAll(() =>
+                                                                            //     const HomePage());
+
+                                                                            List<dynamic>
+                                                                                customerFcm =
+                                                                                documentSnapshot["customer"]["fcmList"];
+                                                                            List<dynamic>
+                                                                                driverFcm =
+                                                                                documentSnapshot["driver"]["fcmList"];
+
+                                                                            sendPlanifiedNotification(
+                                                                                customerFcm.map((item) => item.toString()).toList(),
+                                                                                "voyage",
+                                                                                "Voyage va commencer dans 30 min",
+                                                                                DateTime.parse(documentSnapshot['order_pickup_time']));
+                                                                            sendPlanifiedNotification(
+                                                                                driverFcm.map((item) => item.toString()).toList(),
+                                                                                "voyage",
+                                                                                "Voyage va commencer dans 30 min",
+                                                                                DateTime.parse(documentSnapshot['order_pickup_time']));
+                                                                            controller.markers.clear();
+                                                                            controller.polylines.clear();
+                                                                            controller.getUserLocation();
+                                                                            await controller.getWithOrder();
+                                                                            controller.update();
+                                                                          } else {
+                                                                            print("zzzzz");
+
+                                                                            print("zzzz ${documentSnapshot["driver"]['uid']} ${controller.driverId}");
+                                                                            if (controller.driverId ==
+                                                                                controller.userBase!.uid) {
+                                                                              controller.startCourse = true;
+
+                                                                              // controller.markers
+                                                                              //     .clear();
+                                                                              // controller.polylines
+                                                                              //     .clear();
+                                                                              // controller
+                                                                              //     .getUserLocation();
+                                                                              await controller.getWithOrder();
+                                                                              controller.isWithOrder = true;
+                                                                              controller.update();
+                                                                            }
+                                                                          }
+                                                                        },
+                                                                        child:
+                                                                            Container(
+                                                                          height:
+                                                                              55.h,
+                                                                          width:
+                                                                              320.w,
+                                                                          alignment:
+                                                                              Alignment.center,
+                                                                          decoration:
+                                                                              BoxDecoration(
+                                                                            color: controller.driverId == controller.userBase!.uid
+                                                                                ? primary
+                                                                                : Colors.grey.withOpacity(0.4),
+                                                                            borderRadius:
+                                                                                BorderRadius.circular(360),
+                                                                          ),
+                                                                          child:
+                                                                              Text(
+                                                                            controller.driverId == controller.userBase!.uid
+                                                                                ? 'Continuer'
+                                                                                : 'En attente',
+                                                                            style:
+                                                                                TextStyle(
+                                                                              fontSize: 15.sp,
+                                                                              color: Colors.white,
+                                                                              fontFamily: "LatoSemiBold",
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                      SizedBox(
+                                                                        height:
+                                                                            20.h,
+                                                                      ),
+                                                                      InkWell(
+                                                                        onTap:
+                                                                            () async {
+                                                                          controller.isOnOrder =
+                                                                              false;
+                                                                          controller.isWithOrder =
+                                                                              false;
+                                                                          documentSnapshot['order_type'].toString() != "0"
+                                                                              ? FirebaseFirestore.instance.collection('mp_users').doc(controller.userBase!.uid).update({
+                                                                                  "is_on_order": false,
+                                                                                  "driver_cancelled_trip": FieldValue.increment(1)
+                                                                                })
+                                                                              : FirebaseFirestore.instance.collection('mp_users').doc(controller.userBase!.uid).update({
+                                                                                  "is_on_order": false,
+                                                                                  "driver_cancelled_delivery": FieldValue.increment(1)
+                                                                                });
+
+                                                                          List<dynamic>
+                                                                              fcm =
+                                                                              documentSnapshot["customer"]["fcmList"];
+
+                                                                          sendNotification(
+                                                                              fcm.map((item) => item.toString()).toList(),
+                                                                              "voyage annulé",
+                                                                              "Le chauffeur a annulé le voyage");
+                                                                          // refuserOrder(
+                                                                          //     controller.userBase!,
+                                                                          //     controller.orderID);
+                                                                          controller
+                                                                              .markers
+                                                                              .clear();
+                                                                          controller
+                                                                              .polylines
+                                                                              .clear();
+
+                                                                          controller
+                                                                              .getUserLocation();
+                                                                          await controller
+                                                                              .getWithOrder();
+                                                                          // controller.stopTimer();
+                                                                          controller
+                                                                              .update();
+                                                                        },
+                                                                        child:
+                                                                            Container(
+                                                                          height:
+                                                                              55.h,
+                                                                          width:
+                                                                              320.w,
+                                                                          alignment:
+                                                                              Alignment.center,
+                                                                          decoration:
+                                                                              BoxDecoration(
+                                                                            color:
+                                                                                Colors.red,
+                                                                            borderRadius:
+                                                                                BorderRadius.circular(360),
+                                                                          ),
+                                                                          child:
+                                                                              Text(
+                                                                            'Annuler',
+                                                                            style:
+                                                                                TextStyle(
+                                                                              fontSize: 15.sp,
+                                                                              color: Colors.white,
+                                                                              fontFamily: "LatoSemiBold",
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ]),
+
+                                                      SizedBox(
+                                                        height: 20.h,
+                                                      ),
+                                                    ],
+                                                  )),
+                                            ],
+                                          ),
+                                        );
+
+                                        // final DocumentSnapshot
+                                        //     documentSnapshot =
+                                        //     snapshot.data!.docs[0];
+                                        // double ttime = double.parse(
                                         //                 documentSnapshot[
                                         //                     'nbre_km_depart_destination']) /
                                         //             50 <
@@ -311,960 +950,272 @@ class _OrderInformationsState extends State<OrderInformations> {
                                         //                     'nbre_km_depart_destination']) /
                                         //             50 <
                                         //         1
-                                        //     ? "${controller.ttime.toStringAsFixed(1)} minutes"
-                                        //     : "${controller.ttime.toStringAsFixed(1)} heures";
+                                        //     ? "${ttime.toStringAsFixed(1)} minutes"
+                                        //     : "${ttime.toStringAsFixed(1)} heures";
 
-                                        // return Text(
-                                        //     "data ${controller.order.orderId}");
-
-                                        // Align(
-                                        //   alignment: Alignment.bottomCenter,
-                                        //   child: Wrap(
-                                        //     children: [
-                                        //       Container(
-                                        //           decoration:
-                                        //               const BoxDecoration(
-                                        //                   color: Colors.white),
-                                        //           child: Column(
+                                        // return Column(
+                                        //   crossAxisAlignment:
+                                        //       CrossAxisAlignment.center,
+                                        //   children: [
+                                        //     20.verticalSpace,
+                                        //     Container(
+                                        //       height: 5.h,
+                                        //       width: 220.w,
+                                        //       decoration: BoxDecoration(
+                                        //         color: Colors.grey,
+                                        //         borderRadius:
+                                        //             BorderRadius.circular(360),
+                                        //       ),
+                                        //     ),
+                                        //     20.verticalSpace,
+                                        //     Padding(
+                                        //       padding: EdgeInsets.symmetric(
+                                        //           horizontal: 20.w),
+                                        //       child: Row(
+                                        //         children: [
+                                        //           SizedBox(
+                                        //             width: 45.w,
+                                        //             height: 45.w,
+                                        //             child: ClipRRect(
+                                        //               borderRadius:
+                                        //                   BorderRadius.circular(
+                                        //                       50.r),
+                                        //               child: Image.network(
+                                        //                 documentSnapshot[
+                                        //                         'customer']
+                                        //                     ['profile_picture'],
+                                        //                 fit: BoxFit.fill,
+                                        //               ),
+                                        //             ),
+                                        //           ),
+                                        //           10.horizontalSpace,
+                                        //           Column(
                                         //             crossAxisAlignment:
                                         //                 CrossAxisAlignment
-                                        //                     .center,
+                                        //                     .start,
+                                        //             mainAxisAlignment:
+                                        //                 MainAxisAlignment
+                                        //                     .spaceBetween,
                                         //             children: [
-                                        //               20.verticalSpace,
-                                        //               Container(
-                                        //                 height: 5.h,
-                                        //                 width: 220.w,
-                                        //                 decoration:
-                                        //                     BoxDecoration(
-                                        //                   color: Colors.grey,
-                                        //                   borderRadius:
-                                        //                       BorderRadius
-                                        //                           .circular(
-                                        //                               360),
-                                        //                 ),
+                                        //               Text(
+                                        //                 documentSnapshot[
+                                        //                         'customer']
+                                        //                     ['full_name'],
+                                        //                 style: bodyTextStyle,
                                         //               ),
-                                        //               20.verticalSpace,
-                                        //               Padding(
-                                        //                 padding: EdgeInsets
-                                        //                     .symmetric(
-                                        //                         horizontal:
-                                        //                             20.w),
-                                        //                 child: Row(
-                                        //                   children: [
-                                        //                     SizedBox(
-                                        //                       width: 45.w,
-                                        //                       height: 45.w,
-                                        //                       child: ClipRRect(
-                                        //                         borderRadius:
-                                        //                             BorderRadius
-                                        //                                 .circular(
-                                        //                                     50.r),
-                                        //                         child: Image
-                                        //                             .network(
-                                        //                           documentSnapshot[
-                                        //                                   'customer']
-                                        //                               [
-                                        //                               'profile_picture'],
-                                        //                           fit: BoxFit
-                                        //                               .fill,
-                                        //                         ),
-                                        //                       ),
-                                        //                     ),
-                                        //                     10.horizontalSpace,
-                                        //                     Column(
-                                        //                       crossAxisAlignment:
-                                        //                           CrossAxisAlignment
-                                        //                               .start,
-                                        //                       mainAxisAlignment:
-                                        //                           MainAxisAlignment
-                                        //                               .spaceBetween,
-                                        //                       children: [
-                                        //                         Text(
-                                        //                           documentSnapshot[
-                                        //                                   'customer']
-                                        //                               [
-                                        //                               'full_name'],
-                                        //                           style:
-                                        //                               bodyTextStyle,
-                                        //                         ),
-                                        //                         Text(
-                                        //                           documentSnapshot['order_type']
-                                        //                                       .toString() !=
-                                        //                                   "0"
-                                        //                               ? "Voyage"
-                                        //                               : "Course",
-                                        //                           style:
-                                        //                               bodyTextStyle,
-                                        //                         )
-                                        //                       ],
-                                        //                     ),
-                                        //                     const Spacer(),
-                                        //                     Container(
-                                        //                       height: 45.h,
-                                        //                       width: 45.h,
-                                        //                       margin: EdgeInsets
-                                        //                           .only(
-                                        //                               left:
-                                        //                                   6.w),
-                                        //                       decoration:
-                                        //                           BoxDecoration(
-                                        //                         color: primary,
-                                        //                         borderRadius:
-                                        //                             BorderRadius
-                                        //                                 .circular(
-                                        //                           50,
-                                        //                         ),
-                                        //                       ),
-                                        //                       child: IconButton(
-                                        //                         onPressed:
-                                        //                             () async {
-                                        //                           String
-                                        //                               customerUid =
-                                        //                               "";
-
-                                        //                           var docSnapshot = await FirebaseFirestore
-                                        //                               .instance
-                                        //                               .collection(
-                                        //                                   'mp_orders')
-                                        //                               .doc(documentSnapshot[
-                                        //                                   "order_id"])
-                                        //                               .get();
-                                        //                           if (docSnapshot
-                                        //                               .exists) {
-                                        //                             Map<String,
-                                        //                                     dynamic>?
-                                        //                                 data =
-                                        //                                 docSnapshot
-                                        //                                     .data();
-                                        //                             customerUid =
-                                        //                                 data!["customer"]
-                                        //                                     [
-                                        //                                     'uid'];
-                                        //                           }
-                                        //                           String
-                                        //                               phoneNo =
-                                        //                               "";
-                                        //                           docSnapshot = await FirebaseFirestore
-                                        //                               .instance
-                                        //                               .collection(
-                                        //                                   'mp_users')
-                                        //                               .doc(
-                                        //                                   customerUid)
-                                        //                               .get();
-                                        //                           if (docSnapshot
-                                        //                               .exists) {
-                                        //                             Map<String,
-                                        //                                     dynamic>?
-                                        //                                 data =
-                                        //                                 docSnapshot
-                                        //                                     .data();
-                                        //                             phoneNo = data![
-                                        //                                 'phone_number'];
-                                        //                           }
-
-                                        //                           await FlutterPhoneDirectCaller
-                                        //                               .callNumber(
-                                        //                                   phoneNo);
-                                        //                         },
-                                        //                         icon:
-                                        //                             const Icon(
-                                        //                           Boxicons
-                                        //                               .bx_phone_call,
-                                        //                           color: Colors
-                                        //                               .white,
-                                        //                         ),
-                                        //                         color: primary,
-                                        //                       ),
-                                        //                     ),
-                                        //                     Container(
-                                        //                       height: 45.h,
-                                        //                       width: 45.h,
-                                        //                       margin: EdgeInsets
-                                        //                           .only(
-                                        //                               left:
-                                        //                                   6.w),
-                                        //                       decoration:
-                                        //                           BoxDecoration(
-                                        //                         color: primary,
-                                        //                         borderRadius:
-                                        //                             BorderRadius
-                                        //                                 .circular(
-                                        //                           50,
-                                        //                         ),
-                                        //                       ),
-                                        //                       child: IconButton(
-                                        //                         onPressed:
-                                        //                             () async {
-                                        //                           String
-                                        //                               customerUid =
-                                        //                               "";
-
-                                        //                           var docSnapshot = await FirebaseFirestore
-                                        //                               .instance
-                                        //                               .collection(
-                                        //                                   'orders')
-                                        //                               .doc(documentSnapshot[
-                                        //                                   "order_id"])
-                                        //                               .get();
-                                        //                           if (docSnapshot
-                                        //                               .exists) {
-                                        //                             Map<String,
-                                        //                                     dynamic>?
-                                        //                                 data =
-                                        //                                 docSnapshot
-                                        //                                     .data();
-                                        //                             customerUid =
-                                        //                                 data!["customer"]
-                                        //                                     [
-                                        //                                     'uid'];
-
-                                        //                             print(
-                                        //                                 'haaa ');
-
-                                        //                             String
-                                        //                                 phoneNo =
-                                        //                                 "";
-                                        //                             docSnapshot = await FirebaseFirestore
-                                        //                                 .instance
-                                        //                                 .collection(
-                                        //                                     'mp_users')
-                                        //                                 .doc(
-                                        //                                     customerUid)
-                                        //                                 .get();
-                                        //                             if (docSnapshot
-                                        //                                 .exists) {
-                                        //                               Map<String,
-                                        //                                       dynamic>?
-                                        //                                   data =
-                                        //                                   docSnapshot
-                                        //                                       .data();
-                                        //                               phoneNo =
-                                        //                                   data!["customer"]
-                                        //                                       [
-                                        //                                       'phone_number'];
-
-                                        //                               print(
-                                        //                                   "haaa $phoneNo");
-                                        //                               launchUrl(
-                                        //                                   Uri.parse(
-                                        //                                       "https://wa.me/$phoneNo"));
-                                        //                             }
-                                        //                           }
-                                        //                         },
-                                        //                         icon:
-                                        //                             const Icon(
-                                        //                           Boxicons
-                                        //                               .bx_message_rounded,
-                                        //                           color: Colors
-                                        //                               .white,
-                                        //                         ),
-                                        //                         color: primary,
-                                        //                       ),
-                                        //                     ),
-                                        //                   ],
-                                        //                 ),
+                                        //               Text(
+                                        //                 documentSnapshot[
+                                        //                                 'order_type']
+                                        //                             .toString() !=
+                                        //                         "0"
+                                        //                     ? "Voyage"
+                                        //                     : "Course",
+                                        //                 style: bodyTextStyle,
+                                        //               )
+                                        //             ],
+                                        //           ),
+                                        //           const Spacer(),
+                                        //           Container(
+                                        //             height: 45.h,
+                                        //             width: 45.h,
+                                        //             margin: EdgeInsets.only(
+                                        //                 left: 6.w),
+                                        //             decoration: BoxDecoration(
+                                        //               color: primary,
+                                        //               borderRadius:
+                                        //                   BorderRadius.circular(
+                                        //                 50,
                                         //               ),
-                                        //               20.verticalSpace,
-                                        //               Padding(
-                                        //                 padding: EdgeInsets
-                                        //                     .symmetric(
-                                        //                         horizontal:
-                                        //                             20.w),
-                                        //                 child: Row(
-                                        //                   children: [
-                                        //                     Row(
-                                        //                       children: [
-                                        //                         const Icon(
-                                        //                           Boxicons
-                                        //                               .bx_dollar,
-                                        //                           color:
-                                        //                               primary,
-                                        //                         ),
-                                        //                         10.horizontalSpace,
-                                        //                         Text(
-                                        //                           '${documentSnapshot['order_purchase_amount']} MAD',
-                                        //                           style:
-                                        //                               bodyTextStyle,
-                                        //                         ),
-                                        //                       ],
-                                        //                     ),
-                                        //                     20.horizontalSpace,
-                                        //                     Row(
-                                        //                       children: [
-                                        //                         const Icon(
-                                        //                           Boxicons
-                                        //                               .bxs_map,
-                                        //                           color:
-                                        //                               primary,
-                                        //                         ),
-                                        //                         10.horizontalSpace,
-                                        //                         Text(
-                                        //                           '${documentSnapshot['nbre_km_depart_destination']} Km   ($ttimeText)',
-                                        //                           style:
-                                        //                               bodyTextStyle,
-                                        //                         ),
-                                        //                       ],
-                                        //                     ),
-                                        //                   ],
-                                        //                 ),
+                                        //             ),
+                                        //             child: IconButton(
+                                        //               onPressed: () async {
+                                        //                 String customerUid = "";
+
+                                        //                 var docSnapshot =
+                                        //                     await FirebaseFirestore
+                                        //                         .instance
+                                        //                         .collection(
+                                        //                             'mp_orders')
+                                        //                         .doc(controller
+                                        //                             .orderID)
+                                        //                         .get();
+                                        //                 if (docSnapshot
+                                        //                     .exists) {
+                                        //                   Map<String, dynamic>?
+                                        //                       data = docSnapshot
+                                        //                           .data();
+                                        //                   customerUid = data![
+                                        //                       'customer_uid'];
+                                        //                 }
+                                        //                 String phoneNo = "";
+                                        //                 docSnapshot =
+                                        //                     await FirebaseFirestore
+                                        //                         .instance
+                                        //                         .collection(
+                                        //                             'users')
+                                        //                         .doc(
+                                        //                             customerUid)
+                                        //                         .get();
+                                        //                 if (docSnapshot
+                                        //                     .exists) {
+                                        //                   Map<String, dynamic>?
+                                        //                       data = docSnapshot
+                                        //                           .data();
+                                        //                   phoneNo = data![
+                                        //                       'customer_phone_number'];
+                                        //                 }
+
+                                        //                 await FlutterPhoneDirectCaller
+                                        //                     .callNumber(
+                                        //                         phoneNo);
+                                        //               },
+                                        //               icon: const Icon(
+                                        //                 Boxicons.bx_phone_call,
+                                        //                 color: Colors.white,
                                         //               ),
-                                        //               20.verticalSpace,
-                                        //               documentSnapshot[
-                                        //                       'is_canceled_by_customer']
-                                        //                   ? InkWell(
-                                        //                       onTap: () {
-                                        //                         controller
-                                        //                                 .startCourse =
-                                        //                             false;
-                                        //                         controller
-                                        //                                 .isWithOrder =
-                                        //                             false;
-                                        //                         FirebaseFirestore
-                                        //                             .instance
-                                        //                             .collection(
-                                        //                                 'mp_users')
-                                        //                             .doc(controller
-                                        //                                 .userBase!
-                                        //                                 .uid)
-                                        //                             .update({
-                                        //                           "is_on_order":
-                                        //                               false
-                                        //                         });
-                                        //                         controller
-                                        //                                 .isOnOrder =
-                                        //                             false;
-                                        //                         controller
-                                        //                             .markers
-                                        //                             .clear();
-                                        //                         controller
-                                        //                             .polylines
-                                        //                             .clear();
-                                        //                         // controller.stopTimer();
-                                        //                         controller
-                                        //                             .update();
-
-                                        //                         // Get.offAll(() =>
-                                        //                         //     const HomePage());
-                                        //                       },
-                                        //                       child: Container(
-                                        //                         height: 55.h,
-                                        //                         width: 260.w,
-                                        //                         alignment:
-                                        //                             Alignment
-                                        //                                 .center,
-                                        //                         decoration:
-                                        //                             BoxDecoration(
-                                        //                           color: Colors
-                                        //                               .red,
-                                        //                           borderRadius:
-                                        //                               BorderRadius
-                                        //                                   .circular(
-                                        //                                       360),
-                                        //                         ),
-                                        //                         child: Text(
-                                        //                           'Client a annulé la commande',
-                                        //                           style:
-                                        //                               TextStyle(
-                                        //                             fontSize:
-                                        //                                 15.sp,
-                                        //                             color: Colors
-                                        //                                 .white,
-                                        //                             fontFamily:
-                                        //                                 "LatoSemiBold",
-                                        //                           ),
-                                        //                         ),
-                                        //                       ),
-                                        //                     )
-                                        //                   : InkWell(
-                                        //                       onTap: () async {
-                                        //                         if (documentSnapshot[
-                                        //                                 'status'] ==
-                                        //                             3) {
-                                        //                           controller
-                                        //                                   .startCourse =
-                                        //                               false;
-                                        //                           controller
-                                        //                                   .isOnOrder =
-                                        //                               false;
-                                        //                           controller
-                                        //                                   .isWithOrder =
-                                        //                               false;
-
-                                        //                           documentSnapshot['order_type'].toString() !=
-                                        //                                   "0"
-                                        //                               ? FirebaseFirestore
-                                        //                                   .instance
-                                        //                                   .collection(
-                                        //                                       'mp_users')
-                                        //                                   .doc(controller
-                                        //                                       .userBase!
-                                        //                                       .uid)
-                                        //                                   .update({
-                                        //                                   "is_on_order":
-                                        //                                       false,
-                                        //                                   "driver_planned_trip":
-                                        //                                       FieldValue.increment(1)
-                                        //                                 })
-                                        //                               : FirebaseFirestore
-                                        //                                   .instance
-                                        //                                   .collection(
-                                        //                                       'mp_users')
-                                        //                                   .doc(controller
-                                        //                                       .userBase!
-                                        //                                       .uid)
-                                        //                                   .update({
-                                        //                                   "is_on_order":
-                                        //                                       false,
-                                        //                                   "driver_planned_delivery":
-                                        //                                       FieldValue.increment(1)
-                                        //                                 });
-                                        //                           controller
-                                        //                               .markers
-                                        //                               .clear();
-                                        //                           controller
-                                        //                               .polylines
-                                        //                               .clear();
-                                        //                           controller
-                                        //                               .update();
-                                        //                           // Get.offAll(() =>
-                                        //                           //     const HomePage());
-
-                                        //                           List<String>
-                                        //                               customerFcm =
-                                        //                               documentSnapshot[
-                                        //                                       "customer"]
-                                        //                                   [
-                                        //                                   "fcmList"];
-                                        //                           String
-                                        //                               driverFcm =
-                                        //                               documentSnapshot[
-                                        //                                       "driver"]
-                                        //                                   [
-                                        //                                   "fcmList"];
-
-                                        //                           sendPlanifiedNotification(
-                                        //                               [
-                                        //                                 customerFcm
-                                        //                               ],
-                                        //                               "voyage",
-                                        //                               "Voyage va commencer dans 30 min",
-                                        //                               DateTime.parse(
-                                        //                                   documentSnapshot[
-                                        //                                       'order_pickup_time']));
-                                        //                           sendPlanifiedNotification(
-                                        //                               [
-                                        //                                 driverFcm
-                                        //                               ],
-                                        //                               "voyage",
-                                        //                               "Voyage va commencer dans 30 min",
-                                        //                               DateTime.parse(
-                                        //                                   documentSnapshot[
-                                        //                                       'order_pickup_time']));
-                                        //                           controller
-                                        //                               .markers
-                                        //                               .clear();
-                                        //                           controller
-                                        //                               .polylines
-                                        //                               .clear();
-                                        //                           controller
-                                        //                               .getUserLocation();
-                                        //                           await controller
-                                        //                               .getWithOrder();
-                                        //                           controller
-                                        //                               .update();
-                                        //                         } else {
-                                        //                           if (documentSnapshot[
-                                        //                                       "driver"]
-                                        //                                   [
-                                        //                                   'uid'] ==
-                                        //                               controller
-                                        //                                   .userBase!
-                                        //                                   .uid) {
-                                        //                             controller
-                                        //                                     .startCourse =
-                                        //                                 true;
-
-                                        //                             // controller.markers
-                                        //                             //     .clear();
-                                        //                             // controller.polylines
-                                        //                             //     .clear();
-                                        //                             // controller
-                                        //                             //     .getUserLocation();
-                                        //                             await controller
-                                        //                                 .getWithOrder();
-                                        //                             controller
-                                        //                                 .update();
-                                        //                           }
-                                        //                         }
-                                        //                       },
-                                        //                       child: Container(
-                                        //                         height: 55.h,
-                                        //                         width: 320.w,
-                                        //                         alignment:
-                                        //                             Alignment
-                                        //                                 .center,
-                                        //                         decoration:
-                                        //                             BoxDecoration(
-                                        //                           color: documentSnapshot["driver"]
-                                        //                                       [
-                                        //                                       'uid'] ==
-                                        //                                   controller
-                                        //                                       .userBase!
-                                        //                                       .uid
-                                        //                               ? primary
-                                        //                               : Colors
-                                        //                                   .grey
-                                        //                                   .withOpacity(
-                                        //                                       0.4),
-                                        //                           borderRadius:
-                                        //                               BorderRadius
-                                        //                                   .circular(
-                                        //                                       360),
-                                        //                         ),
-                                        //                         child: Text(
-                                        //                           documentSnapshot["driver"]
-                                        //                                       [
-                                        //                                       'uid'] ==
-                                        //                                   controller
-                                        //                                       .userBase!
-                                        //                                       .uid
-                                        //                               ? 'Continuer'
-                                        //                               : 'En attente',
-                                        //                           style:
-                                        //                               TextStyle(
-                                        //                             fontSize:
-                                        //                                 15.sp,
-                                        //                             color: Colors
-                                        //                                 .white,
-                                        //                             fontFamily:
-                                        //                                 "LatoSemiBold",
-                                        //                           ),
-                                        //                         ),
-                                        //                       ),
-                                        //                     ),
-                                        //               SizedBox(
-                                        //                 height: 20.h,
+                                        //               color: primary,
+                                        //             ),
+                                        //           ),
+                                        //           Container(
+                                        //             height: 45.h,
+                                        //             width: 45.h,
+                                        //             margin: EdgeInsets.only(
+                                        //                 left: 6.w),
+                                        //             decoration: BoxDecoration(
+                                        //               color: primary,
+                                        //               borderRadius:
+                                        //                   BorderRadius.circular(
+                                        //                 50,
                                         //               ),
-                                        //               InkWell(
-                                        //                 onTap: () async {
-                                        //                   controller.isOnOrder =
-                                        //                       false;
-                                        //                   controller
-                                        //                           .isWithOrder =
-                                        //                       false;
-                                        //                   documentSnapshot[
-                                        //                                   'order_type']
-                                        //                               .toString() !=
-                                        //                           "0"
-                                        //                       ? FirebaseFirestore
-                                        //                           .instance
-                                        //                           .collection(
-                                        //                               'mp_users')
-                                        //                           .doc(controller
-                                        //                               .userBase!
-                                        //                               .uid)
-                                        //                           .update({
-                                        //                           "is_on_order":
-                                        //                               false,
-                                        //                           "driver_cancelled_trip":
-                                        //                               FieldValue
-                                        //                                   .increment(
-                                        //                                       1)
-                                        //                         })
-                                        //                       : FirebaseFirestore
-                                        //                           .instance
-                                        //                           .collection(
-                                        //                               'mp_users')
-                                        //                           .doc(controller
-                                        //                               .userBase!
-                                        //                               .uid)
-                                        //                           .update({
-                                        //                           "is_on_order":
-                                        //                               false,
-                                        //                           "driver_cancelled_delivery":
-                                        //                               FieldValue
-                                        //                                   .increment(
-                                        //                                       1)
-                                        //                         });
+                                        //             ),
+                                        //             child: IconButton(
+                                        //               onPressed: () async {
+                                        //                 String customerUid = "";
 
-                                        //                   String fcm =
-                                        //                       documentSnapshot[
-                                        //                               "customer"]
-                                        //                           ["fcmList"];
+                                        //                 var docSnapshot =
+                                        //                     await FirebaseFirestore
+                                        //                         .instance
+                                        //                         .collection(
+                                        //                             'orders')
+                                        //                         .doc(controller
+                                        //                             .orderID)
+                                        //                         .get();
+                                        //                 if (docSnapshot
+                                        //                     .exists) {
+                                        //                   Map<String, dynamic>?
+                                        //                       data = docSnapshot
+                                        //                           .data();
+                                        //                   customerUid = data![
+                                        //                       'customer_uid'];
+                                        //                 }
+                                        //                 String phoneNo = "";
+                                        //                 docSnapshot =
+                                        //                     await FirebaseFirestore
+                                        //                         .instance
+                                        //                         .collection(
+                                        //                             'users')
+                                        //                         .doc(
+                                        //                             customerUid)
+                                        //                         .get();
+                                        //                 if (docSnapshot
+                                        //                     .exists) {
+                                        //                   Map<String, dynamic>?
+                                        //                       data = docSnapshot
+                                        //                           .data();
+                                        //                   phoneNo = data![
+                                        //                       'customer_phone_number'];
+                                        //                 }
 
-                                        //                   sendNotification(
-                                        //                       [fcm],
-                                        //                       "voyage annulé",
-                                        //                       "Le chauffeur a annulé le voyage");
-                                        //                   // refuserOrder(
-                                        //                   //     controller.userBase!,
-                                        //                   //     controller.orderID);
-                                        //                   controller.markers
-                                        //                       .clear();
-                                        //                   controller.polylines
-                                        //                       .clear();
-
-                                        //                   controller
-                                        //                       .getUserLocation();
-                                        //                   await controller
-                                        //                       .getWithOrder();
-                                        //                   // controller.stopTimer();
-                                        //                   controller.update();
-                                        //                 },
-                                        //                 child: Container(
-                                        //                   height: 55.h,
-                                        //                   width: 320.w,
-                                        //                   alignment:
-                                        //                       Alignment.center,
-                                        //                   decoration:
-                                        //                       BoxDecoration(
-                                        //                     color: Colors.red,
-                                        //                     borderRadius:
-                                        //                         BorderRadius
-                                        //                             .circular(
-                                        //                                 360),
-                                        //                   ),
-                                        //                   child: Text(
-                                        //                     'Annuler',
-                                        //                     style: TextStyle(
-                                        //                       fontSize: 15.sp,
-                                        //                       color:
-                                        //                           Colors.white,
-                                        //                       fontFamily:
-                                        //                           "LatoSemiBold",
-                                        //                     ),
-                                        //                   ),
-                                        //                 ),
+                                        //                 launch(
+                                        //                     "https://wa.me/$phoneNo");
+                                        //               },
+                                        //               icon: const Icon(
+                                        //                 Boxicons
+                                        //                     .bx_message_rounded,
+                                        //                 color: Colors.white,
                                         //               ),
-                                        //               SizedBox(
-                                        //                 height: 20.h,
+                                        //               color: primary,
+                                        //             ),
+                                        //           ),
+                                        //         ],
+                                        //       ),
+                                        //     ),
+                                        //     20.verticalSpace,
+                                        //     Padding(
+                                        //       padding: EdgeInsets.symmetric(
+                                        //           horizontal: 20.w),
+                                        //       child: Row(
+                                        //         children: [
+                                        //           Row(
+                                        //             children: [
+                                        //               const Icon(
+                                        //                 Boxicons.bx_dollar,
+                                        //                 color: primary,
+                                        //               ),
+                                        //               10.horizontalSpace,
+                                        //               Text(
+                                        //                 '${documentSnapshot['order_purchase_amount']} MAD',
+                                        //                 style: bodyTextStyle,
                                         //               ),
                                         //             ],
-                                        //           )),
-                                        //     ],
-                                        //   ),
-                                        // );
-
-                                        //===================================================================================================
-                                        // StreamBuilder(
-                                        //   stream: FirebaseFirestore.instance
-                                        //       .collection("mp_orders")
-                                        //       .where("order_id",
-                                        //           isEqualTo:
-                                        //               documentSnapshot[
-                                        //                   "order_id"])
-                                        //       .snapshots(),
-                                        //   builder: (ctx,
-                                        //       AsyncSnapshot<QuerySnapshot>
-                                        //           snapshot) {
-                                        //     if (!snapshot.hasData) {
-                                        //       return const Text('');
-                                        //     } else {
-                                        //       final DocumentSnapshot
-                                        //           documentSnapshot =
-                                        //           snapshot.data!.docs[0];
-                                        //       controller
-                                        //           .ttime = double.parse(
-                                        //                       documentSnapshot[
-                                        //                           'nbre_km_depart_destination']) /
-                                        //                   50 <
-                                        //               1
-                                        //           ? double.parse(
-                                        //                   documentSnapshot[
-                                        //                       'nbre_km_depart_destination']) /
-                                        //               50 *
-                                        //               60
-                                        //           : double.parse(
-                                        //                   documentSnapshot[
-                                        //                       'nbre_km_depart_destination']) /
-                                        //               50;
-                                        //       String ttimeText = double.parse(
-                                        //                       documentSnapshot[
-                                        //                           'nbre_km_depart_destination']) /
-                                        //                   50 <
-                                        //               1
-                                        //           ? "${controller.ttime.toStringAsFixed(1)} minutes"
-                                        //           : "${controller.ttime.toStringAsFixed(1)} heures";
-
-                                        //       return Column(
-                                        //         crossAxisAlignment:
-                                        //             CrossAxisAlignment
-                                        //                 .center,
+                                        //           ),
+                                        //           20.horizontalSpace,
+                                        //           Row(
+                                        //             children: [
+                                        //               const Icon(
+                                        //                 Boxicons.bxs_map,
+                                        //                 color: primary,
+                                        //               ),
+                                        //               10.horizontalSpace,
+                                        //               Text(
+                                        //                 '${documentSnapshot['nbre_km_depart_destination']} Km   ($ttimeText)',
+                                        //                 style: bodyTextStyle,
+                                        //               ),
+                                        //             ],
+                                        //           ),
+                                        //         ],
+                                        //       ),
+                                        //     ),
+                                        //     20.verticalSpace,
+                                        //     Padding(
+                                        //       padding: EdgeInsets.symmetric(
+                                        //           horizontal: 20.w),
+                                        //       child: Row(
                                         //         children: [
-                                        //           20.verticalSpace,
-                                        //           Container(
-                                        //             height: 5.h,
-                                        //             width: 220.w,
-                                        //             decoration:
-                                        //                 BoxDecoration(
-                                        //               color: Colors.grey,
-                                        //               borderRadius:
-                                        //                   BorderRadius
-                                        //                       .circular(
-                                        //                           360),
+                                        //           InkWell(
+                                        //             onTap: () {
+                                        //               // Get.to(
+                                        //               //     () => HelpCenter(),
+                                        //               //     transition: Transition
+                                        //               //         .rightToLeft);
+                                        //             },
+                                        //             child: Container(
+                                        //               height: 55.h,
+                                        //               width: 55.h,
+                                        //               decoration: BoxDecoration(
+                                        //                 color: primary,
+                                        //                 borderRadius:
+                                        //                     BorderRadius
+                                        //                         .circular(
+                                        //                   360,
+                                        //                 ),
+                                        //               ),
+                                        //               child: const Icon(
+                                        //                 Boxicons.bx_help_circle,
+                                        //                 color: Colors.white,
+                                        //               ),
                                         //             ),
                                         //           ),
-                                        //           20.verticalSpace,
-                                        //           Padding(
-                                        //             padding: EdgeInsets
-                                        //                 .symmetric(
-                                        //                     horizontal:
-                                        //                         20.w),
-                                        //             child: Row(
-                                        //               children: [
-                                        //                 SizedBox(
-                                        //                   width: 45.w,
-                                        //                   height: 45.w,
-                                        //                   child: ClipRRect(
-                                        //                     borderRadius:
-                                        //                         BorderRadius
-                                        //                             .circular(
-                                        //                                 50.r),
-                                        //                     child: Image
-                                        //                         .network(
-                                        //                       documentSnapshot[
-                                        //                               'customer']
-                                        //                           [
-                                        //                           'profile_picture'],
-                                        //                       fit: BoxFit
-                                        //                           .fill,
-                                        //                     ),
-                                        //                   ),
-                                        //                 ),
-                                        //                 10.horizontalSpace,
-                                        //                 Column(
-                                        //                   crossAxisAlignment:
-                                        //                       CrossAxisAlignment
-                                        //                           .start,
-                                        //                   mainAxisAlignment:
-                                        //                       MainAxisAlignment
-                                        //                           .spaceBetween,
-                                        //                   children: [
-                                        //                     Text(
-                                        //                       documentSnapshot[
-                                        //                               'customer']
-                                        //                           [
-                                        //                           'full_name'],
-                                        //                       style:
-                                        //                           bodyTextStyle,
-                                        //                     ),
-                                        //                     Text(
-                                        //                       documentSnapshot['order_type']
-                                        //                                   .toString() !=
-                                        //                               "0"
-                                        //                           ? "Voyage"
-                                        //                           : "Course",
-                                        //                       style:
-                                        //                           bodyTextStyle,
-                                        //                     )
-                                        //                   ],
-                                        //                 ),
-                                        //                 const Spacer(),
-                                        //                 Container(
-                                        //                   height: 45.h,
-                                        //                   width: 45.h,
-                                        //                   margin: EdgeInsets
-                                        //                       .only(
-                                        //                           left:
-                                        //                               6.w),
-                                        //                   decoration:
-                                        //                       BoxDecoration(
-                                        //                     color: primary,
-                                        //                     borderRadius:
-                                        //                         BorderRadius
-                                        //                             .circular(
-                                        //                       50,
-                                        //                     ),
-                                        //                   ),
-                                        //                   child: IconButton(
-                                        //                     onPressed:
-                                        //                         () async {
-                                        //                       String
-                                        //                           customerUid =
-                                        //                           "";
-
-                                        //                       var docSnapshot = await FirebaseFirestore
-                                        //                           .instance
-                                        //                           .collection(
-                                        //                               'mp_orders')
-                                        //                           .doc(documentSnapshot[
-                                        //                               "order_id"])
-                                        //                           .get();
-                                        //                       if (docSnapshot
-                                        //                           .exists) {
-                                        //                         Map<String,
-                                        //                                 dynamic>?
-                                        //                             data =
-                                        //                             docSnapshot
-                                        //                                 .data();
-                                        //                         customerUid =
-                                        //                             data![
-                                        //                                 'customer_uid'];
-                                        //                       }
-                                        //                       String
-                                        //                           phoneNo =
-                                        //                           "";
-                                        //                       docSnapshot = await FirebaseFirestore
-                                        //                           .instance
-                                        //                           .collection(
-                                        //                               'mp_users')
-                                        //                           .doc(
-                                        //                               customerUid)
-                                        //                           .get();
-                                        //                       if (docSnapshot
-                                        //                           .exists) {
-                                        //                         Map<String,
-                                        //                                 dynamic>?
-                                        //                             data =
-                                        //                             docSnapshot
-                                        //                                 .data();
-                                        //                         phoneNo = data![
-                                        //                             'phone_number'];
-                                        //                       }
-
-                                        //                       await FlutterPhoneDirectCaller
-                                        //                           .callNumber(
-                                        //                               phoneNo);
-                                        //                     },
-                                        //                     icon:
-                                        //                         const Icon(
-                                        //                       Boxicons
-                                        //                           .bx_phone_call,
-                                        //                       color: Colors
-                                        //                           .white,
-                                        //                     ),
-                                        //                     color: primary,
-                                        //                   ),
-                                        //                 ),
-                                        //                 Container(
-                                        //                   height: 45.h,
-                                        //                   width: 45.h,
-                                        //                   margin: EdgeInsets
-                                        //                       .only(
-                                        //                           left:
-                                        //                               6.w),
-                                        //                   decoration:
-                                        //                       BoxDecoration(
-                                        //                     color: primary,
-                                        //                     borderRadius:
-                                        //                         BorderRadius
-                                        //                             .circular(
-                                        //                       50,
-                                        //                     ),
-                                        //                   ),
-                                        //                   child: IconButton(
-                                        //                     onPressed:
-                                        //                         () async {
-                                        //                       String
-                                        //                           customerUid =
-                                        //                           "";
-
-                                        //                       var docSnapshot = await FirebaseFirestore
-                                        //                           .instance
-                                        //                           .collection(
-                                        //                               'orders')
-                                        //                           .doc(documentSnapshot[
-                                        //                               "order_id"])
-                                        //                           .get();
-                                        //                       if (docSnapshot
-                                        //                           .exists) {
-                                        //                         Map<String,
-                                        //                                 dynamic>?
-                                        //                             data =
-                                        //                             docSnapshot
-                                        //                                 .data();
-                                        //                         customerUid =
-                                        //                             data![
-                                        //                                 'customer_uid'];
-                                        //                       }
-                                        //                       String
-                                        //                           phoneNo =
-                                        //                           "";
-                                        //                       docSnapshot = await FirebaseFirestore
-                                        //                           .instance
-                                        //                           .collection(
-                                        //                               'mp_users')
-                                        //                           .doc(
-                                        //                               customerUid)
-                                        //                           .get();
-                                        //                       if (docSnapshot
-                                        //                           .exists) {
-                                        //                         Map<String,
-                                        //                                 dynamic>?
-                                        //                             data =
-                                        //                             docSnapshot
-                                        //                                 .data();
-                                        //                         phoneNo = data![
-                                        //                             'phone_number'];
-                                        //                       }
-
-                                        //                       launch(
-                                        //                           "https://wa.me/$phoneNo");
-                                        //                     },
-                                        //                     icon:
-                                        //                         const Icon(
-                                        //                       Boxicons
-                                        //                           .bx_message_rounded,
-                                        //                       color: Colors
-                                        //                           .white,
-                                        //                     ),
-                                        //                     color: primary,
-                                        //                   ),
-                                        //                 ),
-                                        //               ],
-                                        //             ),
-                                        //           ),
-                                        //           20.verticalSpace,
-                                        //           Padding(
-                                        //             padding: EdgeInsets
-                                        //                 .symmetric(
-                                        //                     horizontal:
-                                        //                         20.w),
-                                        //             child: Row(
-                                        //               children: [
-                                        //                 Row(
-                                        //                   children: [
-                                        //                     const Icon(
-                                        //                       Boxicons
-                                        //                           .bx_dollar,
-                                        //                       color:
-                                        //                           primary,
-                                        //                     ),
-                                        //                     10.horizontalSpace,
-                                        //                     Text(
-                                        //                       '${documentSnapshot['order_purchase_amount']} MAD',
-                                        //                       style:
-                                        //                           bodyTextStyle,
-                                        //                     ),
-                                        //                   ],
-                                        //                 ),
-                                        //                 20.horizontalSpace,
-                                        //                 Row(
-                                        //                   children: [
-                                        //                     const Icon(
-                                        //                       Boxicons
-                                        //                           .bxs_map,
-                                        //                       color:
-                                        //                           primary,
-                                        //                     ),
-                                        //                     10.horizontalSpace,
-                                        //                     Text(
-                                        //                       '${documentSnapshot['nbre_km_depart_destination']} Km   ($ttimeText)',
-                                        //                       style:
-                                        //                           bodyTextStyle,
-                                        //                     ),
-                                        //                   ],
-                                        //                 ),
-                                        //               ],
-                                        //             ),
-                                        //           ),
-                                        //           20.verticalSpace,
+                                        //           const Spacer(),
                                         //           documentSnapshot[
                                         //                   'is_canceled_by_customer']
                                         //               ? InkWell(
-                                        //                   onTap: () {
+                                        //                   onTap: () async {
                                         //                     controller
                                         //                             .startCourse =
+                                        //                         false;
+                                        //                     controller
+                                        //                             .isOnOrder =
                                         //                         false;
                                         //                     controller
                                         //                             .isWithOrder =
@@ -1272,7 +1223,7 @@ class _OrderInformationsState extends State<OrderInformations> {
                                         //                     FirebaseFirestore
                                         //                         .instance
                                         //                         .collection(
-                                        //                             'mp_users')
+                                        //                             'drivers')
                                         //                         .doc(controller
                                         //                             .userBase!
                                         //                             .uid)
@@ -1280,32 +1231,32 @@ class _OrderInformationsState extends State<OrderInformations> {
                                         //                       "is_on_order":
                                         //                           false
                                         //                     });
-                                        //                     controller
-                                        //                             .isOnOrder =
-                                        //                         false;
-                                        //                     controller
-                                        //                         .markers
+                                        //                     controller.markers
+                                        //                         .clear();
+                                        //                     controller.polylines
+                                        //                         .clear();
+                                        //                     controller.update();
+                                        //                     controller.markers
+                                        //                         .clear();
+                                        //                     controller.polylines
                                         //                         .clear();
                                         //                     controller
-                                        //                         .polylines
-                                        //                         .clear();
-                                        //                     // controller.stopTimer();
-                                        //                     controller
-                                        //                         .update();
-
-                                        //                     // Get.offAll(() =>
-                                        //                     //     const HomePage());
+                                        //                         .getUserLocation();
+                                        //                     await controller
+                                        //                         .getWithOrder();
+                                        //                     controller.update();
                                         //                   },
                                         //                   child: Container(
                                         //                     height: 55.h,
                                         //                     width: 260.w,
-                                        //                     alignment:
-                                        //                         Alignment
-                                        //                             .center,
+                                        //                     alignment: Alignment
+                                        //                         .center,
                                         //                     decoration:
                                         //                         BoxDecoration(
-                                        //                       color: Colors
-                                        //                           .red,
+                                        //                       color: documentSnapshot[
+                                        //                               'is_start']
+                                        //                           ? primary
+                                        //                           : Colors.red,
                                         //                       borderRadius:
                                         //                           BorderRadius
                                         //                               .circular(
@@ -1313,10 +1264,8 @@ class _OrderInformationsState extends State<OrderInformations> {
                                         //                     ),
                                         //                     child: Text(
                                         //                       'Client a annulé la commande',
-                                        //                       style:
-                                        //                           TextStyle(
-                                        //                         fontSize:
-                                        //                             15.sp,
+                                        //                       style: TextStyle(
+                                        //                         fontSize: 15.sp,
                                         //                         color: Colors
                                         //                             .white,
                                         //                         fontFamily:
@@ -1327,138 +1276,137 @@ class _OrderInformationsState extends State<OrderInformations> {
                                         //                 )
                                         //               : InkWell(
                                         //                   onTap: () async {
-                                        //                     if (documentSnapshot[
-                                        //                             'status'] ==
-                                        //                         3) {
-                                        //                       controller
-                                        //                               .startCourse =
-                                        //                           false;
-                                        //                       controller
-                                        //                               .isOnOrder =
-                                        //                           false;
-                                        //                       controller
-                                        //                               .isWithOrder =
-                                        //                           false;
+                                        //                     String fcm =
+                                        //                         documentSnapshot[
+                                        //                             "customer_fcm"];
 
-                                        //                       documentSnapshot['order_type'].toString() !=
-                                        //                               "0"
-                                        //                           ? FirebaseFirestore
-                                        //                               .instance
-                                        //                               .collection(
-                                        //                                   'mp_users')
-                                        //                               .doc(controller
-                                        //                                   .userBase!
-                                        //                                   .uid)
-                                        //                               .update({
-                                        //                               "is_on_order":
-                                        //                                   false,
-                                        //                               "driver_planned_trip":
-                                        //                                   FieldValue.increment(1)
-                                        //                             })
-                                        //                           : FirebaseFirestore
-                                        //                               .instance
-                                        //                               .collection(
-                                        //                                   'mp_users')
-                                        //                               .doc(controller
-                                        //                                   .userBase!
-                                        //                                   .uid)
-                                        //                               .update({
-                                        //                               "is_on_order":
-                                        //                                   false,
-                                        //                               "driver_planned_delivery":
-                                        //                                   FieldValue.increment(1)
-                                        //                             });
-                                        //                       controller
-                                        //                           .markers
-                                        //                           .clear();
-                                        //                       controller
-                                        //                           .polylines
-                                        //                           .clear();
+                                        //                     newOne() async {
+                                        //                       double distancee =
+                                        //                           double.parse(
+                                        //                                   documentSnapshot[
+                                        //                                       'nbre_km_depart_destination']) /
+                                        //                               50;
+                                        //                       print(ttime
+                                        //                           .toInt());
+                                        //                       sendNotification([
+                                        //                         fcm
+                                        //                       ], "voyage a commencée",
+                                        //                           "votre chauffeur arrivera dans ${double.parse(documentSnapshot['nbre_km_depart_destination']) / 50 < 1 ? "${ttime.toStringAsFixed(1)} minutes" : "${ttime.toStringAsFixed(1)} heures"}  ");
+                                        //                       plannedNotif(
+                                        //                           [
+                                        //                             fcm
+                                        //                           ],
+                                        //                           "Votre Motopickup vous attend.",
+                                        //                           "",
+                                        //                           DateTime.now()
+                                        //                               .add(Duration(
+                                        //                                   minutes:
+                                        //                                       ttime.toInt())));
+                                        //                       // double.parse(documentSnapshot['nbre_km_depart_destination']) /
+                                        //                       //             50 <
+                                        //                       //         1
+                                        //                       // ? plannedNotif(
+                                        //                       //     [
+                                        //                       //         fcm
+                                        //                       //       ],
+                                        //                       //     "Votre Motopickup vous attend.",
+                                        //                       //     " ",
+                                        //                       //     DateTime.now().add(Duration(
+                                        //                       //         minutes: ttime
+                                        //                       //             .toInt())))
+                                        //                       // : plannedNotif(
+                                        //                       //     [
+                                        //                       //         fcm
+                                        //                       //       ],
+                                        //                       //     "Votre Motopickup vous attend.",
+                                        //                       //     " ",
+                                        //                       //     DateTime.now().add(Duration(
+                                        //                       //         hours:
+                                        //                       //             ttime.toInt())));
+                                        //                       // await updateStatusOrder(
+                                        //                       //     controller
+                                        //                       //         .orderID);
+                                        //                       controller.updateMyLocation(
+                                        //                           documentSnapshot[
+                                        //                               "order_id"]);
                                         //                       controller
                                         //                           .update();
-                                        //                       // Get.offAll(() =>
-                                        //                       //     const HomePage());
-
-                                        //                       String
-                                        //                           customerFcm =
-                                        //                           documentSnapshot[
-                                        //                               "customer_fcm"];
-                                        //                       String
-                                        //                           driverFcm =
-                                        //                           documentSnapshot[
-                                        //                               "driver_fcm"];
-
-                                        //                       sendPlanifiedNotification(
-                                        //                           [
-                                        //                             customerFcm
-                                        //                           ],
-                                        //                           "voyage",
-                                        //                           "Voyage va commencer dans 30 min",
-                                        //                           DateTime.parse(
-                                        //                               documentSnapshot[
-                                        //                                   'order_pickup_time']));
-                                        //                       sendPlanifiedNotification(
-                                        //                           [
-                                        //                             driverFcm
-                                        //                           ],
-                                        //                           "voyage",
-                                        //                           "Voyage va commencer dans 30 min",
-                                        //                           DateTime.parse(
-                                        //                               documentSnapshot[
-                                        //                                   'order_pickup_time']));
-                                        //                       controller
-                                        //                           .markers
-                                        //                           .clear();
-                                        //                       controller
-                                        //                           .polylines
-                                        //                           .clear();
-                                        //                       controller
-                                        //                           .getUserLocation();
-                                        //                       await controller
-                                        //                           .getWithOrder();
-                                        //                       controller
-                                        //                           .update();
-                                        //                     } else {
-                                        //                       if (documentSnapshot[
-                                        //                               'driver_uid'] ==
-                                        //                           controller
-                                        //                               .userBase!
-                                        //                               .uid) {
-                                        //                         controller
-                                        //                                 .startCourse =
-                                        //                             true;
-
-                                        //                         // controller.markers
-                                        //                         //     .clear();
-                                        //                         // controller.polylines
-                                        //                         //     .clear();
-                                        //                         // controller
-                                        //                         //     .getUserLocation();
-                                        //                         await controller
-                                        //                             .getWithOrder();
-                                        //                         controller
-                                        //                             .update();
-                                        //                       }
                                         //                     }
+
+                                        //                     documentSnapshot[
+                                        //                                 'is_start'] ==
+                                        //                             false
+                                        //                         ? newOne()
+                                        //                         : paiment(
+                                        //                             context,
+                                        //                             () async {
+                                        //                             // sendNotification(
+                                        //                             //     [fcm],
+                                        //                             //     "voyage est finis",
+                                        //                             //     "au revoir");
+                                        //                             // updateSuccedOrder(
+                                        //                             //     controller
+                                        //                             //         .orderID);
+                                        //                             controller
+                                        //                                     .startCourse =
+                                        //                                 false;
+                                        //                             controller
+                                        //                                     .isOnOrder =
+                                        //                                 false;
+                                        //                             controller
+                                        //                                     .isWithOrder =
+                                        //                                 false;
+                                        //                             FirebaseFirestore
+                                        //                                 .instance
+                                        //                                 .collection(
+                                        //                                     'drivers')
+                                        //                                 .doc(controller
+                                        //                                     .userBase!
+                                        //                                     .uid)
+                                        //                                 .update({
+                                        //                               "is_on_order":
+                                        //                                   false
+                                        //                             });
+                                        //                             await controller
+                                        //                                 .getWithOrder();
+                                        //                             controller
+                                        //                                 .markers
+                                        //                                 .clear();
+                                        //                             controller
+                                        //                                 .polylines
+                                        //                                 .clear();
+                                        //                             await SessionManager().set(
+                                        //                                 "order_id",
+                                        //                                 controller
+                                        //                                     .orderID);
+                                        //                             await SessionManager().set(
+                                        //                                 "distance",
+                                        //                                 Geolocator.distanceBetween(
+                                        //                                     documentSnapshot["order_pickup_location"]['latitude'],
+                                        //                                     documentSnapshot["order_pickup_location"]['longitude'],
+                                        //                                     controller.latitude!,
+                                        //                                     controller.longitude!));
+                                        //                             // controller
+                                        //                             // .stopTimer();
+                                        //                             // Get.delete<OrderInformationsController>();
+                                        //                             // Get.offAll(
+                                        //                             //     () =>
+                                        //                             //         RateClient());
+                                        //                           });
+                                        //                     controller.update();
                                         //                   },
                                         //                   child: Container(
                                         //                     height: 55.h,
-                                        //                     width: 320.w,
-                                        //                     alignment:
-                                        //                         Alignment
-                                        //                             .center,
+                                        //                     width: 260.w,
+                                        //                     alignment: Alignment
+                                        //                         .center,
                                         //                     decoration:
                                         //                         BoxDecoration(
                                         //                       color: documentSnapshot[
-                                        //                                   'driver_uid'] ==
-                                        //                               controller
-                                        //                                   .userBase!
-                                        //                                   .uid
+                                        //                                   'is_start'] ==
+                                        //                               false
                                         //                           ? primary
-                                        //                           : Colors
-                                        //                               .grey
-                                        //                               .withOpacity(
-                                        //                                   0.4),
+                                        //                           : Colors.red,
                                         //                       borderRadius:
                                         //                           BorderRadius
                                         //                               .circular(
@@ -1466,16 +1414,20 @@ class _OrderInformationsState extends State<OrderInformations> {
                                         //                     ),
                                         //                     child: Text(
                                         //                       documentSnapshot[
-                                        //                                   'driver_uid'] ==
-                                        //                               controller
-                                        //                                   .userBase!
-                                        //                                   .uid
-                                        //                           ? 'Continuer'
-                                        //                           : 'En attente',
-                                        //                       style:
-                                        //                           TextStyle(
-                                        //                         fontSize:
-                                        //                             15.sp,
+                                        //                                   'is_start'] ==
+                                        //                               false
+                                        //                           ? documentSnapshot[
+                                        //                                       'order_type'] !=
+                                        //                                   0
+                                        //                               ? 'Commencez le voyage'
+                                        //                               : 'Commencer la course'
+                                        //                           : documentSnapshot[
+                                        //                                       'order_type'] !=
+                                        //                                   0
+                                        //                               ? 'Finir le voyage'
+                                        //                               : 'Finir la course',
+                                        //                       style: TextStyle(
+                                        //                         fontSize: 15.sp,
                                         //                         color: Colors
                                         //                             .white,
                                         //                         fontFamily:
@@ -1484,679 +1436,21 @@ class _OrderInformationsState extends State<OrderInformations> {
                                         //                     ),
                                         //                   ),
                                         //                 ),
-                                        //           SizedBox(
-                                        //             height: 20.h,
-                                        //           ),
-                                        //           InkWell(
-                                        //             onTap: () async {
-                                        //               controller.isOnOrder =
-                                        //                   false;
-                                        //               controller
-                                        //                       .isWithOrder =
-                                        //                   false;
-                                        //               documentSnapshot[
-                                        //                               'order_type']
-                                        //                           .toString() !=
-                                        //                       "0"
-                                        //                   ? FirebaseFirestore
-                                        //                       .instance
-                                        //                       .collection(
-                                        //                           'mp_users')
-                                        //                       .doc(controller
-                                        //                           .userBase!
-                                        //                           .uid)
-                                        //                       .update({
-                                        //                       "is_on_order":
-                                        //                           false,
-                                        //                       "driver_cancelled_trip":
-                                        //                           FieldValue
-                                        //                               .increment(
-                                        //                                   1)
-                                        //                     })
-                                        //                   : FirebaseFirestore
-                                        //                       .instance
-                                        //                       .collection(
-                                        //                           'mp_users')
-                                        //                       .doc(controller
-                                        //                           .userBase!
-                                        //                           .uid)
-                                        //                       .update({
-                                        //                       "is_on_order":
-                                        //                           false,
-                                        //                       "driver_cancelled_delivery":
-                                        //                           FieldValue
-                                        //                               .increment(
-                                        //                                   1)
-                                        //                     });
-
-                                        //               String fcm =
-                                        //                   documentSnapshot[
-                                        //                       "customer_fcm"];
-
-                                        //               sendNotification(
-                                        //                   [fcm],
-                                        //                   "voyage annulé",
-                                        //                   "Le chauffeur a annulé le voyage");
-                                        //               // refuserOrder(
-                                        //               //     controller.userBase!,
-                                        //               //     controller.orderID);
-                                        //               controller.markers
-                                        //                   .clear();
-                                        //               controller.polylines
-                                        //                   .clear();
-
-                                        //               controller
-                                        //                   .getUserLocation();
-                                        //               await controller
-                                        //                   .getWithOrder();
-                                        //               // controller.stopTimer();
-                                        //               controller.update();
-                                        //             },
-                                        //             child: Container(
-                                        //               height: 55.h,
-                                        //               width: 320.w,
-                                        //               alignment:
-                                        //                   Alignment.center,
-                                        //               decoration:
-                                        //                   BoxDecoration(
-                                        //                 color: Colors.red,
-                                        //                 borderRadius:
-                                        //                     BorderRadius
-                                        //                         .circular(
-                                        //                             360),
-                                        //               ),
-                                        //               child: Text(
-                                        //                 'Annuler',
-                                        //                 style: TextStyle(
-                                        //                   fontSize: 15.sp,
-                                        //                   color:
-                                        //                       Colors.white,
-                                        //                   fontFamily:
-                                        //                       "LatoSemiBold",
-                                        //                 ),
-                                        //               ),
-                                        //             ),
-                                        //           ),
-                                        //           SizedBox(
-                                        //             height: 20.h,
-                                        //           ),
                                         //         ],
-                                        //       );
-                                        //     }
-                                        //   },
-                                        // ),
-                                        //===================================================================================================
-                                        // } else {
-                                        //   return const Text('you have declined');
-                                      // }
-                          if (controller.startCourse)
-                            Align(
-                              alignment: Alignment.bottomCenter,
-                              child: Wrap(
-                                children: [
-                                  Container(
-                                    decoration: const BoxDecoration(
-                                        color: Colors.white),
-                                    child: StreamBuilder(
-                                      stream: FirebaseFirestore.instance
-                                          .collection("orders")
-                                          .where("order_id",
-                                              isEqualTo:
-                                                  controller.orderID)
-                                          .snapshots(),
-                                      builder: (ctx,
-                                          AsyncSnapshot<QuerySnapshot>
-                                              snapshot) {
-                                        if (!snapshot.hasData) {
-                                          return const Text('');
-                                        } else {
-                                          final DocumentSnapshot
-                                              documentSnapshot =
-                                              snapshot.data!.docs[0];
-                                          double ttime = double.parse(
-                                                          documentSnapshot[
-                                                              'nbre_km_depart_destination']) /
-                                                      50 <
-                                                  1
-                                              ? double.parse(documentSnapshot[
-                                                      'nbre_km_depart_destination']) /
-                                                  50 *
-                                                  60
-                                              : double.parse(documentSnapshot[
-                                                      'nbre_km_depart_destination']) /
-                                                  50;
-                                          String ttimeText = double.parse(
-                                                          documentSnapshot[
-                                                              'nbre_km_depart_destination']) /
-                                                      50 <
-                                                  1
-                                              ? "${ttime.toStringAsFixed(1)} minutes"
-                                              : "${ttime.toStringAsFixed(1)} heures";
-
-                                          return Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              20.verticalSpace,
-                                              Container(
-                                                height: 5.h,
-                                                width: 220.w,
-                                                decoration: BoxDecoration(
-                                                  color: Colors.grey,
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          360),
-                                                ),
-                                              ),
-                                              20.verticalSpace,
-                                              Padding(
-                                                padding: EdgeInsets.symmetric(
-                                                    horizontal: 20.w),
-                                                child: Row(
-                                                  children: [
-                                                    SizedBox(
-                                                      width: 45.w,
-                                                      height: 45.w,
-                                                      child: ClipRRect(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(50.r),
-                                                        child: Image.network(
-                                                          documentSnapshot[
-                                                                  'user'][
-                                                              'customer_picture'],
-                                                          fit: BoxFit.fill,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    10.horizontalSpace,
-                                                    Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .spaceBetween,
-                                                      children: [
-                                                        Text(
-                                                          documentSnapshot[
-                                                                  'user'][
-                                                              'customer_full_name'],
-                                                          style: bodyTextStyle,
-                                                        ),
-                                                        Text(
-                                                          documentSnapshot[
-                                                                          'order_type']
-                                                                      .toString() !=
-                                                                  "0"
-                                                              ? "Voyage"
-                                                              : "Course",
-                                                          style: bodyTextStyle,
-                                                        )
-                                                      ],
-                                                    ),
-                                                    const Spacer(),
-                                                    Container(
-                                                      height: 45.h,
-                                                      width: 45.h,
-                                                      margin: EdgeInsets.only(
-                                                          left: 6.w),
-                                                      decoration: BoxDecoration(
-                                                        color: primary,
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(
-                                                          50,
-                                                        ),
-                                                      ),
-                                                      child: IconButton(
-                                                        onPressed: () async {
-                                                          String customerUid =
-                                                              "";
-
-                                                          var docSnapshot =
-                                                              await FirebaseFirestore
-                                                                  .instance
-                                                                  .collection(
-                                                                      'orders')
-                                                                  .doc(controller
-                                                                      .orderID)
-                                                                  .get();
-                                                          if (docSnapshot
-                                                              .exists) {
-                                                            Map<String,
-                                                                    dynamic>?
-                                                                data =
-                                                                docSnapshot
-                                                                    .data();
-                                                            customerUid = data![
-                                                                'customer_uid'];
-                                                          }
-                                                          String phoneNo = "";
-                                                          docSnapshot =
-                                                              await FirebaseFirestore
-                                                                  .instance
-                                                                  .collection(
-                                                                      'users')
-                                                                  .doc(
-                                                                      customerUid)
-                                                                  .get();
-                                                          if (docSnapshot
-                                                              .exists) {
-                                                            Map<String,
-                                                                    dynamic>?
-                                                                data =
-                                                                docSnapshot
-                                                                    .data();
-                                                            phoneNo = data![
-                                                                'customer_phone_number'];
-                                                          }
-
-                                                          await FlutterPhoneDirectCaller
-                                                              .callNumber(
-                                                                  phoneNo);
-                                                        },
-                                                        icon: const Icon(
-                                                          Boxicons
-                                                              .bx_phone_call,
-                                                          color: Colors.white,
-                                                        ),
-                                                        color: primary,
-                                                      ),
-                                                    ),
-                                                    Container(
-                                                      height: 45.h,
-                                                      width: 45.h,
-                                                      margin: EdgeInsets.only(
-                                                          left: 6.w),
-                                                      decoration: BoxDecoration(
-                                                        color: primary,
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(
-                                                          50,
-                                                        ),
-                                                      ),
-                                                      child: IconButton(
-                                                        onPressed: () async {
-                                                          String customerUid =
-                                                              "";
-
-                                                          var docSnapshot =
-                                                              await FirebaseFirestore
-                                                                  .instance
-                                                                  .collection(
-                                                                      'orders')
-                                                                  .doc(controller
-                                                                      .orderID)
-                                                                  .get();
-                                                          if (docSnapshot
-                                                              .exists) {
-                                                            Map<String,
-                                                                    dynamic>?
-                                                                data =
-                                                                docSnapshot
-                                                                    .data();
-                                                            customerUid = data![
-                                                                'customer_uid'];
-                                                          }
-                                                          String phoneNo = "";
-                                                          docSnapshot =
-                                                              await FirebaseFirestore
-                                                                  .instance
-                                                                  .collection(
-                                                                      'users')
-                                                                  .doc(
-                                                                      customerUid)
-                                                                  .get();
-                                                          if (docSnapshot
-                                                              .exists) {
-                                                            Map<String,
-                                                                    dynamic>?
-                                                                data =
-                                                                docSnapshot
-                                                                    .data();
-                                                            phoneNo = data![
-                                                                'customer_phone_number'];
-                                                          }
-
-                                                          launch(
-                                                              "https://wa.me/$phoneNo");
-                                                        },
-                                                        icon: const Icon(
-                                                          Boxicons
-                                                              .bx_message_rounded,
-                                                          color: Colors.white,
-                                                        ),
-                                                        color: primary,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                              20.verticalSpace,
-                                              Padding(
-                                                padding: EdgeInsets.symmetric(
-                                                    horizontal: 20.w),
-                                                child: Row(
-                                                  children: [
-                                                    Row(
-                                                      children: [
-                                                        const Icon(
-                                                          Boxicons.bx_dollar,
-                                                          color: primary,
-                                                        ),
-                                                        10.horizontalSpace,
-                                                        Text(
-                                                          '${documentSnapshot['order_purchase_amount']} MAD',
-                                                          style: bodyTextStyle,
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    20.horizontalSpace,
-                                                    Row(
-                                                      children: [
-                                                        const Icon(
-                                                          Boxicons.bxs_map,
-                                                          color: primary,
-                                                        ),
-                                                        10.horizontalSpace,
-                                                        Text(
-                                                          '${documentSnapshot['nbre_km_depart_destination']} Km   ($ttimeText)',
-                                                          style: bodyTextStyle,
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                              20.verticalSpace,
-                                              Padding(
-                                                padding: EdgeInsets.symmetric(
-                                                    horizontal: 20.w),
-                                                child: Row(
-                                                  children: [
-                                                    InkWell(
-                                                      onTap: () {
-                                                        // Get.to(
-                                                        //     () => HelpCenter(),
-                                                        //     transition: Transition
-                                                        //         .rightToLeft);
-                                                      },
-                                                      child: Container(
-                                                        height: 55.h,
-                                                        width: 55.h,
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          color: primary,
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                            360,
-                                                          ),
-                                                        ),
-                                                        child: const Icon(
-                                                          Boxicons
-                                                              .bx_help_circle,
-                                                          color: Colors.white,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    const Spacer(),
-                                                    documentSnapshot[
-                                                            'is_canceled_by_customer']
-                                                        ? InkWell(
-                                                            onTap: () async {
-                                                              controller
-                                                                      .startCourse =
-                                                                  false;
-                                                              controller
-                                                                      .isOnOrder =
-                                                                  false;
-                                                              controller
-                                                                      .isWithOrder =
-                                                                  false;
-                                                              FirebaseFirestore
-                                                                  .instance
-                                                                  .collection(
-                                                                      'drivers')
-                                                                  .doc(controller
-                                                                      .userBase!
-                                                                      .uid)
-                                                                  .update({
-                                                                "is_on_order":
-                                                                    false
-                                                              });
-                                                              controller.markers
-                                                                  .clear();
-                                                              controller
-                                                                  .polylines
-                                                                  .clear();
-                                                              controller
-                                                                  .update();
-                                                              controller.markers
-                                                                  .clear();
-                                                              controller
-                                                                  .polylines
-                                                                  .clear();
-                                                              controller
-                                                                  .getUserLocation();
-                                                              await controller
-                                                                  .getWithOrder();
-                                                              controller
-                                                                  .update();
-                                                            },
-                                                            child: Container(
-                                                              height: 55.h,
-                                                              width: 260.w,
-                                                              alignment:
-                                                                  Alignment
-                                                                      .center,
-                                                              decoration:
-                                                                  BoxDecoration(
-                                                                color: documentSnapshot[
-                                                                        'is_start']
-                                                                    ? primary
-                                                                    : Colors
-                                                                        .red,
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            360),
-                                                              ),
-                                                              child: Text(
-                                                                'Client a annulé la commande',
-                                                                style:
-                                                                    TextStyle(
-                                                                  fontSize:
-                                                                      15.sp,
-                                                                  color: Colors
-                                                                      .white,
-                                                                  fontFamily:
-                                                                      "LatoSemiBold",
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          )
-                                                        : InkWell(
-                                                            onTap: () async {
-                                                              String fcm =
-                                                                  documentSnapshot[
-                                                                      "customer_fcm"];
-
-                                                              newOne() async {
-                                                                double
-                                                                    distancee =
-                                                                    double.parse(
-                                                                            documentSnapshot['nbre_km_depart_destination']) /
-                                                                        50;
-                                                                print(ttime
-                                                                    .toInt());
-                                                                sendNotification(
-                                                                    [fcm],
-                                                                    "voyage a commencée",
-                                                                    "votre chauffeur arrivera dans ${double.parse(documentSnapshot['nbre_km_depart_destination']) / 50 < 1 ? "${ttime.toStringAsFixed(1)} minutes" : "${ttime.toStringAsFixed(1)} heures"}  ");
-                                                                plannedNotif(
-                                                                    [
-                                                                      fcm
-                                                                    ],
-                                                                    "Votre Motopickup vous attend.",
-                                                                    "",
-                                                                    DateTime.now().add(Duration(
-                                                                        minutes:
-                                                                            ttime.toInt())));
-                                                                // double.parse(documentSnapshot['nbre_km_depart_destination']) /
-                                                                //             50 <
-                                                                //         1
-                                                                // ? plannedNotif(
-                                                                //     [
-                                                                //         fcm
-                                                                //       ],
-                                                                //     "Votre Motopickup vous attend.",
-                                                                //     " ",
-                                                                //     DateTime.now().add(Duration(
-                                                                //         minutes: ttime
-                                                                //             .toInt())))
-                                                                // : plannedNotif(
-                                                                //     [
-                                                                //         fcm
-                                                                //       ],
-                                                                //     "Votre Motopickup vous attend.",
-                                                                //     " ",
-                                                                //     DateTime.now().add(Duration(
-                                                                //         hours:
-                                                                //             ttime.toInt())));
-                                                                // await updateStatusOrder(
-                                                                //     controller
-                                                                //         .orderID);
-                                                                controller.updateMyLocation(
-                                                                    documentSnapshot[
-                                                                        "order_id"]);
-                                                                controller
-                                                                    .update();
-                                                              }
-
-                                                              documentSnapshot[
-                                                                          'is_start'] ==
-                                                                      false
-                                                                  ? newOne()
-                                                                  : paiment(
-                                                                      context,
-                                                                      () async {
-                                                                      // sendNotification(
-                                                                      //     [fcm],
-                                                                      //     "voyage est finis",
-                                                                      //     "au revoir");
-                                                                      // updateSuccedOrder(
-                                                                      //     controller
-                                                                      //         .orderID);
-                                                                      controller
-                                                                              .startCourse =
-                                                                          false;
-                                                                      controller
-                                                                              .isOnOrder =
-                                                                          false;
-                                                                      controller
-                                                                              .isWithOrder =
-                                                                          false;
-                                                                      FirebaseFirestore
-                                                                          .instance
-                                                                          .collection(
-                                                                              'drivers')
-                                                                          .doc(controller
-                                                                              .userBase!
-                                                                              .uid)
-                                                                          .update({
-                                                                        "is_on_order":
-                                                                            false
-                                                                      });
-                                                                      await controller
-                                                                          .getWithOrder();
-                                                                      controller
-                                                                          .markers
-                                                                          .clear();
-                                                                      controller
-                                                                          .polylines
-                                                                          .clear();
-                                                                      await SessionManager().set(
-                                                                          "order_id",
-                                                                          controller
-                                                                              .orderID);
-                                                                      await SessionManager().set(
-                                                                          "distance",
-                                                                          Geolocator.distanceBetween(
-                                                                              documentSnapshot["order_pickup_location"]['latitude'],
-                                                                              documentSnapshot["order_pickup_location"]['longitude'],
-                                                                              controller.latitude!,
-                                                                              controller.longitude!));
-                                                                      // controller
-                                                                      // .stopTimer();
-                                                                      // Get.delete<OrderInformationsController>();
-                                                                      // Get.offAll(
-                                                                      //     () =>
-                                                                      //         RateClient());
-                                                                    });
-                                                              controller
-                                                                  .update();
-                                                            },
-                                                            child: Container(
-                                                              height: 55.h,
-                                                              width: 260.w,
-                                                              alignment:
-                                                                  Alignment
-                                                                      .center,
-                                                              decoration:
-                                                                  BoxDecoration(
-                                                                color: documentSnapshot[
-                                                                            'is_start'] ==
-                                                                        false
-                                                                    ? primary
-                                                                    : Colors
-                                                                        .red,
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            360),
-                                                              ),
-                                                              child: Text(
-                                                                documentSnapshot[
-                                                                            'is_start'] ==
-                                                                        false
-                                                                    ? documentSnapshot['order_type'] !=
-                                                                            0
-                                                                        ? 'Commencez le voyage'
-                                                                        : 'Commencer la course'
-                                                                    : documentSnapshot['order_type'] !=
-                                                                            0
-                                                                        ? 'Finir le voyage'
-                                                                        : 'Finir la course',
-                                                                style:
-                                                                    TextStyle(
-                                                                  fontSize:
-                                                                      15.sp,
-                                                                  color: Colors
-                                                                      .white,
-                                                                  fontFamily:
-                                                                      "LatoSemiBold",
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                  ],
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                height: 20.h,
-                                              ),
-                                            ],
-                                          );
-                                        }
-                                      },
-                                    ),
+                                        //       ),
+                                        //     ),
+                                        //     SizedBox(
+                                        //       height: 20.h,
+                                        //     ),
+                                        //   ],
+                                        // );
+                                      }
+                                    },
                                   ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
+                          ),
                         ],
                       )
                     : Column(
