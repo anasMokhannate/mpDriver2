@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
@@ -8,31 +10,44 @@ import '../../utils/models/user.dart';
 import '../../utils/queries.dart';
 import '../../utils/services.dart';
 import '../../views/completeYourProfile/adding_moto.dart';
-import '../../views/congrats_page.dart';
 
 class VerifyCodeController extends GetxController {
   RxBool loading = false.obs;
 
   MpUser? currUser;
   String phoneNumber = '';
-
+  Duration myDuration = const Duration(seconds: 30);
   TextEditingController code = TextEditingController();
 
   String message = '', verificationCode = '';
+  Timer? countdownTimer;
+  int second = 30;
+  void startTimer() {
+    countdownTimer =
+        Timer.periodic(const Duration(seconds: 1), (_) => setCountDown());
+  }
 
-  var second;
+  void setCountDown() {
+    const reduceSecondsBy = 1;
+    final seconds = myDuration.inSeconds - reduceSecondsBy;
+    second = seconds;
+    if (seconds <= 0) {
+      countdownTimer!.cancel();
+    } else {
+      myDuration = Duration(seconds: seconds);
+    }
+    update();
+  }
 
   @override
   void onInit() async {
     super.onInit();
-      currUser = MpUser.fromJson(await SessionManager().get("currentUser"));
-      phoneNumber = currUser!.phoneNumber!;
-      print(phoneNumber);
-      verificationCode = Get.arguments;
-      //startTimer();
-      update();
-    
-
+    currUser = MpUser.fromJson(await SessionManager().get("currentUser"));
+    phoneNumber = currUser!.phoneNumber!;
+    print(phoneNumber);
+    verificationCode = Get.arguments;
+    startTimer();
+    update();
   }
 
   void submit(BuildContext context) {
@@ -68,5 +83,21 @@ class VerifyCodeController extends GetxController {
     }
   }
 
-  void reSendCode(BuildContext context) {}
+  void reSendCode(BuildContext context) async {
+    code.clear();
+    update();
+    await FirebaseAuth.instance.verifyPhoneNumber(
+      phoneNumber: phoneNumber,
+      verificationCompleted: (phonesAuthCredentials) async {},
+      verificationFailed: (verificationFailed) async {},
+      codeSent: (verificationId, resendingToken) async {
+        verificationCode = verificationId;
+      },
+      codeAutoRetrievalTimeout: (verificationId) async {},
+    );
+    second = 30;
+    myDuration = const Duration(seconds: 30);
+    startTimer();
+    update();
+  }
 }
