@@ -18,7 +18,8 @@ class OrderInformationsController extends GetxController {
   MpUser? userBase;
   RxBool isTrue = false.obs;
   double ttime = 0;
-  bool status = false;
+  bool isOnline = false;
+  String? orderStatus;
   Timer? timer;
   String? city;
   double? latitude, longitude;
@@ -49,8 +50,20 @@ class OrderInformationsController extends GetxController {
     }
   }
 
+  getOrderStatus() async {
+    var docSnapshot = await FirebaseFirestore.instance
+        .collection('mp_orders')
+        .doc(orderID)
+        .get();
+    if (docSnapshot.exists) {
+      Map<String, dynamic>? data = docSnapshot.data();
+      orderStatus = data!['status'];
+      update();
+    }
+  }
+
   goOnline() async {
-    userBase!.isOnline = status;
+    userBase!.isOnline = isOnline;
     FirebaseFirestore.instance
         .collection('mp_users')
         .doc(userBase!.uid)
@@ -204,7 +217,7 @@ class OrderInformationsController extends GetxController {
     print("driver id $driverId");
     await getCurrentUser().then((value) async {
       userBase = value;
-      status = userBase!.isOnline ?? false;
+      isOnline = userBase!.isOnline ?? false;
       await saveCurrentUser(userBase!);
       await getUserLocation();
     });
@@ -212,6 +225,7 @@ class OrderInformationsController extends GetxController {
     orderID = Get.arguments;
     print("ssss $orderID");
     await getWithOrder();
+    await getOrderStatus();
     startIcon = await BitmapDescriptor.fromAssetImage(
         const ImageConfiguration(devicePixelRatio: 2),
         'assets/images/marker_start.png');

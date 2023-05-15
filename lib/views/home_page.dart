@@ -269,7 +269,8 @@ class _HomePageState extends State<HomePage> {
                                                   FieldValue.arrayUnion([
                                                 controller.userBase!.toJson(),
                                                 // controller.userBase!.uid,
-                                              ])
+                                              ]),
+                                              "status": "driver_accepted"
                                             });
 
                                             controller.order = order_class.Order

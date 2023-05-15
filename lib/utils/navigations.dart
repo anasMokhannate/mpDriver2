@@ -41,9 +41,9 @@ Future<Widget?> initWidget() async {
           print('object ${user.uid} ${userFromDb.currentPageDriver}');
           switch (userFromDb.currentPageDriver) {
             case 'homePage':
-              if (user.isOnOrder!) {
+              if (userFromDb.isOnOrder!) {
                 mainPage = const OrderInformations();
-              }else {
+              } else {
                 mainPage = const HomePage();
               }
               break;
