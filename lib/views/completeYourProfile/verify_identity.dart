@@ -558,6 +558,7 @@ class _VerifyIdentityState extends State<VerifyIdentity> {
                                     PrimaryButton(
                                       text: 'Terminer',
                                       function: () async {
+                                        Navigator.pop(context);
                                         controller.submit(context);
                                       },
                                     ),

@@ -68,10 +68,11 @@ class HomePageController extends GetxController {
 
   void startLocationUpdates() {
     positionStream = Geolocator.getPositionStream(
-      locationSettings: const LocationSettings(accuracy: LocationAccuracy.high),
+      locationSettings:
+          const LocationSettings(accuracy: LocationAccuracy.medium),
     ).listen((Position position) {
       // Update the location in Firestore
-      if (userBase!.isOnline!) {
+      if (userBase!.isOnline ?? false) {
         updateLocationInFirestore(position.latitude, position.longitude);
       }
     });
@@ -214,8 +215,9 @@ class HomePageController extends GetxController {
       await initOneSignal();
       userBase = value;
       status = userBase!.isOnline ?? false;
-      await getUserLocation();
       userBase!.totalOrders = 0;
+      userBase!.isActivatedAccount = true;
+      await getUserLocation();
       center = GeoFirePoint(latitude!, longitude!);
       startLocationUpdates();
       // stream = geo!

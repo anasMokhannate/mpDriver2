@@ -182,6 +182,9 @@ class VerifyIdentityController extends GetxController {
                 DateFormat dateFormat = DateFormat("yyyy-MM-dd ");
                 String datenow = dateFormat.format(DateTime.now());
                 userBase!.lastDocumentUpdateDate = datenow;
+
+                userBase!.isOnline = false;
+                userBase!.isOnOrder = false;
                 await saveCurrentUser(userBase!).then((value) {
                   completeUser(userBase!).then((value) {
                     Get.offAll(() => Congrats(),

@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:motopickupdriver/utils/buttons.dart';
 import 'package:motopickupdriver/utils/colors.dart';
+import 'package:motopickupdriver/utils/functions.dart';
 import 'package:motopickupdriver/utils/typography.dart';
 
 import '../../controllers/completeYourProfile/verify_phone_number.dart';
@@ -31,14 +32,6 @@ class VerifyPhoneNumber extends StatelessWidget {
           ),
           child: Scaffold(
             appBar: AppBar(
-              leading: InkWell(
-                onTap: () => Get.back(),
-                child: Icon(
-                  Boxicons.bx_arrow_back,
-                  color: primary,
-                  size: 30.h,
-                ),
-              ),
               toolbarHeight: 80.h,
               title: Image.asset(
                 'assets/images/logoMoto_colored.png',
@@ -47,6 +40,18 @@ class VerifyPhoneNumber extends StatelessWidget {
               centerTitle: true,
               elevation: 0,
               backgroundColor: Colors.transparent,
+              actions: <Widget>[
+                IconButton(
+                  icon: Icon(
+                    Boxicons.bx_log_out,
+                    color: primary,
+                    size: 30.h,
+                  ),
+                  onPressed: () async {
+                    logout(context);
+                  },
+                )
+              ],
             ),
             body: SingleChildScrollView(
               child: Column(
