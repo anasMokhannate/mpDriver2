@@ -34,11 +34,10 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
   final padding = const EdgeInsets.symmetric(horizontal: 20);
   @override
   Widget build(BuildContext context) {
-    print("hell");
-//     double starss = widget.currentUser!.note! /
-// (widget.currentUser!.totalOrders == 0
-//             ? 1
-//             : widget.currentUser!.totalOrders!);
+    double starss = widget.currentUser!.note! /
+        (widget.currentUser!.totalOrders == 0
+            ? 1
+            : widget.currentUser!.totalOrders!);
 
     return Drawer(
       backgroundColor: Colors.transparent,
@@ -61,7 +60,7 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
             buildHeader(
               urlImage: widget.currentUser!.profilePicture!,
               name: widget.currentUser!.fullName!,
-              stars: 4,
+              stars: starss.toInt(),
               onClicked: () {},
             ),
             Divider(

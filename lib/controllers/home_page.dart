@@ -82,7 +82,14 @@ class HomePageController extends GetxController {
     print("$status status");
     userBase!.location =
         GeoFlutterFire().point(latitude: latitude!, longitude: longitude!).data;
-    await completeUser(userBase!);
+    // await completeUser(userBase!);
+    await FirebaseFirestore.instance
+        .collection("mp_users")
+        .doc(userBase!.uid)
+        .update({
+      'location': userBase!.location,
+      // 'driver_latitude': latitude,
+    });
   }
 
 // Stop listening for location updates
