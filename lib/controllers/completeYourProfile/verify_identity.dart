@@ -122,7 +122,7 @@ class VerifyIdentityController extends GetxController {
     // loading.toggle();
     // update();
   }
-
+  
   uploadImage(context) async {
     if (isDriver.value == true) {
       await FirebaseStorage.instance

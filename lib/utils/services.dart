@@ -10,7 +10,6 @@ import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:motopickupdriver/utils/colors.dart';
 import 'package:motopickupdriver/utils/models/ListItems.dart';
 import 'package:motopickupdriver/utils/models/config-params.dart';
 import 'package:motopickupdriver/utils/queries.dart';
@@ -166,7 +165,8 @@ checkIsFirstTime() async {
   }
 }
 
-sendPlanifiedNotification(fcm, heading, content, whenDate) async {
+sendPlanifiedNotificationBeforeThirtyMinutes(
+    fcm, heading, content, whenDate) async {
   DateTime dateTime = DateTime.now();
   await OneSignal.shared.postNotification(OSCreateNotification(
     playerIds: fcm,
@@ -180,6 +180,20 @@ sendPlanifiedNotification(fcm, heading, content, whenDate) async {
             whenDate.minute,
             0)
         .subtract(const Duration(minutes: 30)),
+  ));
+}
+
+sendPlanifiedNotification(fcm, heading, content, whenDate) async {
+  //DateTime dateTime = DateTime.now();
+  await OneSignal.shared.postNotification(OSCreateNotification(
+    playerIds: fcm,
+    content: content,
+    heading: heading,
+    sendAfter: DateTime(
+      whenDate.year,
+      whenDate.month,
+      whenDate.day,
+    ).subtract(const Duration(days: 1)),
   ));
 }
 
