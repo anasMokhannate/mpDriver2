@@ -17,6 +17,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../controllers/settings_page.dart';
 import '../utils/models/user.dart';
 import '../views/help_center.dart';
+import '../views/home_page.dart';
 import '../views/policy_screen.dart';
 import '../views/using_condition_screen.dart';
 
@@ -75,6 +76,7 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                     icon: Boxicons.bx_home_alt,
                     onClicked: () {
                       Navigator.pop(context);
+                      Get.to(const HomePage());
                     },
                   ),
                   buildMenuItem(

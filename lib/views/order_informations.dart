@@ -160,9 +160,14 @@ class _OrderInformationsState extends State<OrderInformations> {
                                             documentSnapshot =
                                             snapshot.data!.docs[0];
 
-                                        controller.driverId =
-                                            documentSnapshot["driver"]['uid'] ??
-                                                "";
+                                        // final driver =
+                                        //     documentSnapshot["driver"] ?? "";
+                                        if(documentSnapshot["driver"] != null){
+                                          controller.driverId = documentSnapshot["driver"]["uid"];
+                                        } else {
+                                          controller.driverId = "";
+                                        }
+                                        // controller.driverId = driver.uid ?? "";
 
                                         controller.startlatitude =
                                             documentSnapshot[
@@ -428,7 +433,7 @@ class _OrderInformationsState extends State<OrderInformations> {
                                                                   var docSnapshot = await FirebaseFirestore
                                                                       .instance
                                                                       .collection(
-                                                                          'orders')
+                                                                          'mp_orders')
                                                                       .doc(documentSnapshot[
                                                                           "order_id"])
                                                                       .get();
@@ -810,7 +815,7 @@ class _OrderInformationsState extends State<OrderInformations> {
                                                                               // controller
                                                                               //     .getUserLocation();
                                                                               await controller.getWithOrder();
-                                                                              controller.isWithOrder = true;
+                                                                              //controller.isWithOrder = true;
                                                                               controller.update();
                                                                             }
                                                                           }
