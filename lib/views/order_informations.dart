@@ -156,15 +156,17 @@ class _OrderInformationsState extends State<OrderInformations> {
                                       if (!snapshot.hasData) {
                                         return const Text('');
                                       } else {
-                                        print("zzz ${controller.driverId}");
-                                        print(
-                                            "zzz status ${controller.orderStatus}");
                                         // controller.orderStatus =
                                         //     'customer_accepted';
+                                        // controller.getOrderStatus();
+                                        print(
+                                            "zzz status ${controller.orderStatus}");
                                         final DocumentSnapshot
                                             documentSnapshot =
                                             snapshot.data!.docs[0];
 
+                                        controller.orderStatus =
+                                            documentSnapshot["status"];
                                         // final driver =
                                         //     documentSnapshot["driver"] ?? "";
                                         if (documentSnapshot["driver"] !=
@@ -231,7 +233,7 @@ class _OrderInformationsState extends State<OrderInformations> {
                                         // );
 
                                         print(
-                                            "zzz ${documentSnapshot['order_id']}");
+                                            "zzz orderId ${documentSnapshot['order_id']}");
                                         controller.ttime = double.parse(
                                                         documentSnapshot[
                                                             'nbre_km_depart_destination']) /
@@ -681,6 +683,9 @@ class _OrderInformationsState extends State<OrderInformations> {
                                                                             if (controller.orderStatus ==
                                                                                 'customer_accepted') {
                                                                               controller.startCourse = true;
+                                                                              await FirebaseFirestore.instance.collection("mp_orders").doc(controller.orderID).update({
+                                                                                'status': 'driver_coming'
+                                                                              });
 
                                                                               // controller.markers
                                                                               //     .clear();
@@ -846,8 +851,18 @@ class _OrderInformationsState extends State<OrderInformations> {
                                                                           //     DateTime.now().add(Duration(
                                                                           //         hours:
                                                                           //             ttime.toInt())));
-                                                                          await updateStatusOrder(
-                                                                              controller.orderID);
+                                                                          // await updateStatusOrder(
+                                                                          //     controller.orderID);
+                                                                          await FirebaseFirestore
+                                                                              .instance
+                                                                              .collection(
+                                                                                  "mp_orders")
+                                                                              .doc(controller
+                                                                                  .orderID)
+                                                                              .update({
+                                                                            'status':
+                                                                                'driver_is_here'
+                                                                          });
                                                                           // controller
                                                                           //     .updateMyLocation(
                                                                           //         documentSnapshot["order_id"]);
@@ -907,7 +922,10 @@ class _OrderInformationsState extends State<OrderInformations> {
                                                                               //     [fcm],
                                                                               //     "voyage est finis",
                                                                               //     "au revoir");
-                                                                              updateSuccedOrder(controller.orderID);
+                                                                              // updateSuccedOrder(controller.orderID);
+                                                                              await FirebaseFirestore.instance.collection("mp_orders").doc(controller.orderID).update({
+                                                                                'status': 'order_finished'
+                                                                              });
                                                                               controller.startCourse = false;
                                                                               controller.isOnOrder = false;
                                                                               controller.isWithOrder = false;
