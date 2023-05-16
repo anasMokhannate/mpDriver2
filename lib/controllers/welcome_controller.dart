@@ -50,22 +50,29 @@ class WelcomeController extends GetxController {
 
           if (provider == "") {
             MpUser mpUser = MpUser(
-                // fullName: user.displayName,
-                uid: user?.uid,
-                email: user?.email,
-                profilePicture: user?.photoURL,
-                authType: "Google",
-                registrationDate: DateFormat('dd-MM-yyyy Hh:mm', 'Fr_fr')
+                uid: user!.uid,
+                email: user.email,
+                authType: 'Google',
+                isActivatedAccount: false,
+                currentPageClient: 'completeProfile',
+                currentPageDriver: 'completeProfile',
+                isDriver: false,
+                lastLoginDate: DateFormat("dd-MM-yyyy HH:mm", "Fr_fr")
                     .format(DateTime.now()),
-                lastLoginDate: DateFormat('dd-MM-yyyy Hh:mm', 'Fr_fr')
+                registrationDate: DateFormat("dd-MM-yyyy HH:mm", "Fr_fr")
                     .format(DateTime.now()),
                 isDeletedAccount: false,
-                isDriver: false,
-                isBlacklistedAccount: false,
-                isActivatedAccount: false,
                 isVerifiedAccount: false,
-                currentPageClient: "completeProfile",
-                currentPageDriver: "completeProfile");
+                cancelledDelivery: 0,
+                cancelledTrip: 0,
+                isBlacklistedAccount: false,
+                isPasswordChange: false,
+                orderTotalAmount: 0.0,
+                reportedTimes: 0,
+                succededDelivery: 0,
+                succededTrip: 0,
+                totalOrders: 0);
+
             await saveCurrentUser(mpUser);
             await createUser(mpUser).then(
               (value) async {
@@ -78,7 +85,6 @@ class WelcomeController extends GetxController {
               MpUser mpUser = user;
               mpUser.lastLoginDate = DateFormat('dd-MM-yyyy Hh:mm', 'Fr_fr')
                   .format(DateTime.now());
-              //TODO check if profile is complete
               await completeUser(mpUser).then((value) async {
                 await saveCurrentUser(mpUser).then((value) async {
                   await initWidget().then((mainPage) {
@@ -116,7 +122,7 @@ class WelcomeController extends GetxController {
   @override
   void onInit() async {
     super.onInit();
-    
+
     await SessionManager().get("hasAccepted").then((value) {
       print('Conditions d\'utilisation : $value ');
     });

@@ -63,6 +63,7 @@ class OrderInformationsController extends GetxController {
   }
 
   goOnline() async {
+    
     userBase!.isOnline = isOnline;
     FirebaseFirestore.instance
         .collection('mp_users')

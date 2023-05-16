@@ -37,7 +37,7 @@ class MpUser {
   String? assuranceExpirationDate;
   String? carteGrisePicture;
   String? carteGriseExpirationDate;
-  String? orderTotalAmount;
+  double? orderTotalAmount;
   String? anthropometrique;
   int? totalOrders;
   int? reportedTimes;
@@ -48,7 +48,7 @@ class MpUser {
   String? currentPageDriver;
   String? authType;
   String? lastDocumentUpdateDate;
-  String? currentOrderId;
+  //String? currentOrderId;
 
   MpUser(
       {this.fullName,
@@ -96,7 +96,8 @@ class MpUser {
       this.currentPageDriver,
       this.lastDocumentUpdateDate,
       this.authType,
-      this.currentOrderId});
+      //this.currentOrderId
+    });
 
   factory MpUser.fromJson(Map<String, dynamic>? json) {
     // fullName = json?['full_name'];
@@ -202,8 +203,8 @@ class MpUser {
         currentPageClient: json?['current_page_client'],
         currentPageDriver: json?['current_page_driver'],
         lastDocumentUpdateDate: json?['last_document_update_date'],
-        authType: json?['auth_type'],
-        currentOrderId: json?['current_order_id']);
+        authType: json?['auth_type']);
+        //currentOrderId: json?['current_order_id']);
   }
 
   Map<String, dynamic> toJson() {
@@ -274,7 +275,7 @@ class MpUser {
     data['current_order_driver'] = currentOrderDriver;
     data['current_order_customer'] = currentOrderCustomer;
     data['last_document_update_date'] = lastDocumentUpdateDate;
-    data['current_order_id'] = currentOrderId;
+    // data['current_order_id'] = currentOrderId;
     return data;
   }
 

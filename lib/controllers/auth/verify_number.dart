@@ -88,6 +88,15 @@ class VerfiyNumberController extends GetxController {
                 DateFormat("dd-MM-yyyy HH:mm", "Fr_fr").format(DateTime.now()),
             isDeletedAccount: false,
             isVerifiedAccount: true,
+            cancelledDelivery: 0,
+            cancelledTrip: 0,
+            isBlacklistedAccount: false,
+            isPasswordChange: false,
+            orderTotalAmount: 0.0,
+            reportedTimes: 0,
+            succededDelivery: 0,
+            succededTrip: 0,
+            totalOrders : 0
           );
           await saveCurrentUser(userBase).then((value) async {
             await createUser(userBase).then((value) {
