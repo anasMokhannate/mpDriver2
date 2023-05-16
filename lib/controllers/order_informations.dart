@@ -51,14 +51,15 @@ class OrderInformationsController extends GetxController {
   }
 
   getOrderStatus() async {
+    print("zzz currentOrderId ${userBase!.currentOrderId}");
     var docSnapshot = await FirebaseFirestore.instance
         .collection('mp_orders')
-        .doc(orderID)
+        .doc(userBase!.currentOrderId)
         .get();
     if (docSnapshot.exists) {
       Map<String, dynamic>? data = docSnapshot.data();
       orderStatus = data!['status'];
-      update();
+      // update();
     }
   }
 

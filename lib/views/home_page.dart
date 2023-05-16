@@ -270,6 +270,7 @@ class _HomePageState extends State<HomePage> {
                                                 controller.userBase!.toJson(),
                                                 // controller.userBase!.uid,
                                               ]),
+                                              'drivers_concerned': FieldValue.arrayRemove([controller.userBase!.uid]),
                                               "status": "driver_accepted"
                                             });
 

@@ -87,6 +87,7 @@ class VerfiyNumberController extends GetxController {
             registrationDate:
                 DateFormat("dd-MM-yyyy HH:mm", "Fr_fr").format(DateTime.now()),
             isDeletedAccount: false,
+            isBlacklistedAccount: false,
             isVerifiedAccount: true,
           );
           await saveCurrentUser(userBase).then((value) async {
