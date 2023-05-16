@@ -88,8 +88,19 @@ class _HomePageState extends State<HomePage> {
                         showOnOff: false,
                         onToggle: (val) {
                           controller.status = !controller.status;
-                          controller.goOnline();
-                          controller.update();
+                          if (controller.userBase!.currentOrderCustomer !=
+                              null) {
+                            print(
+                                "zzzzzz ${controller.userBase!.currentOrderCustomer}");
+                            showAlertDialogOneButton(
+                                context,
+                                "Erreur",
+                                "Vous devez terminer votre commande en tant que client.",
+                                "ok");
+                          } else {
+                            controller.goOnline();
+                            controller.update();
+                          }
                         },
                       ),
                       15.horizontalSpace,
@@ -270,7 +281,10 @@ class _HomePageState extends State<HomePage> {
                                                 controller.userBase!.toJson(),
                                                 // controller.userBase!.uid,
                                               ]),
-                                              'drivers_concerned': FieldValue.arrayRemove([controller.userBase!.uid]),
+                                              'drivers_concerned':
+                                                  FieldValue.arrayRemove([
+                                                controller.userBase!.uid
+                                              ]),
                                               "status": "driver_accepted"
                                             });
 

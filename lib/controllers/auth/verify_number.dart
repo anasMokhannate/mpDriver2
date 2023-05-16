@@ -91,7 +91,6 @@ class VerfiyNumberController extends GetxController {
             isVerifiedAccount: true,
             cancelledDelivery: 0,
             cancelledTrip: 0,
-            isBlacklistedAccount: false,
             isPasswordChange: false,
             orderTotalAmount: 0.0,
             reportedTimes: 0,

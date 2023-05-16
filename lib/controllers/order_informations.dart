@@ -51,10 +51,10 @@ class OrderInformationsController extends GetxController {
   }
 
   getOrderStatus() async {
-    print("zzz currentOrderId ${userBase!.currentOrderId}");
+    print("zzz currentOrderId ${userBase!.currentOrderDriver}");
     var docSnapshot = await FirebaseFirestore.instance
         .collection('mp_orders')
-        .doc(userBase!.currentOrderId)
+        .doc(userBase!.currentOrderDriver)
         .get();
     if (docSnapshot.exists) {
       Map<String, dynamic>? data = docSnapshot.data();
@@ -64,7 +64,6 @@ class OrderInformationsController extends GetxController {
   }
 
   goOnline() async {
-    
     userBase!.isOnline = isOnline;
     FirebaseFirestore.instance
         .collection('mp_users')

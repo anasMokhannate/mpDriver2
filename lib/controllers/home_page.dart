@@ -218,7 +218,7 @@ class HomePageController extends GetxController {
   @override
   void onInit() async {
     super.onInit();
-    await getUserFromMemory().then((value) async {
+    await getCurrentUser().then((value) async {
       await initOneSignal();
       userBase = value;
       status = userBase!.isOnline ?? false;
