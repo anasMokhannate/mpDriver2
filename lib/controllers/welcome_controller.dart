@@ -52,6 +52,7 @@ class WelcomeController extends GetxController {
             MpUser mpUser = MpUser(
                 uid: user!.uid,
                 email: user.email,
+                profilePicture: user.photoURL,
                 authType: 'Google',
                 isActivatedAccount: false,
                 currentPageClient: 'completeProfile',

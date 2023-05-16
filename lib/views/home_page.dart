@@ -276,7 +276,11 @@ class _HomePageState extends State<HomePage> {
                                             FirebaseFirestore.instance
                                                 .collection('mp_users')
                                                 .doc(controller.userBase!.uid)
-                                                .update({"is_on_order": true});
+                                                .update({
+                                              "is_on_order": true,
+                                              "current_order_driver":
+                                                  documentSnapshot["order_id"]
+                                            });
 
                                             FirebaseFirestore.instance
                                                 .collection("mp_orders")
