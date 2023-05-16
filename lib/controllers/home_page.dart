@@ -102,7 +102,7 @@ class HomePageController extends GetxController {
     FirebaseFirestore.instance
         .collection('mp_users')
         .doc(userBase!.uid)
-        .update(userBase!.toJson());
+        .update({'is_online': status});
     update();
   }
 
