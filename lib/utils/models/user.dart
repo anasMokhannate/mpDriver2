@@ -14,8 +14,7 @@ class MpUser {
   bool? isActivatedAccount;
   bool? isVerifiedAccount;
   bool? isBlacklistedAccount;
-  bool? isOnline;
-  bool? isOnOrder;
+  bool? isOnline; 
   bool? isPasswordChange;
   bool? isDriver;
   int? cancelledDelivery;
@@ -66,8 +65,7 @@ class MpUser {
       this.isActivatedAccount,
       this.isVerifiedAccount,
       this.isBlacklistedAccount,
-      this.isOnline,
-      this.isOnOrder,
+      this.isOnline, 
       this.isPasswordChange,
       this.isDriver,
       this.cancelledDelivery,
@@ -170,8 +168,7 @@ class MpUser {
         isActivatedAccount: json?['is_activated_account'],
         isVerifiedAccount: json?['is_verified_account'],
         isBlacklistedAccount: json?['is_blacklisted_account'],
-        isOnline: json?['is_online'],
-        isOnOrder: json?['is_on_order'],
+        isOnline: json?['is_online'], 
         isPasswordChange: json?['is_password_change'],
         isDriver: json?['is_driver'],
         cancelledDelivery: json?['cancelled_delivery'],
@@ -230,8 +227,7 @@ class MpUser {
     data['is_activated_account'] = isActivatedAccount;
     data['is_verified_account'] = isVerifiedAccount;
     data['is_blacklisted_account'] = isBlacklistedAccount;
-    data['is_online'] = isOnline;
-    data['is_on_order'] = isOnOrder;
+    data['is_online'] = isOnline; 
     data['is_password_change'] = isPasswordChange;
     data['is_driver'] = isDriver;
     data['cancelled_delivery'] = cancelledDelivery;

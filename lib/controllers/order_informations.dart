@@ -36,7 +36,6 @@ class OrderInformationsController extends GetxController {
   List trajet = [];
   String? driverId;
 // bool showCard=false;
-  String? orderID;
 
   getWithOrder() async {
     var docSnapshot = await FirebaseFirestore.instance
@@ -221,22 +220,19 @@ class OrderInformationsController extends GetxController {
       isOnline = userBase!.isOnline ?? false;
       await saveCurrentUser(userBase!);
       await getUserLocation();
+      await getWithOrder();
+      await getOrderStatus();
+      startIcon = await BitmapDescriptor.fromAssetImage(
+          const ImageConfiguration(devicePixelRatio: 2),
+          'assets/images/marker_start.png');
+      endIcon = await BitmapDescriptor.fromAssetImage(
+          const ImageConfiguration(devicePixelRatio: 2),
+          'assets/images/marker_end.png');
+      isTrue.toggle();
+      // await myLocationUpdateNotif();
+      // await updateMyLocation();
+
+      update();
     });
-
-    orderID = Get.arguments;
-    print("ssss $orderID");
-    await getWithOrder();
-    await getOrderStatus();
-    startIcon = await BitmapDescriptor.fromAssetImage(
-        const ImageConfiguration(devicePixelRatio: 2),
-        'assets/images/marker_start.png');
-    endIcon = await BitmapDescriptor.fromAssetImage(
-        const ImageConfiguration(devicePixelRatio: 2),
-        'assets/images/marker_end.png');
-    isTrue.toggle();
-    // await myLocationUpdateNotif();
-    // await updateMyLocation();
-
-    update();
   }
 }

@@ -111,6 +111,7 @@ Future<void> initOneSignal() async {
     osUserID = changes.to.userId ?? '';
     String playerid = osUserID;
     await SessionManager().set('user_fcm', playerid);
+    print("playerid: $playerid");
   });
   await OneSignal.shared.promptUserForPushNotificationPermission(
     fallbackToSettings: true,

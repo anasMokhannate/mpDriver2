@@ -16,7 +16,6 @@ import 'package:motopickupdriver/controllers/order_informations.dart';
 import 'package:motopickupdriver/utils/alert_dialog.dart';
 import 'package:motopickupdriver/utils/buttons.dart';
 import 'package:motopickupdriver/utils/colors.dart';
-import 'package:motopickupdriver/utils/queries.dart';
 import 'package:motopickupdriver/utils/typography.dart';
 import 'package:motopickupdriver/views/rate_client.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -24,16 +23,10 @@ import 'package:url_launcher/url_launcher.dart';
 import '../utils/services.dart';
 import 'home_page.dart';
 
-class OrderInformations extends StatefulWidget {
-  const OrderInformations({Key? key}) : super(key: key);
+class OrderInformations extends StatelessWidget {
+  OrderInformations({Key? key}) : super(key: key);
 
-  @override
-  State<OrderInformations> createState() => _OrderInformationsState();
-}
-
-class _OrderInformationsState extends State<OrderInformations> {
   final GlobalKey<ScaffoldState> _key = GlobalKey();
-  var controller = Get.put(OrderInformationsController());
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +35,7 @@ class _OrderInformationsState extends State<OrderInformations> {
       child: SafeArea(
         child: GetBuilder<OrderInformationsController>(
           init: OrderInformationsController(),
-          builder: (value) => Scaffold(
+          builder: (controller) => Scaffold(
             resizeToAvoidBottomInset: false,
             backgroundColor: scaffold,
             key: _key,
@@ -146,7 +139,8 @@ class _OrderInformationsState extends State<OrderInformations> {
                                     stream: FirebaseFirestore.instance
                                         .collection("mp_orders")
                                         .where("order_id",
-                                            isEqualTo: controller.orderID)
+                                            isEqualTo: controller
+                                                .userBase!.currentOrderDriver)
                                         .snapshots(),
                                     builder: (ctx,
                                         AsyncSnapshot<
@@ -154,16 +148,19 @@ class _OrderInformationsState extends State<OrderInformations> {
                                                     Map<String, dynamic>>>
                                             snapshot) {
                                       if (!snapshot.hasData) {
-                                        return const Text('');
+                                        print('no dataaa');
+
+                                        return Container();
                                       } else {
                                         // controller.orderStatus =
                                         //     'customer_accepted';
                                         // controller.getOrderStatus();
+
                                         print(
                                             "zzz status ${controller.orderStatus}");
                                         final DocumentSnapshot
                                             documentSnapshot =
-                                            snapshot.data!.docs[0];
+                                            snapshot.data!.docs.first;
 
                                         controller.orderStatus =
                                             documentSnapshot["status"];
@@ -683,7 +680,7 @@ class _OrderInformationsState extends State<OrderInformations> {
                                                                             if (controller.orderStatus ==
                                                                                 'customer_accepted') {
                                                                               controller.startCourse = true;
-                                                                              await FirebaseFirestore.instance.collection("mp_orders").doc(controller.orderID).update({
+                                                                              await FirebaseFirestore.instance.collection("mp_orders").doc(controller.userBase!.currentOrderDriver).update({
                                                                                 'status': 'driver_coming'
                                                                               });
 
@@ -774,6 +771,9 @@ class _OrderInformationsState extends State<OrderInformations> {
                                                                           await controller
                                                                               .getWithOrder();
                                                                           // controller.stopTimer();
+
+                                                                          Get.offAll(() =>
+                                                                              const HomePage());
                                                                           controller
                                                                               .update();
                                                                         },
@@ -858,7 +858,7 @@ class _OrderInformationsState extends State<OrderInformations> {
                                                                               .collection(
                                                                                   "mp_orders")
                                                                               .doc(controller
-                                                                                  .orderID)
+                                                                                  .userBase!.currentOrderDriver)
                                                                               .update({
                                                                             'status':
                                                                                 'driver_is_here'
@@ -923,7 +923,7 @@ class _OrderInformationsState extends State<OrderInformations> {
                                                                               //     "voyage est finis",
                                                                               //     "au revoir");
                                                                               // updateSuccedOrder(controller.orderID);
-                                                                              await FirebaseFirestore.instance.collection("mp_orders").doc(controller.orderID).update({
+                                                                              await FirebaseFirestore.instance.collection("mp_orders").doc(controller.userBase!.currentOrderDriver).update({
                                                                                 'status': 'order_finished'
                                                                               });
                                                                               controller.startCourse = false;
@@ -935,7 +935,7 @@ class _OrderInformationsState extends State<OrderInformations> {
                                                                               await controller.getWithOrder();
                                                                               controller.markers.clear();
                                                                               controller.polylines.clear();
-                                                                              await SessionManager().set("order_id", controller.orderID);
+                                                                              await SessionManager().set("order_id", controller.userBase!.currentOrderDriver);
                                                                               await SessionManager().set("distance", Geolocator.distanceBetween(documentSnapshot["order_pickup_location"]['geopoint'].latitude, documentSnapshot["order_pickup_location"]['geopoint'].longitude, controller.latitude!, controller.longitude!));
                                                                               // controller
                                                                               //     .stopTimer();
