@@ -40,7 +40,7 @@ class MpUser {
   String? anthropometrique;
   int? totalOrders;
   int? reportedTimes;
-  List? fcmList;
+  String? fcm;
   String? currentOrderDriver;
   String? currentOrderCustomer;
   String? currentPageClient;
@@ -87,7 +87,7 @@ class MpUser {
       this.anthropometrique,
       this.totalOrders,
       this.reportedTimes,
-      this.fcmList,
+      this.fcm,
       this.currentOrderDriver,
       this.currentOrderCustomer,
       this.currentPageClient,
@@ -194,7 +194,7 @@ class MpUser {
         anthropometrique: json?['anthropometrique'],
         totalOrders: json?['total_orders'],
         reportedTimes: json?['reported_times'],
-        fcmList: json?['fcmList'],
+        fcm: json?['curr_fcm'],
         currentOrderDriver: json?['current_order_driver'],
         currentOrderCustomer: json?['current_order_customer'],
         currentPageClient: json?['current_page_client'],
@@ -254,7 +254,7 @@ class MpUser {
     data['anthropometrique'] = anthropometrique;
     data['total_orders'] = totalOrders;
     data['reported_times'] = reportedTimes;
-    data['fcmList'] = fcmList;
+    data['curr_fcm'] = fcm;
     data['current_order_driver'] = currentOrderDriver;
     data['current_order_customer'] = currentOrderCustomer;
     data['identity_card_number'] = identityCardNumber;
@@ -267,7 +267,7 @@ class MpUser {
     data['anthropometrique'] = anthropometrique;
     data['total_orders'] = totalOrders;
     data['reported_times'] = reportedTimes;
-    data['fcmList'] = fcmList;
+    data['curr_fcm'] = fcm;
     data['current_order_driver'] = currentOrderDriver;
     data['current_order_customer'] = currentOrderCustomer;
     data['last_document_update_date'] = lastDocumentUpdateDate;

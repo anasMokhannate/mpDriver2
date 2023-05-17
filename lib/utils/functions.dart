@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -39,13 +40,17 @@ Future<Future> logout(context) async {
             style: linkTextStyle,
           ).tr(),
           onPressed: () async {
+            await FirebaseFirestore.instance
+                .collection('mp_users')
+                .doc(FirebaseAuth.instance.currentUser!.uid)
+                .update({'curr_fcm': null});
             await FirebaseAuth.instance.signOut();
             // String fcm = await SessionManager().get('user_fcm')??'';
             await GoogleSignIn(scopes: ['profile', 'email']).signOut();
             await SessionManager().remove("currentUser");
-            await SessionManager().get("hasAccepted").then((value){
+            await SessionManager().get("hasAccepted").then((value) {
               value = false;
-               Get.offAll(() => const UsingConditionScreen());
+              Get.offAll(() => const UsingConditionScreen());
             });
             // await SessionManager().destroy();
             // await SessionManager().set('user_fcm', fcm);

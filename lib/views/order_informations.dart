@@ -659,22 +659,20 @@ class OrderInformations extends StatelessWidget {
                                                                             // Get.offAll(() =>
                                                                             //     const HomePage());
 
-                                                                            List<dynamic>
+                                                                            String
                                                                                 customerFcm =
-                                                                                documentSnapshot["customer"]["fcmList"];
-                                                                            List<dynamic>
+                                                                                documentSnapshot["customer"]["fcm"];
+                                                                            String
                                                                                 driverFcm =
-                                                                                documentSnapshot["driver"]["fcmList"];
+                                                                                documentSnapshot["driver"]["fcm"];
 
-                                                                            sendPlanifiedNotification(
-                                                                                customerFcm.map((item) => item.toString()).toList(),
-                                                                                "voyage",
-                                                                                "Voyage va commencer dans 30 min",
+                                                                            sendPlanifiedNotification([
+                                                                              customerFcm
+                                                                            ], "voyage", "Voyage va commencer dans 30 min",
                                                                                 DateTime.parse(documentSnapshot['order_pickup_time']));
-                                                                            sendPlanifiedNotification(
-                                                                                driverFcm.map((item) => item.toString()).toList(),
-                                                                                "voyage",
-                                                                                "Voyage va commencer dans 30 min",
+                                                                            sendPlanifiedNotification([
+                                                                              driverFcm
+                                                                            ], "voyage", "Voyage va commencer dans 30 min",
                                                                                 DateTime.parse(documentSnapshot['order_pickup_time']));
                                                                             controller.markers.clear();
                                                                             controller.polylines.clear();
@@ -760,7 +758,7 @@ class OrderInformations extends StatelessWidget {
 
                                                                           List<dynamic>
                                                                               fcm =
-                                                                              documentSnapshot["customer"]["fcmList"];
+                                                                              documentSnapshot["customer"]["currfcm"];
 
                                                                           sendNotification(
                                                                               fcm.map((item) => item.toString()).toList(),
@@ -823,9 +821,9 @@ class OrderInformations extends StatelessWidget {
                                                                   ? InkWell(
                                                                       onTap:
                                                                           () async {
-                                                                        List<dynamic>
+                                                                        String
                                                                             fcm =
-                                                                            documentSnapshot["customer"]["fcmList"];
+                                                                            documentSnapshot["customer"]["curr_fcm"];
 
                                                                         newOne() async {
                                                                           double
@@ -834,12 +832,14 @@ class OrderInformations extends StatelessWidget {
                                                                           print(controller
                                                                               .ttime
                                                                               .toInt());
-                                                                          sendNotification(
-                                                                              fcm.map((item) => item.toString()).toList(),
-                                                                              "voyage a commencée",
+                                                                          sendNotification([
+                                                                            fcm
+                                                                          ], "voyage a commencée",
                                                                               "votre chauffeur arrivera dans ${double.parse(documentSnapshot['nbre_km_depart_destination']) / 50 < 1 ? "${controller.ttime.toStringAsFixed(1)} minutes" : "${controller.ttime.toStringAsFixed(1)} heures"}  ");
                                                                           plannedNotif(
-                                                                              fcm.map((item) => item.toString()).toList(),
+                                                                              [
+                                                                                fcm
+                                                                              ],
                                                                               "Votre Motopickup vous attend.",
                                                                               "",
                                                                               DateTime.now().add(Duration(minutes: controller.ttime.toInt())));
@@ -925,9 +925,9 @@ class OrderInformations extends StatelessWidget {
                                                                       ? InkWell(
                                                                           onTap:
                                                                               () async {
-                                                                            List<dynamic>
+                                                                            String
                                                                                 fcm =
-                                                                                documentSnapshot["customer"]["fcmList"];
+                                                                                documentSnapshot["customer"]["curr_fcm"];
 
                                                                             paiment(context,
                                                                                 () async {

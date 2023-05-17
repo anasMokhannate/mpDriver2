@@ -130,24 +130,34 @@ Future<void> initOneSignal() async {
 }
 
 updateFcm(MpUser user) async {
-  bool fcmFound = false;
-  List fcmList = user.fcmList ?? [];
-  await SessionManager().get('user_fcm').then((value) {
-    for (String fcm in fcmList) {
-      if (fcm == value) {
-        fcmFound = true;
-      }
-    }
-    if (!fcmFound) {
-      fcmList.add(value);
-      FirebaseFirestore.instance
-          .collection('mp_users')
-          .doc(user.uid)
-          .update({"fcmList": fcmList});
-    }
+  // bool fcmFound = false;
+  // List fcmList = user.fcmList ?? [];
+
+  String? fcm;
+  await SessionManager().get('user_fcm').then((value) async {
+    fcm = value;
+    //cmList.add(value);
+    await FirebaseFirestore.instance
+        .collection('mp_users')
+        .doc(user.uid)
+        .update({"curr_fcm": fcm});
+
+    //   for (String fcm in fcmList) {
+    //     if (fcm == value) {
+    //       fcmFound = true;
+    //     }
+    //   }
+    //   if (!fcmFound) {
+    //     fcmList.add(value);
+    //     FirebaseFirestore.instance
+    //         .collection('mp_users')
+    //         .doc(user.uid)
+    //         .update({"fcmList": fcmList});
+    //   }
+    // });
+    // user.fcmList!.add(fcm);
+    await saveCurrentUser(user);
   });
-  // user.fcmList!.add(fcm);
-  await saveCurrentUser(user);
 }
 
 sendNotification(fcm, heading, content) async {

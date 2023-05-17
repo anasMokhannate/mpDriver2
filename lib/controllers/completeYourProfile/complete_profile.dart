@@ -88,7 +88,7 @@ class CompleteProfileController extends GetxController {
         userBase!.uid = FirebaseAuth.instance.currentUser!.uid;
         userBase!.fullName = fullname.text;
         userBase!.email = email.text;
-        userBase!.fcmList = <String>[]; //fcmList;
+        userBase!.fcm = ""; //fcmList;
         userBase!.dateNaissance = birthday;
         userBase!.identityCardNumber = cni.text;
         userBase!.sexe = sexe!.value;

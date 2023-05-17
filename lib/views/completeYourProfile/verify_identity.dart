@@ -132,7 +132,7 @@ class _VerifyIdentityState extends State<VerifyIdentity> {
                               DateFormat('yyyy-MM-dd').format(date).toString();
 
                           sendPlanifiedNotification(
-                              controller.userBase!.fcmList,
+                              [controller.userBase!.fcm],
                               'Expiration de votre carte d\'identité',
                               'Votre carte d\'identité expire le ${controller.cardExpire}',
                               DateTime.parse(controller.cardExpire));
@@ -208,7 +208,7 @@ class _VerifyIdentityState extends State<VerifyIdentity> {
                           controller.licenceExpire =
                               DateFormat('yyyy-MM-dd').format(date).toString();
                           sendPlanifiedNotification(
-                              controller.userBase!.fcmList,
+                              [controller.userBase!.fcm],
                               'Expiration de votre permis de conduite',
                               'Votre permis de conduite expire le ${controller.licenceExpire}',
                               DateTime.parse(controller.licenceExpire));
@@ -284,7 +284,7 @@ class _VerifyIdentityState extends State<VerifyIdentity> {
                           controller.assuranceExpire =
                               DateFormat('yyyy-MM-dd').format(date).toString();
                           sendPlanifiedNotification(
-                            controller.userBase!.fcmList,
+                            [controller.userBase!.fcm],
                             'Expiration de votre assurance',
                             'Votre assurance expire le ${controller.assuranceExpire}',
                             DateTime.parse(controller.assuranceExpire),
@@ -361,7 +361,7 @@ class _VerifyIdentityState extends State<VerifyIdentity> {
                           controller.griseExpire =
                               DateFormat('yyyy-MM-dd').format(date).toString();
                           sendPlanifiedNotification(
-                              controller.userBase!.fcmList,
+                              [controller.userBase!.fcm],
                               'Expiration de votre carte grise',
                               'Votre carte grise expire le ${controller.griseExpire}',
                               DateTime.parse(controller.griseExpire));
