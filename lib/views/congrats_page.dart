@@ -13,6 +13,7 @@ import 'package:motopickupdriver/utils/services.dart';
 import 'package:motopickupdriver/utils/typography.dart';
 import 'package:motopickupdriver/views/home_page.dart';
 
+
 import '../utils/queries.dart';
 
 class Congrats extends StatelessWidget {
