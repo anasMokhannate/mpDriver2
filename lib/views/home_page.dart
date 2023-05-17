@@ -346,15 +346,39 @@ class _HomePageState extends State<HomePage> {
                                             //     documentSnapshot[
                                             //         "order_id"]);
 
-                                            Get.to(OrderInformations(),
+                                            Get.offAll(OrderInformations(),
                                                 transition:
                                                     Transition.leftToRight);
                                             controller.update();
                                           },
                                         );
                                         // }
+                                      } else {
+                                        return Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Center(
+                                              child: Image.asset(
+                                                'assets/images/empty.png',
+                                                width: 310.w,
+                                              ),
+                                            ),
+                                            Center(
+                                              child: Text(
+                                                "Il n'y a pas encore de commandes",
+                                                style: TextStyle(
+                                                  fontSize: 18.sp,
+                                                  color: primary,
+                                                  height: 1.2,
+                                                  fontFamily: "LatoSemiBold",
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        );
                                       }
-                                      return null;
+                                      //return null;
                                       // return null;
                                       // else {
                                       //   print("haaa");

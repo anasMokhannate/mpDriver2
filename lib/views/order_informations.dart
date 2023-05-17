@@ -1,4 +1,4 @@
-// ignore_for_file: must_be_immutable
+// ignore_for_file: must_be_immutable, library_prefixes
 
 import 'package:boxicons/boxicons.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -19,7 +19,8 @@ import 'package:motopickupdriver/utils/colors.dart';
 import 'package:motopickupdriver/utils/typography.dart';
 import 'package:motopickupdriver/views/rate_client.dart';
 import 'package:url_launcher/url_launcher.dart';
-
+import '../utils/models/order.dart' as orderModel;
+import '../utils/queries.dart';
 import '../utils/services.dart';
 import 'home_page.dart';
 
@@ -163,7 +164,9 @@ class OrderInformations extends StatelessWidget {
                                         // StreamBuilder<QuerySnapshot<Map<String, dynamic>>>
                                         // order_informations.dart:145
                                         // When the exception was thrown, this was the stack
-
+                                        if (snapshot.data!.docs.isEmpty) {
+                                          Get.to(() => const HomePage());
+                                        }
                                         final DocumentSnapshot
                                             documentSnapshot =
                                             snapshot.data!.docs.first;
@@ -572,8 +575,8 @@ class OrderInformations extends StatelessWidget {
                                                                         .userBase!
                                                                         .uid)
                                                                     .update({
-                                                                  "is_on_order":
-                                                                      false
+                                                                  "current_order_driver":
+                                                                      null
                                                                 });
                                                                 controller
                                                                         .isOnOrder =
@@ -643,11 +646,11 @@ class OrderInformations extends StatelessWidget {
 
                                                                             documentSnapshot['order_type'].toString() != "0"
                                                                                 ? FirebaseFirestore.instance.collection('mp_users').doc(controller.userBase!.uid).update({
-                                                                                    "is_on_order": false,
+                                                                                    "current_order_driver": null,
                                                                                     "driver_planned_trip": FieldValue.increment(1)
                                                                                   })
                                                                                 : FirebaseFirestore.instance.collection('mp_users').doc(controller.userBase!.uid).update({
-                                                                                    "is_on_order": false,
+                                                                                    "current_order_driver": null,
                                                                                     "driver_planned_delivery": FieldValue.increment(1)
                                                                                   });
                                                                             controller.markers.clear();
@@ -744,13 +747,14 @@ class OrderInformations extends StatelessWidget {
                                                                               false;
                                                                           controller.isWithOrder =
                                                                               false;
-                                                                          documentSnapshot['order_type'].toString() != "0"
+                                                                          documentSnapshot['order_type'].toString() !=
+                                                                                  "0"
                                                                               ? FirebaseFirestore.instance.collection('mp_users').doc(controller.userBase!.uid).update({
-                                                                                  "is_on_order": false,
+                                                                                  "current_order_driver": null,
                                                                                   "driver_cancelled_trip": FieldValue.increment(1)
                                                                                 })
                                                                               : FirebaseFirestore.instance.collection('mp_users').doc(controller.userBase!.uid).update({
-                                                                                  "is_on_order": false,
+                                                                                  "current_order_driver": null,
                                                                                   "driver_cancelled_delivery": FieldValue.increment(1)
                                                                                 });
 
@@ -762,9 +766,9 @@ class OrderInformations extends StatelessWidget {
                                                                               fcm.map((item) => item.toString()).toList(),
                                                                               "voyage annulé",
                                                                               "Le chauffeur a annulé le voyage");
-                                                                          refuserOrder(
+                                                                          annulerOrder(
                                                                               controller.userBase!,
-                                                                              controller.orderID);
+                                                                              orderModel.Order.fromJson(documentSnapshot as Map<String, dynamic>));
                                                                           Get.to(
                                                                               () => const HomePage(),
                                                                               transition: Transition.rightToLeft);
@@ -939,7 +943,7 @@ class OrderInformations extends StatelessWidget {
                                                                               controller.isOnOrder = false;
                                                                               controller.isWithOrder = false;
                                                                               FirebaseFirestore.instance.collection('mp_users').doc(controller.userBase!.uid).update({
-                                                                                "is_on_order": false
+                                                                                "current_order_driver": null,
                                                                               });
                                                                               await controller.getWithOrder();
                                                                               controller.markers.clear();
