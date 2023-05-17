@@ -158,6 +158,12 @@ class OrderInformations extends StatelessWidget {
 
                                         print(
                                             "zzz status ${controller.orderStatus}");
+
+                                        // TODO: he relevant error-causing widget was
+                                        // StreamBuilder<QuerySnapshot<Map<String, dynamic>>>
+                                        // order_informations.dart:145
+                                        // When the exception was thrown, this was the stack
+
                                         final DocumentSnapshot
                                             documentSnapshot =
                                             snapshot.data!.docs.first;
@@ -756,15 +762,18 @@ class OrderInformations extends StatelessWidget {
                                                                               fcm.map((item) => item.toString()).toList(),
                                                                               "voyage annulé",
                                                                               "Le chauffeur a annulé le voyage");
-                                                                          // refuserOrder(
-                                                                          //     controller.userBase!,
-                                                                          //     controller.orderID);
-                                                                          controller
-                                                                              .markers
-                                                                              .clear();
-                                                                          controller
-                                                                              .polylines
-                                                                              .clear();
+                                                                          refuserOrder(
+                                                                              controller.userBase!,
+                                                                              controller.orderID);
+                                                                          Get.to(
+                                                                              () => const HomePage(),
+                                                                              transition: Transition.rightToLeft);
+                                                                          // controller
+                                                                          //     .markers
+                                                                          //     .clear();
+                                                                          // controller
+                                                                          //     .polylines
+                                                                          //     .clear();
 
                                                                           controller
                                                                               .getUserLocation();

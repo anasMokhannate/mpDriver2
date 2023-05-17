@@ -187,7 +187,7 @@ Future createEmergency(Emergency emergency) async {
 Future refuserOrder(MpUser driver, orderId) async {
   FirebaseFirestore.instance.collection('mp_orders').doc(orderId).update(({
         'is_canceled_by_driver': true,
-        'status': 0,
+        'status': 'canceled_by_driver',
         'drivers_declined': FieldValue.arrayUnion([driver.uid]),
         'drivers_concerned': FieldValue.arrayRemove([driver.uid])
       }));
