@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:diacritic/diacritic.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:geoflutterfire2/geoflutterfire2.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -25,6 +26,7 @@ class OrderInformationsController extends GetxController {
   double? latitude, longitude;
   CameraPosition? kGooglePlex;
 
+  StreamSubscription<Position>? positionStream;
   double? distance, startlatitude, startlongitude, endlatitude, endlongitude;
   final Set<Marker> markers = {};
   final Set<Polyline> polylines = {};
@@ -199,6 +201,32 @@ class OrderInformationsController extends GetxController {
     polylines.clear();
     polylines.addAll([polyline, polylineDriver]);
     // update();
+  }
+
+  void startLocationUpdates(givenid) {
+    positionStream = Geolocator.getPositionStream(
+      locationSettings:
+          const LocationSettings(accuracy: LocationAccuracy.medium),
+    ).listen((Position position) {
+      // Update the location in Firestore
+      if (userBase!.isOnline ?? false) {
+        updateLocationInFirestore(
+            position.latitude, position.longitude, givenid);
+      }
+    });
+  }
+
+  updateLocationInFirestore(latitude, longitude, givenID) async {
+    userBase!.location =
+        GeoFlutterFire().point(latitude: latitude!, longitude: longitude!).data;
+    // await completeUser(userBase!);
+    await FirebaseFirestore.instance
+        .collection("mp_orders")
+        .doc(givenID)
+        .update({
+      'driver': userBase!.toJson(),
+      // 'driver_latitude': latitude,
+    });
   }
 
   Future<void> drawPolyline(LatLng from, LatLng to) async {

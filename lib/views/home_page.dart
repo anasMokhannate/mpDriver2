@@ -56,8 +56,7 @@ class HomePage extends StatelessWidget {
                         await getCurrentUser().then((value) async {
                           controller.userBase = value;
                           await saveCurrentUser(controller.userBase!);
-                          print(
-                              "this is the total orders${controller.userBase!.totalOrders}");
+                      
                         });
                       },
                       child: Icon(
@@ -269,39 +268,45 @@ class HomePage extends StatelessWidget {
                                               .toStringAsFixed(2),
                                           stars: controller.stars,
                                           accepte: () async {
-                                            FirebaseFirestore.instance
+                                            await FirebaseFirestore.instance
                                                 .collection('mp_users')
                                                 .doc(controller.userBase!.uid)
                                                 .update({
-                                              "is_on_order": true,
                                               "current_order_driver":
                                                   documentSnapshot["order_id"]
+                                            }).then((value) async {
+                                              await FirebaseFirestore.instance
+                                                  .collection("mp_orders")
+                                                  .doc(documentSnapshot[
+                                                      "order_id"])
+                                                  .update({
+                                                "drivers_accepted":
+                                                    FieldValue.arrayUnion([
+                                                  controller.userBase!.toJson(),
+                                                  // controller.userBase!.uid,
+                                                ]),
+                                                'drivers_concerned':
+                                                    FieldValue.arrayRemove([
+                                                  controller.userBase!.uid
+                                                ]),
+                                                "status": "driver_accepted"
+                                              }).then((value) {
+                                                controller.order =
+                                                    order_class.Order.fromJson(
+                                                        documentSnapshot.data()
+                                                            as Map<String,
+                                                                dynamic>);
+                                                print("haaaa");
+                                                controller.isOnOrder = true;
+                                                controller.isWithOrder = true;
+                                                Get.offAll(
+                                                    () => OrderInformations(),
+                                                    transition:
+                                                        Transition.leftToRight);
+                                                controller.update();
+                                              });
                                             });
 
-                                            FirebaseFirestore.instance
-                                                .collection("mp_orders")
-                                                .doc(documentSnapshot[
-                                                    "order_id"])
-                                                .update({
-                                              "drivers_accepted":
-                                                  FieldValue.arrayUnion([
-                                                controller.userBase!.toJson(),
-                                                // controller.userBase!.uid,
-                                              ]),
-                                              'drivers_concerned':
-                                                  FieldValue.arrayRemove([
-                                                controller.userBase!.uid
-                                              ]),
-                                              "status": "driver_accepted"
-                                            });
-
-                                            controller.order = order_class.Order
-                                                .fromJson(documentSnapshot
-                                                        .data()
-                                                    as Map<String, dynamic>);
-
-                                            print(
-                                                "haaaa ${controller.order.orderId}");
                                             // controller.showCard=false;
                                             // controller.update();
                                             // String fcm =
@@ -311,8 +316,7 @@ class HomePage extends StatelessWidget {
                                             //   fcm
                                             // ], "Votre commande est en attente de confirmation",
                                             //     "");
-                                            controller.isOnOrder = true;
-                                            controller.isWithOrder = true;
+
                                             // String fcmDriver =
                                             //     await SessionManager()
                                             //         .get('user_fcm');
@@ -341,11 +345,6 @@ class HomePage extends StatelessWidget {
                                             //     controller.userBase!,
                                             //     documentSnapshot[
                                             //         "order_id"]);
-
-                                            Get.offAll(OrderInformations(),
-                                                transition:
-                                                    Transition.leftToRight);
-                                            controller.update();
                                           },
                                         );
                                         // }
