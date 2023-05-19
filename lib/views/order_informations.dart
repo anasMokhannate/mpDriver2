@@ -598,7 +598,7 @@ class OrderInformations extends StatelessWidget {
                                                                     .update();
 
                                                                 Get.offAll(() =>
-                                                                     HomePage());
+                                                                    HomePage());
                                                               },
                                                               child: Container(
                                                                 height: 55.h,
@@ -741,88 +741,72 @@ class OrderInformations extends StatelessWidget {
                                                                           ),
                                                                         ),
                                                                       ),
-                                                                      SizedBox(
-                                                                        height:
-                                                                            20.h,
-                                                                      ),
-                                                                      InkWell(
-                                                                        onTap:
-                                                                            () async {
-                                                                          controller.isOnOrder =
-                                                                              false;
-                                                                          controller.isWithOrder =
-                                                                              false;
-                                                                          documentSnapshot['order_type'].toString() != "0"
-                                                                              ? FirebaseFirestore.instance.collection('mp_users').doc(controller.userBase!.uid).update({
-                                                                                  // "current_order_driver": null,
-                                                                                  "driver_cancelled_trip": FieldValue.increment(1)
-                                                                                })
-                                                                              : FirebaseFirestore.instance.collection('mp_users').doc(controller.userBase!.uid).update({
-                                                                                  // "current_order_driver": null,
-                                                                                  "driver_cancelled_delivery": FieldValue.increment(1)
-                                                                                });
-
-                                                                          String
-                                                                              fcm =
-                                                                              documentSnapshot["customer"]["curr_fcm"];
-
-                                                                          sendNotification([
-                                                                            fcm
-                                                                          ], "voyage annulé",
-                                                                              "Le chauffeur a annulé le voyage");
-                                                                          await annulerOrder(
-                                                                            controller.userBase!,
-                                                                            orderModel.Order.fromJson(documentSnapshot.data()!
-                                                                                as Map<String, dynamic>),
-                                                                          );
-                                                                          Get.to(
-                                                                              () =>  HomePage(),
-                                                                              transition: Transition.rightToLeft);
-                                                                          // controller
-                                                                          //     .markers
-                                                                          //     .clear();
-                                                                          // controller
-                                                                          //     .polylines
-                                                                          //     .clear();
-
-                                                                          controller
-                                                                              .getUserLocation();
-                                                                          await controller
-                                                                              .getWithOrder();
-                                                                          // controller.stopTimer();
-
-                                                                          Get.offAll(() =>
-                                                                               HomePage());
-                                                                          controller
-                                                                              .update();
-                                                                        },
-                                                                        child:
-                                                                            Container(
-                                                                          height:
-                                                                              55.h,
-                                                                          width:
-                                                                              320.w,
-                                                                          alignment:
-                                                                              Alignment.center,
-                                                                          decoration:
-                                                                              BoxDecoration(
-                                                                            color:
-                                                                                Colors.red,
-                                                                            borderRadius:
-                                                                                BorderRadius.circular(360),
-                                                                          ),
-                                                                          child:
-                                                                              Text(
-                                                                            'Annuler',
-                                                                            style:
-                                                                                TextStyle(
-                                                                              fontSize: 15.sp,
-                                                                              color: Colors.white,
-                                                                              fontFamily: "LatoSemiBold",
+                                                                      if (controller
+                                                                              .orderStatus ==
+                                                                          'customer_accepted')
+                                                                        Column(
+                                                                          children: [
+                                                                            SizedBox(
+                                                                              height: 20.h,
                                                                             ),
-                                                                          ),
+                                                                            InkWell(
+                                                                              onTap: () async {
+                                                                                controller.isOnOrder = false;
+                                                                                controller.isWithOrder = false;
+                                                                                documentSnapshot['order_type'].toString() != "0"
+                                                                                    ? FirebaseFirestore.instance.collection('mp_users').doc(controller.userBase!.uid).update({
+                                                                                        // "current_order_driver": null,
+                                                                                        "driver_cancelled_trip": FieldValue.increment(1)
+                                                                                      })
+                                                                                    : FirebaseFirestore.instance.collection('mp_users').doc(controller.userBase!.uid).update({
+                                                                                        // "current_order_driver": null,
+                                                                                        "driver_cancelled_delivery": FieldValue.increment(1)
+                                                                                      });
+
+                                                                                String fcm = documentSnapshot["customer"]["curr_fcm"];
+
+                                                                                sendNotification([
+                                                                                  fcm
+                                                                                ], "voyage annulé", "Le chauffeur a annulé le voyage");
+                                                                                await annulerOrder(
+                                                                                  controller.userBase!,
+                                                                                  orderModel.Order.fromJson(documentSnapshot.data()! as Map<String, dynamic>),
+                                                                                );
+                                                                                Get.to(() => HomePage(), transition: Transition.rightToLeft);
+                                                                                // controller
+                                                                                //     .markers
+                                                                                //     .clear();
+                                                                                // controller
+                                                                                //     .polylines
+                                                                                //     .clear();
+
+                                                                                controller.getUserLocation();
+                                                                                await controller.getWithOrder();
+                                                                                // controller.stopTimer();
+
+                                                                                Get.offAll(() => HomePage());
+                                                                                controller.update();
+                                                                              },
+                                                                              child: Container(
+                                                                                height: 55.h,
+                                                                                width: 320.w,
+                                                                                alignment: Alignment.center,
+                                                                                decoration: BoxDecoration(
+                                                                                  color: Colors.red,
+                                                                                  borderRadius: BorderRadius.circular(360),
+                                                                                ),
+                                                                                child: Text(
+                                                                                  'Annuler',
+                                                                                  style: TextStyle(
+                                                                                    fontSize: 15.sp,
+                                                                                    color: Colors.white,
+                                                                                    fontFamily: "LatoSemiBold",
+                                                                                  ),
+                                                                                ),
+                                                                              ),
+                                                                            )
+                                                                          ],
                                                                         ),
-                                                                      )
                                                                     ])
                                                               : controller.orderStatus ==
                                                                       'driver_coming'
@@ -1018,8 +1002,7 @@ class OrderInformations extends StatelessWidget {
                                               // controller.stopTimer();
                                               controller.update();
 
-                                              Get.offAll(
-                                                  () => const HomePage());
+                                              Get.offAll(() => HomePage());
                                             },
                                             child: Container(
                                               height: 55.h,

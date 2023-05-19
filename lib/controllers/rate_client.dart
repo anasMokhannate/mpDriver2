@@ -125,7 +125,7 @@ class RateClientController extends GetxController {
     //   });
     loading.toggle();
     update();
-    Get.offAll(() => const HomePage(), transition: Transition.leftToRight);
+    Get.offAll(() => HomePage(), transition: Transition.leftToRight);
   }
 
   reportClient() async {

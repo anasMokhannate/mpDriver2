@@ -46,7 +46,7 @@ class OrderInformationsController extends GetxController {
         .get();
     if (docSnapshot.exists) {
       Map<String, dynamic>? data = docSnapshot.data();
-      isWithOrder = data!['is_on_order'];
+     // isWithOrder = data!['is_on_order'];
       update();
     }
   }
@@ -248,7 +248,7 @@ class OrderInformationsController extends GetxController {
       isOnline = userBase!.isOnline ?? false;
       await saveCurrentUser(userBase!);
       await getUserLocation();
-      await getWithOrder();
+     // await getWithOrder();
       await getOrderStatus();
       startIcon = await BitmapDescriptor.fromAssetImage(
           const ImageConfiguration(devicePixelRatio: 2),

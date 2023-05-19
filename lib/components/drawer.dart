@@ -75,7 +75,7 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                     icon: Boxicons.bx_home_alt,
                     onClicked: () {
                       Navigator.pop(context);
-                      Get.to(const HomePage());
+                      Get.to( HomePage());
                     },
                   ),
                   buildMenuItem(

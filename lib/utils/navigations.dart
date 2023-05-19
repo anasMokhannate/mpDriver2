@@ -46,7 +46,7 @@ Future<Widget?> initWidget() async {
               if (userFromDb.currentOrderDriver != null) {
                 mainPage = OrderInformations();
               } else {
-                mainPage = const HomePage();
+                mainPage = HomePage();
               }
               break;
             case 'completeProfile':
