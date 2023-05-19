@@ -208,16 +208,29 @@ Future annulerOrder(MpUser driver, orderModel.Order order) async {
   print("fdfasf ${order.driversAccepted} ");
   print("kjh  ${driver.uid}");
   print(order.customer!['uid']);
-  await FirebaseFirestore.instance
-      .collection('mp_orders')
-      .doc(order.orderId)
-      .update(({
-        'is_canceled_by_driver': true,
-        'status': 'canceled_by_driver',
-        'drivers_declined': FieldValue.arrayUnion([driver.uid]),
-        // 'drivers_accepted': FieldValue.arrayRemove([0]),
-        'drivers_concerned': FieldValue.arrayRemove([driver.uid])
-      }));
+
+  if (order.status == 'customer_accepted') {
+    await FirebaseFirestore.instance
+        .collection('mp_orders')
+        .doc(order.orderId)
+        .update(({
+          'is_canceled_by_driver': true,
+          'status': 'canceled_by_driver',
+          'drivers_declined': FieldValue.arrayUnion([driver.uid]),
+          // 'drivers_accepted': FieldValue.arrayRemove([0]),
+          'drivers_concerned': FieldValue.arrayRemove([driver.uid])
+        }));
+  } else if (order.status == 'driver_accepted') {
+    await FirebaseFirestore.instance
+        .collection('mp_orders')
+        .doc(order.orderId)
+        .update(({
+          'status': 'canceled_by_driver',
+          'drivers_declined': FieldValue.arrayUnion([driver.uid]),
+          // 'drivers_accepted': FieldValue.arrayRemove([0]),
+          'drivers_concerned': FieldValue.arrayRemove([driver.uid])
+        }));
+  }
 
   await clearCurrentOrders(order.customer!['uid']);
 

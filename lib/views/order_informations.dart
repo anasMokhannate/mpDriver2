@@ -742,65 +742,84 @@ class OrderInformations extends StatelessWidget {
                                                                         height:
                                                                             20.h,
                                                                       ),
-                                                                      controller.orderStatus ==
-                                                                              'customer_accepted'
-                                                                          ? InkWell(
-                                                                              onTap: () async {
-                                                                                controller.isOnOrder = false;
-                                                                                controller.isWithOrder = false;
-                                                                                documentSnapshot['order_type'].toString() != "0"
-                                                                                    ? FirebaseFirestore.instance.collection('mp_users').doc(controller.userBase!.uid).update({
-                                                                                        // "current_order_driver": null,
-                                                                                        "driver_cancelled_trip": FieldValue.increment(1)
-                                                                                      })
-                                                                                    : FirebaseFirestore.instance.collection('mp_users').doc(controller.userBase!.uid).update({
-                                                                                        // "current_order_driver": null,
-                                                                                        "driver_cancelled_delivery": FieldValue.increment(1)
-                                                                                      });
+                                                                      InkWell(
+                                                                        onTap:
+                                                                            () async {
+                                                                          controller.isOnOrder =
+                                                                              false;
+                                                                          controller.isWithOrder =
+                                                                              false;
+                                                                          documentSnapshot['order_type'].toString() != "0"
+                                                                              ? FirebaseFirestore.instance.collection('mp_users').doc(controller.userBase!.uid).update({
+                                                                                  // "current_order_driver": null,
+                                                                                  "driver_cancelled_trip": FieldValue.increment(1)
+                                                                                })
+                                                                              : FirebaseFirestore.instance.collection('mp_users').doc(controller.userBase!.uid).update({
+                                                                                  // "current_order_driver": null,
+                                                                                  "driver_cancelled_delivery": FieldValue.increment(1)
+                                                                                });
 
-                                                                                String fcm = documentSnapshot["customer"]["curr_fcm"];
+                                                                          String
+                                                                              fcm =
+                                                                              documentSnapshot["customer"]["curr_fcm"];
 
-                                                                                sendNotification([
-                                                                                  fcm
-                                                                                ], "voyage annulé", "Le chauffeur a annulé le voyage");
-                                                                                await annulerOrder(
-                                                                                  controller.userBase!,
-                                                                                  orderModel.Order.fromJson(documentSnapshot.data()! as Map<String, dynamic>),
-                                                                                );
-                                                                                Get.to(() => const HomePage(), transition: Transition.rightToLeft);
-                                                                                // controller
-                                                                                //     .markers
-                                                                                //     .clear();
-                                                                                // controller
-                                                                                //     .polylines
-                                                                                //     .clear();
+                                                                          sendNotification([
+                                                                            fcm
+                                                                          ], "voyage annulé",
+                                                                              "Le chauffeur a annulé le voyage");
+                                                                          await annulerOrder(
+                                                                            controller.userBase!,
+                                                                            orderModel.Order.fromJson(documentSnapshot.data()!
+                                                                                as Map<String, dynamic>),
+                                                                          );
+                                                                          Get.to(
+                                                                              () => const HomePage(),
+                                                                              transition: Transition.rightToLeft);
+                                                                          // controller
+                                                                          //     .markers
+                                                                          //     .clear();
+                                                                          // controller
+                                                                          //     .polylines
+                                                                          //     .clear();
 
-                                                                                controller.getUserLocation();
-                                                                                await controller.getWithOrder();
-                                                                                // controller.stopTimer();
+                                                                          controller
+                                                                              .getUserLocation();
+                                                                          await controller
+                                                                              .getWithOrder();
+                                                                          // controller.stopTimer();
 
-                                                                                Get.offAll(() => const HomePage());
-                                                                                controller.update();
-                                                                              },
-                                                                              child: Container(
-                                                                                height: 55.h,
-                                                                                width: 320.w,
-                                                                                alignment: Alignment.center,
-                                                                                decoration: BoxDecoration(
-                                                                                  color: Colors.red,
-                                                                                  borderRadius: BorderRadius.circular(360),
-                                                                                ),
-                                                                                child: Text(
-                                                                                  'Annuler',
-                                                                                  style: TextStyle(
-                                                                                    fontSize: 15.sp,
-                                                                                    color: Colors.white,
-                                                                                    fontFamily: "LatoSemiBold",
-                                                                                  ),
-                                                                                ),
-                                                                              ),
-                                                                            )
-                                                                          : Container(),
+                                                                          Get.offAll(() =>
+                                                                              const HomePage());
+                                                                          controller
+                                                                              .update();
+                                                                        },
+                                                                        child:
+                                                                            Container(
+                                                                          height:
+                                                                              55.h,
+                                                                          width:
+                                                                              320.w,
+                                                                          alignment:
+                                                                              Alignment.center,
+                                                                          decoration:
+                                                                              BoxDecoration(
+                                                                            color:
+                                                                                Colors.red,
+                                                                            borderRadius:
+                                                                                BorderRadius.circular(360),
+                                                                          ),
+                                                                          child:
+                                                                              Text(
+                                                                            'Annuler',
+                                                                            style:
+                                                                                TextStyle(
+                                                                              fontSize: 15.sp,
+                                                                              color: Colors.white,
+                                                                              fontFamily: "LatoSemiBold",
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      )
                                                                     ])
                                                               : controller.orderStatus ==
                                                                       'driver_coming'
@@ -977,39 +996,44 @@ class OrderInformations extends StatelessWidget {
                                           ),
                                         );
                                       } else {
-                                        return InkWell(
-                                          onTap: () {
-                                            controller.startCourse = false;
-                                            controller.isWithOrder = false;
-                                            FirebaseFirestore.instance
-                                                .collection('mp_users')
-                                                .doc(controller.userBase!.uid)
-                                                .update({
-                                              "current_order_driver": null
-                                            });
-                                            controller.isOnOrder = false;
-                                            controller.markers.clear();
-                                            controller.polylines.clear();
-                                            // controller.stopTimer();
-                                            controller.update();
+                                        return Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 20.w),
+                                          child: InkWell(
+                                            onTap: () {
+                                              controller.startCourse = false;
+                                              controller.isWithOrder = false;
+                                              FirebaseFirestore.instance
+                                                  .collection('mp_users')
+                                                  .doc(controller.userBase!.uid)
+                                                  .update({
+                                                "current_order_driver": null
+                                              });
+                                              controller.isOnOrder = false;
+                                              controller.markers.clear();
+                                              controller.polylines.clear();
+                                              // controller.stopTimer();
+                                              controller.update();
 
-                                            Get.offAll(() => const HomePage());
-                                          },
-                                          child: Container(
-                                            height: 55.h,
-                                            width: 260.w,
-                                            alignment: Alignment.center,
-                                            decoration: BoxDecoration(
-                                              color: Colors.red,
-                                              borderRadius:
-                                                  BorderRadius.circular(360),
-                                            ),
-                                            child: Text(
-                                              'Client a annulé la commande',
-                                              style: TextStyle(
-                                                fontSize: 15.sp,
-                                                color: Colors.white,
-                                                fontFamily: "LatoSemiBold",
+                                              Get.offAll(
+                                                  () => const HomePage());
+                                            },
+                                            child: Container(
+                                              height: 55.h,
+                                              width: 260.w,
+                                              alignment: Alignment.center,
+                                              decoration: BoxDecoration(
+                                                color: Colors.red,
+                                                borderRadius:
+                                                    BorderRadius.circular(360),
+                                              ),
+                                              child: Text(
+                                                'Client a annulé la commande',
+                                                style: TextStyle(
+                                                  fontSize: 15.sp,
+                                                  color: Colors.white,
+                                                  fontFamily: "LatoSemiBold",
+                                                ),
                                               ),
                                             ),
                                           ),
