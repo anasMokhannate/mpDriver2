@@ -14,7 +14,7 @@ class UsingConditionScreenHome extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leading: InkWell(
-          onTap: () => Get.offAll(() => const HomePage(),
+          onTap: () => Get.offAll(() =>  HomePage(),
               transition: Transition.rightToLeft),
           child: Icon(
             Boxicons.bx_arrow_back,

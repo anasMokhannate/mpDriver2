@@ -20,15 +20,11 @@ import 'package:motopickupdriver/views/order_informations.dart';
 
 import '../utils/services.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+class HomePage extends StatelessWidget {
+   HomePage({Key? key}) : super(key: key);
 
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> _key = GlobalKey();
+
   var controller = Get.put(HomePageController());
 
   @override

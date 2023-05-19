@@ -26,7 +26,7 @@ class SettingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () => goBackOff(const HomePage()),
+      onWillPop: () => goBackOff( HomePage()),
       child: GetBuilder<SettingController>(
         init: SettingController(),
         builder: (value) => LoadingOverlay(
@@ -59,7 +59,7 @@ class SettingScreen extends StatelessWidget {
                     )
                   : AppBar(
                       leading: InkWell(
-                        onTap: () => goBackOff(const HomePage()),
+                        onTap: () => goBackOff( HomePage()),
                         child: Icon(
                           Boxicons.bx_arrow_back,
                           color: primary,

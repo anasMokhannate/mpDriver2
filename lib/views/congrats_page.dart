@@ -13,7 +13,6 @@ import 'package:motopickupdriver/utils/services.dart';
 import 'package:motopickupdriver/utils/typography.dart';
 import 'package:motopickupdriver/views/home_page.dart';
 
-
 import '../utils/queries.dart';
 
 class Congrats extends StatelessWidget {
@@ -146,7 +145,7 @@ class Congrats extends StatelessWidget {
                                     .then((value) async {
                                   await completeUser(controller.userBase!)
                                       .then((value) async {
-                                    Get.offAll(() => const HomePage(),
+                                    Get.offAll(() => HomePage(),
                                         transition: Transition.rightToLeft);
                                   });
                                 });

@@ -23,7 +23,7 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () => goBackOff(const HomePage()),
+      onWillPop: () => goBackOff( HomePage()),
       child: SafeArea(
         child: GetBuilder<ProfilePageController>(
           init: ProfilePageController(),
@@ -48,7 +48,7 @@ class ProfilePage extends StatelessWidget {
                   )
                 : AppBar(
                     leading: InkWell(
-                      onTap: () => goBackOff(const HomePage()),
+                      onTap: () => goBackOff( HomePage()),
                       child: Icon(
                         Boxicons.bx_arrow_back,
                         color: primary,

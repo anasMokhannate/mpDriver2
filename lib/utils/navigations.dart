@@ -28,9 +28,9 @@ Future<Widget?> initWidget() async {
   Widget? mainPage;
   bool isFirstTime = await SessionManager().get('first_time') ?? true;
   bool hasAccepted = await SessionManager().get('hasAccepted') ?? true;
- await SessionManager().get('user_fcm').then((value) {
-   print('objects $value');
-    });
+  await SessionManager().get('user_fcm').then((value) {
+    print('objects $value');
+  });
   if (isFirstTime) {
     mainPage = const OnBoardingPage();
   } else {
@@ -40,7 +40,7 @@ Future<Widget?> initWidget() async {
       } else {
         MpUser user = value;
         await getUser(user.uid).then((userFromDb) async {
-          print('object ${user.uid} ${userFromDb.currentPageDriver}');
+          print('object zzz ${user.uid} ${userFromDb.currentPageDriver}');
           switch (userFromDb.currentPageDriver) {
             case 'homePage':
               if (userFromDb.currentOrderDriver != null) {
