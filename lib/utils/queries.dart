@@ -42,7 +42,7 @@ Future<bool> checkEmail(email) async {
       .collection('mp_users')
       .where('email', isEqualTo: email)
       //.where('auth_type', whereIn: ["Phone", "Facebook", "Google"])
-      // .where('is_deleted_account', isEqualTo: false)
+      .where('is_deleted_account', isEqualTo: false)
       .snapshots()
       .first
       .then((value) {
