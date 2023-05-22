@@ -46,20 +46,21 @@ class OrderInformationsController extends GetxController {
         .get();
     if (docSnapshot.exists) {
       Map<String, dynamic>? data = docSnapshot.data();
-     // isWithOrder = data!['is_on_order'];
+      // isWithOrder = data!['is_on_order'];
       update();
     }
   }
 
-  getOrderStatus() async {
+  getOrderStatus(String orderId) async {
     print("zzz currentOrderId ${userBase!.currentOrderDriver}");
     var docSnapshot = await FirebaseFirestore.instance
         .collection('mp_orders')
-        .doc(userBase!.currentOrderDriver)
+        .doc(orderId)
         .get();
     if (docSnapshot.exists) {
       Map<String, dynamic>? data = docSnapshot.data();
-      orderStatus = data!['status'];
+      //orderStatus = data!['status'];
+      return data!['status'];
       // update();
     }
   }
@@ -213,7 +214,12 @@ class OrderInformationsController extends GetxController {
         updateLocationInFirestore(
             position.latitude, position.longitude, givenid);
       }
-    });
+
+    }
+    
+    )
+    ;
+   
   }
 
   updateLocationInFirestore(latitude, longitude, givenID) async {
@@ -248,8 +254,8 @@ class OrderInformationsController extends GetxController {
       isOnline = userBase!.isOnline ?? false;
       await saveCurrentUser(userBase!);
       await getUserLocation();
-     // await getWithOrder();
-      await getOrderStatus();
+      // await getWithOrder();
+      orderStatus = await getOrderStatus(userBase!.currentOrderDriver!);
       startIcon = await BitmapDescriptor.fromAssetImage(
           const ImageConfiguration(devicePixelRatio: 2),
           'assets/images/marker_start.png');

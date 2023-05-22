@@ -21,7 +21,7 @@ import 'package:motopickupdriver/views/order_informations.dart';
 import '../utils/services.dart';
 
 class HomePage extends StatelessWidget {
-   HomePage({Key? key}) : super(key: key);
+  HomePage({Key? key}) : super(key: key);
 
   final GlobalKey<ScaffoldState> _key = GlobalKey();
 
@@ -56,7 +56,6 @@ class HomePage extends StatelessWidget {
                         await getCurrentUser().then((value) async {
                           controller.userBase = value;
                           await saveCurrentUser(controller.userBase!);
-                      
                         });
                       },
                       child: Icon(
@@ -248,9 +247,12 @@ class HomePage extends StatelessWidget {
                                                     ['note'] /
                                                 documentSnapshot['customer']
                                                     ['total_orders'];
+                                        controller.isPlanned =
+                                            documentSnapshot['is_planned'];
                                         // controller.showCard=true;
                                         // controller.update();
                                         return OrdersCard(
+                                          isPlanned: controller.isPlanned,
                                           status: 1,
                                           photo: documentSnapshot["customer"]
                                               ["profile_picture"],
