@@ -50,29 +50,33 @@ class WelcomeController extends GetxController {
 
           if (provider == "") {
             MpUser mpUser = MpUser(
-                uid: user!.uid,
-                email: user.email,
-                profilePicture: user.photoURL,
-                authType: 'Google',
-                isActivatedAccount: false,
-                currentPageClient: 'completeProfile',
-                currentPageDriver: 'completeProfile',
-                isDriver: false,
-                lastLoginDate: DateFormat("dd-MM-yyyy HH:mm", "Fr_fr")
-                    .format(DateTime.now()),
-                registrationDate: DateFormat("dd-MM-yyyy HH:mm", "Fr_fr")
-                    .format(DateTime.now()),
-                isDeletedAccount: false,
-                isVerifiedAccount: false,
-                cancelledDelivery: 0,
-                cancelledTrip: 0,
-                isBlacklistedAccount: false,
-                isPasswordChange: false,
-                orderTotalAmount: 0.0,
-                reportedTimes: 0,
-                succededDelivery: 0,
-                succededTrip: 0,
-                totalOrders: 0);
+              uid: user!.uid,
+              email: user.email,
+              profilePicture: user.photoURL,
+              authType: 'Google',
+              isActivatedAccount: false,
+              currentPageClient: 'completeProfile',
+              currentPageDriver: 'completeProfile',
+              isDriver: false,
+              lastLoginDate: DateFormat("dd-MM-yyyy HH:mm", "Fr_fr")
+                  .format(DateTime.now()),
+              registrationDate: DateFormat("dd-MM-yyyy HH:mm", "Fr_fr")
+                  .format(DateTime.now()),
+              isDeletedAccount: false,
+              isVerifiedAccount: false,
+              cancelledDelivery: 0,
+              cancelledTrip: 0,
+              isBlacklistedAccount: false,
+              isPasswordChange: false,
+              orderTotalAmount: 0.0,
+              reportedTimes: 0,
+              succededDelivery: 0,
+              succededTrip: 0,
+              driverTotalOrders: 0,
+              customerTotalOrders: 0,
+              customerNote: 0,
+              driverNote: 0,
+            );
 
             await saveCurrentUser(mpUser);
             await createUser(mpUser).then(

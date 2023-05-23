@@ -222,7 +222,7 @@ class HomePageController extends GetxController {
       await initOneSignal();
       userBase = value;
       status = userBase!.isOnline ?? false;
-      userBase!.totalOrders = 0;
+      //userBase!.driverTotalOrders = 0;
       userBase!.isActivatedAccount = true;
       await getUserLocation();
       center = GeoFirePoint(latitude!, longitude!);

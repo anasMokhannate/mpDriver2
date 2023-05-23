@@ -14,7 +14,7 @@ import 'package:motopickupdriver/views/completeYourProfile/complete_profile.dart
 import 'package:motopickupdriver/views/onboarding/onboarding_page.dart';
 import 'package:motopickupdriver/views/onboarding/using_condition_screen.dart';
 import 'package:motopickupdriver/views/order_informations.dart';
-
+import 'package:motopickupdriver/views/rate_client.dart';
 import '../views/auth/register_page.dart';
 import '../views/completeYourProfile/adding_moto.dart';
 import '../views/completeYourProfile/upload_image.dart';
@@ -27,7 +27,7 @@ import 'models/user.dart';
 Future<Widget?> initWidget() async {
   Widget? mainPage;
   bool isFirstTime = await SessionManager().get('first_time') ?? true;
-  bool hasAccepted = await SessionManager().get('hasAccepted') ?? true;
+  //bool hasAccepted = await SessionManager().get('hasAccepted') ?? true;
   await SessionManager().get('user_fcm').then((value) {
     print('objects $value');
   });
@@ -44,7 +44,16 @@ Future<Widget?> initWidget() async {
           switch (userFromDb.currentPageDriver) {
             case 'homePage':
               if (userFromDb.currentOrderDriver != null) {
-                mainPage = OrderInformations();
+                if (await getOrderStatus(userFromDb.currentOrderDriver!) ==
+                    'in_rating') {
+                  print(
+                      'if zzz ${user.uid} ${userFromDb.currentPageDriver} ${userFromDb.currentOrderDriver} ${getOrderStatus(userFromDb.currentOrderDriver!)}');
+                  mainPage = RateClient();
+                } else {
+                  print(
+                      'else zzz ${user.uid} ${userFromDb.currentPageDriver} ${userFromDb.currentOrderDriver} ${getOrderStatus(userFromDb.currentOrderDriver!)}');
+                  mainPage = OrderInformations();
+                }
               } else {
                 mainPage = HomePage();
               }

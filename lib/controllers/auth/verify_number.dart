@@ -96,7 +96,10 @@ class VerfiyNumberController extends GetxController {
             reportedTimes: 0,
             succededDelivery: 0,
             succededTrip: 0,
-            totalOrders : 0
+            driverTotalOrders: 0,
+            customerTotalOrders: 0,
+            customerNote: 0,
+            driverNote: 0,
           );
           await saveCurrentUser(userBase).then((value) async {
             await createUser(userBase).then((value) {
