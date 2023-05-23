@@ -34,10 +34,11 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
   final padding = const EdgeInsets.symmetric(horizontal: 20);
   @override
   Widget build(BuildContext context) {
-    double starss = widget.currentUser!.note! /
-        (widget.currentUser!.totalOrders == 0
+    double note = widget.currentUser!.driverNote!;
+    double starss = note /
+        (widget.currentUser!.driverTotalOrders == 0
             ? 1
-            : widget.currentUser!.totalOrders!);
+            : widget.currentUser!.driverTotalOrders!);
 
     return Drawer(
       backgroundColor: Colors.transparent,
@@ -75,7 +76,7 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                     icon: Boxicons.bx_home_alt,
                     onClicked: () {
                       Navigator.pop(context);
-                      Get.to( HomePage());
+                      Get.to(HomePage());
                     },
                   ),
                   buildMenuItem(

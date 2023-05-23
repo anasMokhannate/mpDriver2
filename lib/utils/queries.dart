@@ -204,6 +204,19 @@ clearCurrentOrders(String customerId) async {
   });
 }
 
+getOrderStatus(String orderId) async {
+  var docSnapshot = await FirebaseFirestore.instance
+      .collection('mp_orders')
+      .doc(orderId)
+      .get();
+  if (docSnapshot.exists) {
+    Map<String, dynamic>? data = docSnapshot.data();
+    //orderStatus = data!['status'];
+    return data!['status'];
+    // update();
+  }
+}
+
 Future annulerOrder(MpUser driver, orderModel.Order order) async {
   print("fdfasf ${order.driversAccepted} ");
   print("kjh  ${driver.uid}");

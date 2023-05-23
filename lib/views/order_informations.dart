@@ -58,8 +58,6 @@ class OrderInformations extends StatelessWidget {
                         await getCurrentUser().then((value) async {
                           controller.userBase = value;
                           await saveCurrentUser(controller.userBase!);
-                          print(
-                              "this is the total orders${controller.userBase!.totalOrders}");
                         });
                       },
                       child: Icon(
@@ -662,15 +660,15 @@ class OrderInformations extends StatelessWidget {
                                                                             controller.markers.clear();
                                                                             controller.polylines.clear();
                                                                             controller.update();
-                                                                            // Get.offAll(() =>
-                                                                            //     const HomePage());
+                                                                            Get.offAll(() =>
+                                                                                HomePage());
 
                                                                             String
                                                                                 customerFcm =
-                                                                                documentSnapshot["customer"]["fcm"];
+                                                                                documentSnapshot["customer"]["curr_fcm"];
                                                                             String
                                                                                 driverFcm =
-                                                                                documentSnapshot["driver"]["fcm"];
+                                                                                documentSnapshot["driver"]["curr_fcm"];
 
                                                                             sendPlanifiedNotification([
                                                                               customerFcm
@@ -929,14 +927,12 @@ class OrderInformations extends StatelessWidget {
                                                                               //     "au revoir");
                                                                               // updateSuccedOrder(controller.orderID);
                                                                               await FirebaseFirestore.instance.collection("mp_orders").doc(controller.userBase!.currentOrderDriver).update({
-                                                                                'status': 'order_finished'
+                                                                                'status': 'in_rating'
                                                                               });
                                                                               controller.startCourse = false;
                                                                               controller.isOnOrder = false;
                                                                               controller.isWithOrder = false;
-                                                                              FirebaseFirestore.instance.collection('mp_users').doc(controller.userBase!.uid).update({
-                                                                                "current_order_driver": null,
-                                                                              });
+
                                                                               await controller.getWithOrder();
                                                                               controller.markers.clear();
                                                                               controller.polylines.clear();
@@ -944,6 +940,10 @@ class OrderInformations extends StatelessWidget {
                                                                               await SessionManager().set("distance", Geolocator.distanceBetween(documentSnapshot["order_pickup_location"]['geopoint'].latitude, documentSnapshot["order_pickup_location"]['geopoint'].longitude, controller.latitude!, controller.longitude!));
                                                                               // controller
                                                                               //     .stopTimer();
+                                                                              if (controller.positionStream != null) {
+                                                                                controller.positionStream!.cancel();
+                                                                              }
+
                                                                               Get.delete<OrderInformations>();
                                                                               Get.offAll(() => RateClient());
                                                                             });

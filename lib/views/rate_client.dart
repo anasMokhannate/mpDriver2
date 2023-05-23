@@ -1,17 +1,16 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:boxicons/boxicons.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 import 'package:motopickupdriver/controllers/rate_client.dart';
 import 'package:motopickupdriver/utils/buttons.dart';
 import 'package:motopickupdriver/utils/colors.dart';
+import 'package:motopickupdriver/utils/services.dart';
 import 'package:motopickupdriver/utils/typography.dart';
-import 'package:motopickupdriver/views/home_page.dart';
 
 class RateClient extends StatelessWidget {
   // ignore: prefer_const_constructors_in_immutables
@@ -75,8 +74,13 @@ class RateClient extends StatelessWidget {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text(controller.fullname),
-                            17.horizontalSpace,
+                            Text(controller.fullname,
+                                style: darkButtonTextStyle),
+                            Text(
+                              ' :',
+                              style: darkButtonTextStyle,
+                            ),
+                            5.horizontalSpace,
                             Text(controller.client_stars.toString())
                           ],
                         ),
@@ -172,8 +176,16 @@ class RateClient extends StatelessWidget {
                                 width: 150.w,
                                 child: PrimaryButton(
                                   text: 'Valider',
-                                  function: () {
-                                    controller.sendFeedBack();
+                                  function: () async {
+                                    await getCurrentUser().then((value) async {
+                                      await FirebaseFirestore.instance
+                                          .collection('mp_users')
+                                          .doc(value!.uid)
+                                          .update({
+                                        "current_order_driver": null,
+                                      });
+                                      controller.sendFeedBack();
+                                    });
                                   },
                                 ),
                               ),

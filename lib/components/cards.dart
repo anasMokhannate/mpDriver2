@@ -553,6 +553,7 @@ class _CommandCardState extends State<CommandCard> {
 class OrdersCard extends StatefulWidget {
   String photo, username, orderType, from, to, idOrder, distance;
   double stars;
+  bool isPlanned;
   MpUser drive;
   int status;
   final VoidCallback accepte;
@@ -561,6 +562,7 @@ class OrdersCard extends StatefulWidget {
       required this.status,
       required this.username,
       required this.orderType,
+      required this.isPlanned,
       required this.from,
       required this.to,
       required this.idOrder,
@@ -679,16 +681,19 @@ class _OrdersCardState extends State<OrdersCard> {
                       Row(
                         children: [
                           Icon(
-                            widget.orderType == "1"
-                                ? Boxicons.bx_package
-                                : FontAwesomeIcons.motorcycle,
+                            // widget.orderType == "1"
+                            // ? Boxicons.bx_package
+                            FontAwesomeIcons.motorcycle,
                             size: 20.h,
                             color: primary,
                           ),
                           15.horizontalSpace,
                           widget.status != 3
                               ? Text(
-                                  widget.orderType != "1" ? "Course" : "Voyage",
+                                  // widget.orderType != "1" ? "Course" : "Voyage",
+                                  widget.isPlanned
+                                      ? "Voyage planifié"
+                                      : "Voyage",
                                   style: TextStyle(
                                     fontSize: 14.sp,
                                     color: primary,
@@ -769,8 +774,7 @@ class _OrdersCardState extends State<OrdersCard> {
                 children: [
                   InkWell(
                     onTap: () {
-                       refuserOrder(widget.drive, widget.idOrder);
-
+                      refuserOrder(widget.drive, widget.idOrder);
                     },
                     child: Container(
                       height: 40.h,

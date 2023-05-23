@@ -121,7 +121,7 @@ class MyCommand extends StatelessWidget {
                                   size: 30.h,
                                 ),
                                 Text(
-                                  controller.userBase!.totalOrders.toString(),
+                                  controller.userBase!.driverTotalOrders.toString(),
                                   style: TextStyle(
                                     fontSize: 25.sp,
                                     color: light,

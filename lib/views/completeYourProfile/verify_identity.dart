@@ -132,7 +132,7 @@ class _VerifyIdentityState extends State<VerifyIdentity> {
                               DateFormat('yyyy-MM-dd').format(date).toString();
 
                           sendPlanifiedNotification(
-                              [controller.userBase!.fcm],
+                              [controller.userBase!.fcm!],
                               'Expiration de votre carte d\'identité',
                               'Votre carte d\'identité expire le ${controller.cardExpire}',
                               DateTime.parse(controller.cardExpire));
