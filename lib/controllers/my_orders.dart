@@ -4,11 +4,11 @@ import 'package:get/get.dart';
 import 'package:motopickupdriver/utils/models/user.dart';
 import 'package:motopickupdriver/utils/services.dart';
 
-class MyCommandController extends GetxController {
+class MyOrdersController extends GetxController {
   MpUser? userBase;
   RxBool isTrue = false.obs;
   double money = 0;
-  double total_courses = 0;
+  double totalCourses = 0;
 
   bool isActiveOne = false, isActiveTwo = true;
   @override

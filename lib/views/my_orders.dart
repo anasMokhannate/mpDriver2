@@ -8,20 +8,21 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 import 'package:motopickupdriver/components/cards.dart';
-import 'package:motopickupdriver/controllers/my_command.dart';
 import 'package:motopickupdriver/utils/colors.dart';
 import 'package:motopickupdriver/utils/typography.dart';
 import 'package:motopickupdriver/views/order_information.dart';
 
-class MyCommand extends StatelessWidget {
-  MyCommand({Key? key}) : super(key: key);
-  var controller = Get.put(MyCommandController());
+import '../controllers/my_orders.dart';
+
+class MyOrders extends StatelessWidget {
+  MyOrders({Key? key}) : super(key: key);
+  var controller = Get.put(MyOrdersController());
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: GetBuilder<MyCommandController>(
-        init: MyCommandController(),
+      child: GetBuilder<MyOrdersController>(
+        init: MyOrdersController(),
         builder: (value) => Scaffold(
           appBar: AppBar(
             leading: InkWell(
@@ -83,7 +84,7 @@ class MyCommand extends StatelessWidget {
                                 ),
                                 Text(
                                   //TODO: controller.userBase!.total_paid ?
-                                  "${controller.userBase!.orderTotalAmount ?? 0} MAD",
+                                  "${controller.userBase!.driverTotalPaid ?? 0.0} MAD",
                                   style: TextStyle(
                                     fontSize: 25.sp,
                                     color: Colors.amberAccent,
@@ -121,7 +122,8 @@ class MyCommand extends StatelessWidget {
                                   size: 30.h,
                                 ),
                                 Text(
-                                  controller.userBase!.driverTotalOrders.toString(),
+                                  controller.userBase!.driverTotalOrders
+                                      .toString(),
                                   style: TextStyle(
                                     fontSize: 25.sp,
                                     color: light,
@@ -174,9 +176,10 @@ class MyCommand extends StatelessWidget {
                         ? StreamBuilder(
                             stream: FirebaseFirestore.instance
                                 .collection('mp_orders')
-                                .where('driver_uid',
+                                .where('driver.uid',
                                     isEqualTo: controller.userBase!.uid)
-                                .where("status", whereIn: [0, 1]).snapshots(),
+                                .where('is_finished', isEqualTo: true)
+                                .snapshots(),
                             builder: (context,
                                 AsyncSnapshot<QuerySnapshot> snapshot) {
                               if (snapshot.connectionState ==
@@ -255,6 +258,8 @@ class MyCommand extends StatelessWidget {
                                       shrinkWrap: true,
                                       itemBuilder: (context, index) {
                                         return CommandCard(
+                                          isPlanned: documentSnapshot[index]
+                                              ['is_planned'],
                                           date: documentSnapshot[index]
                                               ['order_pickup_time'],
                                           prix: snapshot
@@ -292,10 +297,10 @@ class MyCommand extends StatelessWidget {
                           )
                         : StreamBuilder(
                             stream: FirebaseFirestore.instance
-                                .collection('orders')
-                                .where('driver_uid',
+                                .collection('mp_orders')
+                                .where('driver.uid',
                                     isEqualTo: controller.userBase!.uid)
-                                .where('status', isEqualTo: 3)
+                                .where('is_planned', isEqualTo: true)
                                 .snapshots(),
                             builder: (context,
                                 AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -380,6 +385,8 @@ class MyCommand extends StatelessWidget {
                                       shrinkWrap: true,
                                       itemBuilder: (context, index) {
                                         return CommandCard(
+                                          isPlanned: documentSnapshot[index]
+                                              ['is_planned'],
                                           date: documentSnapshot[index]
                                               ['order_pickup_time'],
                                           prix: snapshot
