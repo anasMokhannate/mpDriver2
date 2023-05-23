@@ -195,16 +195,13 @@ sendPlanifiedNotificationBeforeThirtyMinutes(
 }
 
 sendPlanifiedNotification(fcm, heading, content, whenDate) async {
-  //DateTime dateTime = DateTime.now();
+  DateTime dateTime = DateTime.parse(whenDate);
+  final utc = dateTime.toUtc();
   await OneSignal.shared.postNotification(OSCreateNotification(
     playerIds: fcm,
     content: content,
     heading: heading,
-    sendAfter: DateTime(
-      whenDate.year,
-      whenDate.month,
-      whenDate.day,
-    ).subtract(const Duration(days: 1)),
+    sendAfter: utc.subtract(const Duration(days: 1)),
   ));
 }
 

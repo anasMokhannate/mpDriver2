@@ -361,7 +361,7 @@ class _VerifyIdentityState extends State<VerifyIdentity> {
                           controller.griseExpire =
                               DateFormat('yyyy-MM-dd').format(date).toString();
                           sendPlanifiedNotification(
-                              [controller.userBase!.fcm],
+                              [controller.userBase!.fcm!],
                               'Expiration de votre carte grise',
                               'Votre carte grise expire le ${controller.griseExpire}',
                               DateTime.parse(controller.griseExpire));
