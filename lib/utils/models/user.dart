@@ -148,7 +148,7 @@ class MpUser {
       customerTotalPaid: json?['customer_total_paid']?.toInt() ?? 0,
       driverTotalPaid: json?['driver_total_paid']?.toInt() ?? 0,
       driverTotalOrders: json?['driver_total_orders'],
-      driverNote: json?['driver_note'].toDouble() ?? 0.0,
+      driverNote: json?['driver_note'] ?? 0.0,
     );
   }
 

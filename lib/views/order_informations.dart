@@ -148,10 +148,7 @@ class OrderInformations extends StatelessWidget {
                                             snapshot) {
                                       if (!snapshot.hasData) {
                                         print('no dataaa');
-
-                                        return Container(
-                                            child: const Text(
-                                                'tetttttttttttttttttttttttttttttttt'));
+                                        return Container();
                                       } else if (snapshot.hasData &&
                                           snapshot.data!.docs.isNotEmpty) {
                                         // controller.orderStatus =

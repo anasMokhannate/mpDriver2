@@ -228,7 +228,8 @@ Future annulerOrder(MpUser driver, orderModel.Order order) async {
         .doc(order.orderId)
         .update(({
           'is_canceled_by_driver': true,
-          'status': 'canceled_by_driver',
+          'status': 'order_canceled',
+          'is_finished': true,
           'drivers_declined': FieldValue.arrayUnion([driver.uid]),
           // 'drivers_accepted': FieldValue.arrayRemove([0]),
           'drivers_concerned': FieldValue.arrayRemove([driver.uid])
@@ -238,7 +239,7 @@ Future annulerOrder(MpUser driver, orderModel.Order order) async {
         .collection('mp_orders')
         .doc(order.orderId)
         .update(({
-          'status': 'canceled_by_driver',
+          // 'status': 'canceled_by_driver',
           'drivers_declined': FieldValue.arrayUnion([driver.uid]),
           // 'drivers_accepted': FieldValue.arrayRemove([0]),
           'drivers_concerned': FieldValue.arrayRemove([driver.uid])
@@ -260,14 +261,14 @@ Future annulerOrder(MpUser driver, orderModel.Order order) async {
             .collection('mp_users')
             .doc(driver.uid)
             .update({
-            "current_order_driver": null,
+            // "current_order_driver": null,
             "driver_cancelled_trip": FieldValue.increment(1),
           })
         : FirebaseFirestore.instance
             .collection('mp_users')
             .doc(driver.uid)
             .update({
-            "current_order_driver": null,
+            // "current_order_driver": null,
             "driver_cancelled_delivery": FieldValue.increment(1),
           });
   }
@@ -275,8 +276,8 @@ Future annulerOrder(MpUser driver, orderModel.Order order) async {
 
 Future refuserOrder(MpUser driver, orderId) async {
   FirebaseFirestore.instance.collection('mp_orders').doc(orderId).update(({
-        'is_canceled_by_driver': true,
-        'status': 'canceled_by_driver',
+        // 'is_canceled_by_driver': true,
+        // 'status': 'canceled_by_driver',
         'drivers_declined': FieldValue.arrayUnion([driver.uid]),
         'drivers_concerned': FieldValue.arrayRemove([driver.uid])
       }));
@@ -293,14 +294,14 @@ Future refuserOrder(MpUser driver, orderId) async {
             .collection('mp_users')
             .doc(driver.uid)
             .update({
-            "current_order_driver": null,
+            // "current_order_driver": null,
             "driver_cancelled_trip": FieldValue.increment(1),
           })
         : FirebaseFirestore.instance
             .collection('mp_users')
             .doc(driver.uid)
             .update({
-            "current_order_driver": null,
+            // "current_order_driver": null,
             "driver_cancelled_delivery": FieldValue.increment(1),
           });
   }

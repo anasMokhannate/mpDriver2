@@ -135,7 +135,7 @@ class _VerifyIdentityState extends State<VerifyIdentity> {
                               [controller.userBase!.fcm!],
                               'Expiration de votre carte d\'identité',
                               'Votre carte d\'identité expire le ${controller.cardExpire}',
-                              DateTime.parse(controller.cardExpire));
+                              controller.cardExpire);
                           controller.update();
                         },
                         currentTime: DateTime.now(),
@@ -208,10 +208,10 @@ class _VerifyIdentityState extends State<VerifyIdentity> {
                           controller.licenceExpire =
                               DateFormat('yyyy-MM-dd').format(date).toString();
                           sendPlanifiedNotification(
-                              [controller.userBase!.fcm],
+                              [controller.userBase!.fcm!],
                               'Expiration de votre permis de conduite',
                               'Votre permis de conduite expire le ${controller.licenceExpire}',
-                              DateTime.parse(controller.licenceExpire));
+                              controller.licenceExpire);
                           controller.update();
                         },
                         currentTime: DateTime.now(),
@@ -287,7 +287,7 @@ class _VerifyIdentityState extends State<VerifyIdentity> {
                             [controller.userBase!.fcm!],
                             'Expiration de votre assurance',
                             'Votre assurance expire le ${controller.assuranceExpire}',
-                            DateTime.parse(controller.assuranceExpire),
+                            controller.assuranceExpire,
                           );
                           controller.update();
                         },
@@ -364,7 +364,7 @@ class _VerifyIdentityState extends State<VerifyIdentity> {
                               [controller.userBase!.fcm!],
                               'Expiration de votre carte grise',
                               'Votre carte grise expire le ${controller.griseExpire}',
-                              DateTime.parse(controller.griseExpire));
+                              controller.griseExpire);
                           controller.update();
                         },
                         currentTime: DateTime.now(),
