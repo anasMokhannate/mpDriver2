@@ -95,7 +95,8 @@ class VerifyIdentityController extends GetxController {
         cardFile == null ||
         cardAssurance == null ||
         cardGrise == null ||
-        cardLicence == null) {
+        cardLicence == null ||
+        cardAnthropometrique == null) {
       isValid = false;
       showAlertDialogOneButton(context, 'Données requises',
           'Vous devez entrer toutes les données requises.', 'Ok');
@@ -122,7 +123,7 @@ class VerifyIdentityController extends GetxController {
     // loading.toggle();
     // update();
   }
-  
+
   uploadImage(context) async {
     if (isDriver.value == true) {
       await FirebaseStorage.instance
@@ -160,66 +161,66 @@ class VerifyIdentityController extends GetxController {
         p2.ref.getDownloadURL().then((value) async {
           userBase!.carteGrisePicture = value;
           userBase!.carteGriseExpirationDate = griseExpire;
-          if (cardAnthropometrique != null) {
-            await FirebaseStorage.instance
-                .ref('test-images/user-images/${cardAnthropometrique!.name}')
-                .putFile(anthropometrique!)
-                .then((p1) {
-              p1.ref.getDownloadURL().then((value) async {
-                userBase!.anthropometrique = value;
-                userBase!.currentPageDriver = 'congratsPage';
-                userBase!.isDriver = true;
-                // if (isCoursier == true && isDriver == false) {
-                //   userBase!.isDriver = 1;
-                // }
-                // if (isCoursier == false && isDriver == true) {
-                //   userBase!.is_driver = 2;
-                // }
-                // if (isCoursier == true && isDriver == true) {
-                //   userBase!.is_driver = 3;
-                // }
-                // userBase!.isActivatedAccount = false;
-                DateFormat dateFormat = DateFormat("yyyy-MM-dd ");
-                String datenow = dateFormat.format(DateTime.now());
-                userBase!.lastDocumentUpdateDate = datenow;
-
-                userBase!.isOnline = false; 
-                await saveCurrentUser(userBase!).then((value) {
-                  completeUser(userBase!).then((value) {
-                    Get.offAll(() => Congrats(),
-                        transition: Transition.rightToLeft);
-                    loading.toggle();
-                    update();
-                  });
+          // if (cardAnthropometrique != null) {
+          await FirebaseStorage.instance
+              .ref('test-images/user-images/${cardAnthropometrique!.name}')
+              .putFile(anthropometrique!)
+              .then((p1) {
+            p1.ref.getDownloadURL().then((value) async {
+              userBase!.anthropometrique = value;
+              userBase!.currentPageDriver = 'congratsPage';
+              userBase!.isDriver = true;
+              // if (isCoursier == true && isDriver == false) {
+              //   userBase!.isDriver = 1;
+              // }
+              // if (isCoursier == false && isDriver == true) {
+              //   userBase!.is_driver = 2;
+              // }
+              // if (isCoursier == true && isDriver == true) {
+              //   userBase!.is_driver = 3;
+              // }
+              // userBase!.isActivatedAccount = false;
+              DateFormat dateFormat = DateFormat("yyyy-MM-dd ");
+              String datenow = dateFormat.format(DateTime.now());
+              userBase!.lastDocumentUpdateDate = datenow;
+              userBase!.isOnline = false;
+              await saveCurrentUser(userBase!).then((value) {
+                completeUser(userBase!).then((value) {
+                  Get.offAll(() => Congrats(),
+                      transition: Transition.rightToLeft);
+                  loading.toggle();
+                  update();
                 });
               });
             });
-          } else {
-            // userBase!.isVerifiedAccount = true;
-            // if (isCoursier == true && isDriver == false) {
-            //   userBase!.is_driver = 1;
-            // }
-            // if (isCoursier == false && isDriver == true) {
-            //   userBase!.is_driver = 2;
-            // }
-            // if (isCoursier == true && isDriver == true) {
-            //   userBase!.is_driver = 3;
-            // }
-            // userBase!.isActivatedAccount = false;
-            DateFormat dateFormat = DateFormat("yyyy-MM-dd ");
+          });
+          // } else {
+          //   // userBase!.isVerifiedAccount = true;
+          //   // if (isCoursier == true && isDriver == false) {
+          //   //   userBase!.is_driver = 1;
+          //   // }
+          //   // if (isCoursier == false && isDriver == true) {
+          //   //   userBase!.is_driver = 2;
+          //   // }
+          //   // if (isCoursier == true && isDriver == true) {
+          //   //   userBase!.is_driver = 3;
+          //   // }
+          //   // userBase!.isActivatedAccount = false;
+          //   DateFormat dateFormat = DateFormat("yyyy-MM-dd ");
 
-            String datenow = dateFormat.format(DateTime.now());
-            userBase!.lastDocumentUpdateDate = datenow;
-            userBase!.isOnline = false; 
-            await saveCurrentUser(userBase!).then((value) {
-              completeUser(userBase!).then((value) {
-                Get.offAll(() => Congrats(),
-                    transition: Transition.rightToLeft);
-                loading.toggle();
-                update();
-              });
-            });
-          }
+          //   String datenow = dateFormat.format(DateTime.now());
+          //   userBase!.lastDocumentUpdateDate = datenow;
+          //   userBase!.isOnline = false;
+          //   userBase!.isDriver = true;
+          //   await saveCurrentUser(userBase!).then((value) {
+          //     completeUser(userBase!).then((value) {
+          //       Get.offAll(() => Congrats(),
+          //           transition: Transition.rightToLeft);
+          //       loading.toggle();
+          //       update();
+          //     });
+          //   });
+          // }
         });
       });
     } else {
