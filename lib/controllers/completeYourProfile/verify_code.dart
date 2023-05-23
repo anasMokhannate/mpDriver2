@@ -70,7 +70,12 @@ class VerifyCodeController extends GetxController {
             saveCurrentUser(currUser!);
             Get.to(() => AddingMoto());
           });
-        }).catchError((e) {});
+        }).catchError((e) {
+          showAlertDialogOneButton(context, "Code incorrect",
+              "Veuillez entrer le bon code.", "Ok");
+          loading.toggle();
+          update();
+        });
       } catch (e) {
         message =
             "Le code SMS a expiré. Veuillez renvoyer le code de vérification pour réessayer.";

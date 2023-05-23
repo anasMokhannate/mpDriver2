@@ -90,32 +90,39 @@ class RegisterController extends GetxController {
               } else {
                 String phoneNumber = indicatif + phone.text;
                 SessionManager().set('email', email.text);
-                await FirebaseAuth.instance.verifyPhoneNumber(
-                  phoneNumber: indicatif + phone.text,
-                  verificationCompleted: (phonesAuthCredentials) async {},
-                  verificationFailed: (FirebaseAuthException e) async {
-                    loading.toggle();
-                    update();
-                    if (e.code == 'too-many-requests') {
-                      showAlertDialogOneButton(
-                        context,
-                        "Réessayez plus tard",
-                        "Nous avons bloqué toutes les demandes de cet appareil en raison d'une activité inhabituelle",
-                        "Ok",
-                      );
-                    }
-                  },
-                  codeSent: (verificationId, resendingToken) async {
-                    await SessionManager().set('phone', phoneNumber);
-                    await SessionManager().set('password', password.text);
-                    loading.toggle();
-                    update();
-                    Get.to(() => VerfiyNumber(),
-                        arguments: verificationId,
-                        transition: Transition.rightToLeft);
-                  },
-                  codeAutoRetrievalTimeout: (verificationId) async {},
-                );
+                try {
+                  await FirebaseAuth.instance.verifyPhoneNumber(
+                    phoneNumber: indicatif + phone.text,
+                    verificationCompleted: (phonesAuthCredentials) async {},
+                    verificationFailed: (FirebaseAuthException e) async {
+                      loading.toggle();
+                      update();
+                      if (e.code == 'too-many-requests') {
+                        showAlertDialogOneButton(
+                          context,
+                          "Réessayez plus tard",
+                          "Nous avons bloqué toutes les demandes de cet appareil en raison d'une activité inhabituelle",
+                          "Ok",
+                        );
+                      }
+                    },
+                    codeSent: (verificationId, resendingToken) async {
+                      await SessionManager().set('phone', phoneNumber);
+                      await SessionManager().set('password', password.text);
+                      loading.toggle();
+                      update();
+                      Get.to(() => VerfiyNumber(),
+                          arguments: verificationId,
+                          transition: Transition.rightToLeft);
+                    },
+                    codeAutoRetrievalTimeout: (verificationId) async {},
+                  );
+                } catch (e) {
+                  showAlertDialogOneButton(
+                      context, 'Echéc', "Validation a échoué", "Ok");
+                  loading.toggle();
+                  update();
+                }
               }
             });
           }
