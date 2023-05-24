@@ -261,14 +261,14 @@ Future annulerOrder(MpUser driver, orderModel.Order order) async {
             .collection('mp_users')
             .doc(driver.uid)
             .update({
-            // "current_order_driver": null,
+            "current_order_driver": null,
             "driver_cancelled_trip": FieldValue.increment(1),
           })
         : FirebaseFirestore.instance
             .collection('mp_users')
             .doc(driver.uid)
             .update({
-            // "current_order_driver": null,
+            "current_order_driver": null,
             "driver_cancelled_delivery": FieldValue.increment(1),
           });
   }

@@ -377,17 +377,44 @@ class _ChangeCardState extends State<ChangeCard> {
                                   //     controller.userBase!.anthropometrique!,
                                   //     fit: BoxFit.cover,
                                   //   )
-                                  ? CachedNetworkImage(
-                                      imageUrl: controller
-                                          .userBase!.anthropometrique!,
-                                      fit: BoxFit.cover,
-                                      progressIndicatorBuilder: (context, url,
-                                              downloadProgress) =>
-                                          CircularProgressIndicator(
-                                              value: downloadProgress.progress),
-                                      errorWidget: (context, url, error) =>
-                                          const Icon(Icons.error),
-                                    )
+                                  ? controller.userBase!.anthropometrique ==
+                                          null
+                                      ? Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Icon(
+                                              Boxicons.bxs_cloud_upload,
+                                              color: light,
+                                              size: 85.sp,
+                                            ),
+                                            5.verticalSpace,
+                                            Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 15.w),
+                                              child: Text(
+                                                "Téléchargez votre carte d'identité",
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    color: light,
+                                                    fontFamily: 'LatoBold',
+                                                    fontSize: 14.sp),
+                                              ),
+                                            )
+                                          ],
+                                        )
+                                      : CachedNetworkImage(
+                                          imageUrl: controller
+                                              .userBase!.anthropometrique!,
+                                          fit: BoxFit.cover,
+                                          progressIndicatorBuilder: (context,
+                                                  url, downloadProgress) =>
+                                              CircularProgressIndicator(
+                                                  value: downloadProgress
+                                                      .progress),
+                                          errorWidget: (context, url, error) =>
+                                              const Icon(Icons.error),
+                                        )
                                   : Image.file(
                                       controller.anthropometrique!,
                                       fit: BoxFit.cover,
