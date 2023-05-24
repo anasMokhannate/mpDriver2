@@ -427,10 +427,13 @@ class CommandCard extends StatefulWidget {
   String date;
   String prix;
   String from, to;
-  int status;
+  String status;
   VoidCallback? onTap;
+  bool isPlanned;
+
   CommandCard(
-      {required this.date,
+      {required this.isPlanned,
+      required this.date,
       required this.prix,
       required this.from,
       required this.to,
@@ -470,23 +473,29 @@ class _CommandCardState extends State<CommandCard> {
                   width: 45.h,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(360),
-                    color: widget.status == 1
-                        ? primary.withOpacity(0.2)
-                        : widget.status == 0
-                            ? Colors.red.withOpacity(0.2)
-                            : const Color(0xFFF1E6C2),
+                    color: widget.status == "order_canceled"
+                        ? Colors.red.withOpacity(0.2)
+                        : widget.status == "order_finished"
+                            ? primary.withOpacity(0.2)
+                            : widget.isPlanned
+                                ? const Color(0xAAF1E6C2)
+                                : primary.withOpacity(0.2),
                   ),
                   child: Icon(
-                    widget.status == 1
-                        ? Boxicons.bx_check
-                        : widget.status == 0
-                            ? Boxicons.bx_x
-                            : Boxicons.bx_time,
-                    color: widget.status == 1
-                        ? primary
-                        : widget.status == 0
-                            ? Colors.red
-                            : const Color(0xFFA39874),
+                   widget.status == "order_canceled"
+                        ? Boxicons.bx_x
+                        : widget.status == "order_finished"
+                            ? Boxicons.bx_check
+                            : widget.isPlanned
+                                ? Boxicons.bx_time
+                                : Boxicons.bx_check,
+                    color: widget.status == "order_canceled"
+                        ? Colors.red
+                        : widget.status == "order_finished"
+                            ? primary
+                            : widget.isPlanned
+                                ? const Color.fromARGB(170, 147, 140, 118)
+                                : primary,
                   ),
                 ),
                 10.horizontalSpace,

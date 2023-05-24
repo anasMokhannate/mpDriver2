@@ -9,7 +9,7 @@ import 'package:get/get.dart';
 import 'package:motopickupdriver/utils/colors.dart';
 import 'package:motopickupdriver/utils/functions.dart';
 import 'package:motopickupdriver/utils/typography.dart';
-import 'package:motopickupdriver/views/my_command.dart';
+import 'package:motopickupdriver/views/my_orders.dart';
 import 'package:motopickupdriver/views/profile/main_page.dart';
 import 'package:motopickupdriver/views/settings_page.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -92,7 +92,7 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                     icon: Boxicons.bx_package,
                     onClicked: () {
                       Navigator.pop(context);
-                      Get.to(() => MyCommand(),
+                      Get.to(() => MyOrders(),
                           transition: Transition.rightToLeft);
                     },
                   ),

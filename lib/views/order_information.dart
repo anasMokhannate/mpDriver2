@@ -12,12 +12,9 @@ import 'package:loading_indicator/loading_indicator.dart';
 import 'package:motopickupdriver/controllers/order_information.dart';
 import 'package:motopickupdriver/utils/buttons.dart';
 import 'package:motopickupdriver/utils/colors.dart';
-import 'package:motopickupdriver/utils/models/user.dart';
 import 'package:motopickupdriver/utils/services.dart';
 import 'package:motopickupdriver/utils/typography.dart';
 import 'package:motopickupdriver/views/rate_client.dart';
-
-import '../utils/queries.dart';
 
 class OrderInformation extends StatelessWidget {
   dynamic order;
@@ -103,23 +100,24 @@ class OrderInformation extends StatelessWidget {
                                   width: 65.w,
                                   height: 65.w,
                                   decoration: BoxDecoration(
-                                    color: documentSnapshot[0]['status']
-                                                .toString() ==
-                                            '0'
-                                        ? Colors.red.withOpacity(0.4)
-                                        : (documentSnapshot[0]['status']
-                                                    .toString() ==
-                                                '1'
-                                            ? Colors.green.withOpacity(0.4)
-                                            : const Color(0xFFF1E6C2)),
+                                    color: documentSnapshot[0]['status'] ==
+                                            "order_canceled"
+                                        ? Colors.red.withOpacity(0.2)
+                                        : documentSnapshot[0]['status'] ==
+                                                "order_finished"
+                                            ? primary.withOpacity(0.2)
+                                            : documentSnapshot[0]['is_planned']
+                                                ? const Color(0xAAF1E6C2)
+                                                : primary.withOpacity(0.2),
                                     borderRadius: BorderRadius.circular(5),
                                   ),
                                   child: Icon(
-                                    documentSnapshot[0]['order_type']
-                                                .toString() ==
-                                            '1'
-                                        ? FontAwesomeIcons.motorcycle
-                                        : Boxicons.bx_package,
+                                    // documentSnapshot[0]['order_type']
+                                    //             .toString() ==
+                                    //         '1'
+                                    //     ?
+                                    FontAwesomeIcons.motorcycle,
+                                    // : Boxicons.bx_package,
                                     color: documentSnapshot[0]['order_type']
                                                 .toString() ==
                                             '0'
@@ -133,14 +131,15 @@ class OrderInformation extends StatelessWidget {
                                 ),
                                 20.horizontalSpace,
                                 Text(
-                                  documentSnapshot[0]['status'].toString() ==
-                                          '0'
-                                      ? 'Commande annulée'
-                                      : (documentSnapshot[0]['status']
-                                                  .toString() ==
-                                              '1'
-                                          ? 'Commande terminée'
-                                          : 'Commande planifiée'),
+                                  documentSnapshot[0]['status'] ==
+                                          "order_canceled"
+                                      ? "Commande annulé"
+                                      : documentSnapshot[0]['status'] ==
+                                              "order_finished"
+                                          ? "Commande terminée"
+                                          : documentSnapshot[0]['is_planned']
+                                              ? "Plannifier pour ${documentSnapshot[0]['order_pickup_time']}"
+                                              : "Commande terminée",
                                   style: bodyTextStyle,
                                 )
                               ],
@@ -268,8 +267,8 @@ class OrderInformation extends StatelessWidget {
                                             borderRadius:
                                                 BorderRadius.circular(360),
                                             child: Image.network(
-                                              documentSnapshot[0]['user']
-                                                  ['customer_picture'],
+                                              documentSnapshot[0]['customer']
+                                                  ['profile_picture'],
                                               fit: BoxFit.cover,
                                               loadingBuilder:
                                                   (BuildContext context,
@@ -302,8 +301,8 @@ class OrderInformation extends StatelessWidget {
                                               CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                              documentSnapshot[0]['user']
-                                                  ['customer_full_name'],
+                                              documentSnapshot[0]['customer']
+                                                  ['full_name'],
                                               style: bodyTextStyle,
                                             ),
                                             5.verticalSpace,
@@ -389,8 +388,8 @@ class OrderInformation extends StatelessWidget {
                                         padding: EdgeInsets.only(bottom: 20.h),
                                         child: PrimaryButton(
                                           text: documentSnapshot[0]
-                                                      ['is_start'] ==
-                                                  true
+                                                      ['status'] ==
+                                                  "customer_accepted"
                                               ? 'Finir le Voyage'
                                               : 'Commencer le voyage',
                                           function: () async {
