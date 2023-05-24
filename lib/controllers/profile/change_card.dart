@@ -20,7 +20,7 @@ class ChangeCardController extends GetxController {
       assuranceEdited = false,
       griseEdited = false,
       antropometriqueEdited = false;
-  MpUser? userBase;
+  MpUser? userBase = MpUser();
   bool isOpen = false, isCoursier = false, isDriver = false;
   XFile? cardFile, cardLicence, cardAssurance, cardGrise, cardAnthropometrique;
   String cardExpire = "Date d'expiration",
@@ -267,6 +267,7 @@ class ChangeCardController extends GetxController {
     super.onInit();
     await getUserFromMemory().then((value) async {
       userBase = value;
+      print('fen user ${userBase!.identityCardPicture}');
       // cardFile = XFile(value!.identityCardPicture!);
       // card = File(cardFile!.path);
       // cardLicence = XFile(value.drivingLicencePicture!);

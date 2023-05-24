@@ -45,11 +45,9 @@ class MpUser {
   String? authType;
   String? lastDocumentUpdateDate;
   int? customerTotalOrders;
-
   int? customerTotalPaid;
   int? driverTotalPaid;
   int? driverTotalOrders;
-
   double? driverNote;
 
   MpUser({
@@ -84,6 +82,10 @@ class MpUser {
     this.identityCardExpirationDate,
     this.drivingLicencePicture,
     this.drivingLicenceExpirationDate,
+    this.carteGrisePicture,
+    this.carteGriseExpirationDate,
+    this.assurancePicture,
+    this.assuranceExpirationDate,
     this.orderTotalAmount,
     this.anthropometrique,
     this.reportedTimes,
@@ -134,6 +136,10 @@ class MpUser {
       identityCardExpirationDate: json?['identity_card_expiration_date'],
       drivingLicencePicture: json?['driving_licence_picture'],
       drivingLicenceExpirationDate: json?['driving_licence_expiration_date'],
+      carteGrisePicture: json?['grise_picture'],
+      carteGriseExpirationDate: json?['grise_expiration_date'],
+      assurancePicture: json?['assurance_picture'],
+      assuranceExpirationDate: json?['assurance_expiration_date'],
       orderTotalAmount: json?['order_total_amount'],
       anthropometrique: json?['anthropometrique'],
       reportedTimes: json?['reported_times'],
@@ -165,7 +171,6 @@ class MpUser {
     data['last_login_date'] = lastLoginDate;
     data['current_city'] = currentCity;
     data['location'] = location;
-
     data['is_deleted_account'] = isDeletedAccount;
     data['is_activated_account'] = isActivatedAccount;
     data['is_verified_account'] = isVerifiedAccount;
@@ -180,31 +185,24 @@ class MpUser {
     data['succeded_trip'] = succededTrip;
     data['planned_trip'] = plannedTrip;
     data['customer_note'] = customerNote ?? 0.0;
-
     data['motos'] = motos;
-    data['identity_card_number'] = identityCardNumber;
-    data['identity_card_picture'] = identityCardPicture;
-    data['identity_card_expiration_date'] = identityCardExpirationDate;
     data['current_page_client'] = currentPageClient;
     data['current_page_driver'] = currentPageDriver;
     data['auth_type'] = authType;
     data['driving_licence_picture'] = drivingLicencePicture;
     data['driving_licence_expiration_date'] = drivingLicenceExpirationDate;
-    data['order_total_amount'] = orderTotalAmount;
-    data['anthropometrique'] = anthropometrique;
+    data['grise_picture'] = carteGrisePicture;
+    data['grise_expiration_date'] = carteGriseExpirationDate;
+    data['assurance_picture'] = assurancePicture;
+    data['assurance_expiration_date'] = assuranceExpirationDate;
     data['reported_times'] = reportedTimes;
     data['curr_fcm'] = fcm;
-    data['current_order_driver'] = currentOrderDriver;
-    data['current_order_customer'] = currentOrderCustomer;
     data['identity_card_number'] = identityCardNumber;
     data['identity_card_picture'] = identityCardPicture;
     data['identity_card_expiration_date'] = identityCardExpirationDate;
-    data['driving_licence_picture'] = drivingLicencePicture;
-    data['driving_licence_expiration_date'] = drivingLicenceExpirationDate;
     data['order_total_amount'] = orderTotalAmount;
     data['anthropometrique'] = anthropometrique;
     data['reported_times'] = reportedTimes;
-    data['curr_fcm'] = fcm;
     data['current_order_driver'] = currentOrderDriver;
     data['current_order_customer'] = currentOrderCustomer;
     data['last_document_update_date'] = lastDocumentUpdateDate;
