@@ -425,7 +425,7 @@ class _DriverCardState extends State<DriverCard> {
 
 class CommandCard extends StatefulWidget {
   String date;
-  String prix;
+  double prix;
   String from, to;
   String status;
   VoidCallback? onTap;
@@ -473,25 +473,28 @@ class _CommandCardState extends State<CommandCard> {
                   width: 45.h,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(360),
-                    color: widget.status == "order_canceled"
+                    color: widget.status == "order_cancelled"
                         ? Colors.red.withOpacity(0.2)
-                        : widget.status == "order_finished"
+                        : widget.status == "order_finished" ||
+                                widget.status == "in_rating"
                             ? primary.withOpacity(0.2)
                             : widget.isPlanned
                                 ? const Color(0xAAF1E6C2)
                                 : primary.withOpacity(0.2),
                   ),
                   child: Icon(
-                   widget.status == "order_canceled"
+                    widget.status == "order_cancelled"
                         ? Boxicons.bx_x
-                        : widget.status == "order_finished"
+                        : widget.status == "in_rating" ||
+                                widget.status == "order_finished"
                             ? Boxicons.bx_check
                             : widget.isPlanned
                                 ? Boxicons.bx_time
                                 : Boxicons.bx_check,
-                    color: widget.status == "order_canceled"
+                    color: widget.status == "order_cancelled"
                         ? Colors.red
-                        : widget.status == "order_finished"
+                        : widget.status == "in_rating" ||
+                                widget.status == "order_finished"
                             ? primary
                             : widget.isPlanned
                                 ? const Color.fromARGB(170, 147, 140, 118)
@@ -512,9 +515,9 @@ class _CommandCardState extends State<CommandCard> {
                             widget.date,
                             style: bodyTextStyle,
                           ),
-                          const Spacer(),
+                          20.horizontalSpace,
                           Text(
-                            'Tarifs : ${widget.prix} MAD',
+                            'Tarif : ${widget.prix.round()} DH',
                             style: bodyTextStyle,
                           ),
                         ],

@@ -228,7 +228,7 @@ Future annulerOrder(MpUser driver, orderModel.Order order) async {
         .doc(order.orderId)
         .update(({
           'is_canceled_by_driver': true,
-          'status': 'order_canceled',
+          'status': 'order_cancelled',
           'is_finished': true,
           'drivers_declined': FieldValue.arrayUnion([driver.uid]),
           // 'drivers_accepted': FieldValue.arrayRemove([0]),

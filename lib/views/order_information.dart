@@ -48,7 +48,7 @@ class OrderInformation extends StatelessWidget {
           body: controller.isTrue.value
               ? StreamBuilder(
                   stream: FirebaseFirestore.instance
-                      .collection('orders')
+                      .collection('mp_orders')
                       .where('order_id', isEqualTo: controller.orderId)
                       .snapshots(),
                   builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -101,10 +101,12 @@ class OrderInformation extends StatelessWidget {
                                   height: 65.w,
                                   decoration: BoxDecoration(
                                     color: documentSnapshot[0]['status'] ==
-                                            "order_canceled"
+                                            "order_cancelled"
                                         ? Colors.red.withOpacity(0.2)
                                         : documentSnapshot[0]['status'] ==
-                                                "order_finished"
+                                                    "order_finished" ||
+                                                documentSnapshot[0]['status'] ==
+                                                    "in_rating"
                                             ? primary.withOpacity(0.2)
                                             : documentSnapshot[0]['is_planned']
                                                 ? const Color(0xAAF1E6C2)
@@ -118,26 +120,31 @@ class OrderInformation extends StatelessWidget {
                                     //     ?
                                     FontAwesomeIcons.motorcycle,
                                     // : Boxicons.bx_package,
-                                    color: documentSnapshot[0]['order_type']
-                                                .toString() ==
-                                            '0'
+                                    color: documentSnapshot[0]['status'] ==
+                                            "order_cancelled"
                                         ? Colors.red
-                                        : (documentSnapshot[0]['status']
-                                                    .toString() ==
-                                                '1'
-                                            ? Colors.green
-                                            : const Color(0xFFF1E6C2)),
+                                        : documentSnapshot[0]['status'] ==
+                                                    "order_finished" ||
+                                                documentSnapshot[0]['status'] ==
+                                                    "in_rating"
+                                            ? primary
+                                            : documentSnapshot[0]['is_planned']
+                                                ? const Color.fromARGB(
+                                                    170, 147, 140, 118)
+                                                : primary,
                                   ),
                                 ),
                                 20.horizontalSpace,
                                 Text(
                                   documentSnapshot[0]['status'] ==
-                                          "order_canceled"
+                                          "order_cancelled"
                                       ? "Commande annulé"
                                       : documentSnapshot[0]['status'] ==
                                               "order_finished"
                                           ? "Commande terminée"
-                                          : documentSnapshot[0]['is_planned']
+                                          : documentSnapshot[0]['is_planned'] &&
+                                                  !documentSnapshot[0]
+                                                      ['is_finished']
                                               ? "Plannifier pour ${documentSnapshot[0]['order_pickup_time']}"
                                               : "Commande terminée",
                                   style: bodyTextStyle,
@@ -352,7 +359,8 @@ class OrderInformation extends StatelessWidget {
                                           ],
                                         ),
                                         const Spacer(),
-                                        if (documentSnapshot[0]['status'] != 1)
+                                        if (documentSnapshot[0]['status'] !=
+                                            "order_finished")
                                           Container(
                                             height: 55.w,
                                             width: 55.w,
@@ -381,64 +389,79 @@ class OrderInformation extends StatelessWidget {
                               ),
                             ),
                             Spacer(),
-                            documentSnapshot[0]['status'] == 3
+                            documentSnapshot[0]['is_planned'] &&
+                                    documentSnapshot[0]['is_finished'] != true
                                 ? Column(
                                     children: [
                                       Padding(
                                         padding: EdgeInsets.only(bottom: 20.h),
                                         child: PrimaryButton(
-                                          text: documentSnapshot[0]
-                                                      ['status'] ==
+                                          text: documentSnapshot[0]['status'] ==
                                                   "customer_accepted"
-                                              ? 'Finir le Voyage'
-                                              : 'Commencer le voyage',
+                                              ? 'Commencer le voyage'
+                                              : 'Finir le Voyage',
                                           function: () async {
-                                            if (documentSnapshot[0]
-                                                    ['is_start'] ==
-                                                false) {
-                                              FirebaseFirestore.instance
-                                                  .collection('drivers')
+                                            if (documentSnapshot[0]['status'] !=
+                                                "driver_is_here") {
+                                              await FirebaseFirestore.instance
+                                                  .collection('mp_users')
                                                   .doc(documentSnapshot[0]
-                                                      ['driver_uid'])
+                                                      ['driver.uid'])
                                                   .update(({
-                                                    'is_on_order': true,
+                                                    'current_order_driver':
+                                                        order['order_id'],
+                                                  }));
+                                              await FirebaseFirestore.instance
+                                                  .collection('mp_users')
+                                                  .doc(documentSnapshot[0]
+                                                      ['customer.uid'])
+                                                  .update(({
+                                                    'current_order_customer':
+                                                        order['order_id'],
                                                   }));
                                               String fcm = documentSnapshot[0]
-                                                  ["customer_fcm"];
+                                                  ["customer.curr_fcm"];
 
                                               sendNotification(
                                                   [fcm],
-                                                  "voyage a commencée",
+                                                  "Voyage a commencé",
                                                   "Le chauffeur est en route");
                                               controller.contrr.isWithOrder =
                                                   true;
-                                              FirebaseFirestore.instance
-                                                  .collection('orders')
+                                              await FirebaseFirestore.instance
+                                                  .collection('mp_orders')
                                                   .doc(order['order_id'])
                                                   .update(({
-                                                    'is_start': true,
+                                                    'status': "driver_is_here",
                                                   }));
                                               controller.contrr.update();
                                             } else {
-                                              FirebaseFirestore.instance
-                                                  .collection('orders')
+                                              await FirebaseFirestore.instance
+                                                  .collection('mp_orders')
                                                   .doc(order['order_id'])
                                                   .update(({
-                                                    'is_succeed': true,
-                                                    'status': 1,
+                                                    'status': "in_rating",
+                                                    'is_finished': true,
                                                   }));
-                                              FirebaseFirestore.instance
-                                                  .collection('drivers')
+                                              controller.userBase!
+                                                      .driverTotalOrders =
+                                                  controller.userBase!
+                                                          .driverTotalOrders! +
+                                                      1;
+                                              await FirebaseFirestore.instance
+                                                  .collection('mp_users')
                                                   .doc(documentSnapshot[0]
-                                                      ['driver_uid'])
+                                                      ['driver.uid'])
                                                   .update(({
-                                                    'is_on_order': false,
+                                                    'driver_total_orders':
+                                                        FieldValue.increment(1),
                                                   }));
+
                                               String fcm = documentSnapshot[0]
-                                                  ["customer_fcm"];
+                                                  ["customer.curr_fcm"];
                                               sendNotification(
                                                   [fcm],
-                                                  "voyage est finis",
+                                                  "Voyage Terminé",
                                                   "au revoir");
                                               controller.contrr.isWithOrder =
                                                   false;
@@ -456,37 +479,40 @@ class OrderInformation extends StatelessWidget {
                                         child: InkWell(
                                           onTap: () {
                                             FirebaseFirestore.instance
-                                                .collection('orders')
+                                                .collection('mp_orders')
                                                 .doc(order['order_id'])
                                                 .update(({
-                                                  'is_canceled_by_driver': true,
-                                                  'status': 0,
+                                                  'is_cancelled_by_driver':
+                                                      true,
+                                                  'status': "order_cancelled",
                                                 }));
                                             documentSnapshot[0]['order_type']
                                                         .toString() !=
                                                     "0"
                                                 ? FirebaseFirestore.instance
-                                                    .collection('drivers')
+                                                    .collection('mp_users')
                                                     .doc(documentSnapshot[0]
-                                                        ['driver_uid'])
+                                                        ['driver.uid'])
                                                     .update(({
-                                                      'is_on_order': false,
+                                                      'current_order_driver':
+                                                          null,
                                                       "driver_cancelled_trip":
                                                           FieldValue.increment(
                                                               1)
                                                     }))
                                                 : FirebaseFirestore.instance
-                                                    .collection('drivers')
+                                                    .collection('mp_users')
                                                     .doc(documentSnapshot[0]
-                                                        ['driver_uid'])
+                                                        ['driver.uid'])
                                                     .update(({
                                                       "driver_cancelled_delivery":
                                                           FieldValue.increment(
                                                               1),
-                                                      'is_on_order': false,
+                                                      'current_order_driver':
+                                                          null,
                                                     }));
                                             String fcm = documentSnapshot[0]
-                                                ["customer_fcm"];
+                                                ["customer.curr_fcm"];
 
                                             sendNotification(
                                                 [fcm],

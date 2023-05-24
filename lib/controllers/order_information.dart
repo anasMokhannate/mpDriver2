@@ -48,7 +48,8 @@ class OrderInformationController extends GetxController {
     if (docSnapshot.exists) {
       Map<String, dynamic>? data = docSnapshot.data();
       clientNumber = data!['phone_number'];
-      startsmean = data['note'] / data['total_orders'];
+      startsmean =
+          data['customer_note'] ?? 0 / data['customer_total_orders'] ?? 1;
       update();
     }
   }
@@ -59,7 +60,7 @@ class OrderInformationController extends GetxController {
     await getTime();
     await getUserFromMemory().then((value) async {
       userBase = value;
-      // orderId = Get.arguments[0];
+      orderId = Get.arguments[0];
       await getClientData();
       isTrue = true.obs;
       update();
