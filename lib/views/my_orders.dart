@@ -262,11 +262,8 @@ class MyOrders extends StatelessWidget {
                                               ['is_planned'],
                                           date: documentSnapshot[index]
                                               ['order_pickup_time'],
-                                          prix: snapshot
-                                              .data!
-                                              .docs[index]
-                                                  ['order_purchase_amount']
-                                              .toString(),
+                                          prix: snapshot.data!.docs[index]
+                                              ['order_purchase_amount'],
                                           from: documentSnapshot[index]
                                               ['address_from'],
                                           to: documentSnapshot[index]
@@ -389,11 +386,8 @@ class MyOrders extends StatelessWidget {
                                               ['is_planned'],
                                           date: documentSnapshot[index]
                                               ['order_pickup_time'],
-                                          prix: snapshot
-                                              .data!
-                                              .docs[index]
-                                                  ['order_purchase_amount']
-                                              .toString(),
+                                          prix: snapshot.data!.docs[index]
+                                              ['order_purchase_amount'],
                                           from: documentSnapshot[index]
                                               ['address_from'],
                                           to: documentSnapshot[index]
