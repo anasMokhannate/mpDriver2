@@ -26,7 +26,7 @@ class SettingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () => goBackOff( HomePage()),
+      onWillPop: () => goBackOff(HomePage()),
       child: GetBuilder<SettingController>(
         init: SettingController(),
         builder: (value) => LoadingOverlay(
@@ -59,7 +59,7 @@ class SettingScreen extends StatelessWidget {
                     )
                   : AppBar(
                       leading: InkWell(
-                        onTap: () => goBackOff( HomePage()),
+                        onTap: () => goBackOff(HomePage()),
                         child: Icon(
                           Boxicons.bx_arrow_back,
                           color: primary,
@@ -157,7 +157,10 @@ class SettingScreen extends StatelessWidget {
                               ),
                             ),
                             onTap: () {
-                              Get.to(() => MyBikes());
+                              context.locale.toString() == 'fr'
+                                  ? context.setLocale(const Locale('ar'))
+                                  : context.setLocale(const Locale('fr'));
+                              // Get.to(() => MyBikes());
                             }),
                         20.verticalSpace,
                         Padding(
