@@ -143,8 +143,9 @@ class OrderInformation extends StatelessWidget {
                                               "order_finished"
                                           ? "Commande terminée"
                                           : documentSnapshot[0]['is_planned'] &&
-                                                  !documentSnapshot[0]
-                                                      ['is_finished']
+                                                  (documentSnapshot[0]
+                                                          ['is_finished'] ??
+                                                      false)
                                               ? "Plannifier pour ${documentSnapshot[0]['order_pickup_time']}"
                                               : "Commande terminée",
                                   style: bodyTextStyle,
