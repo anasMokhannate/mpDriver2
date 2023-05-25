@@ -134,6 +134,7 @@ class HomePage extends StatelessWidget {
                                 // .where("is_canceled_by_customer", isEqualTo: false)
                                 .where('drivers_concerned',
                                     arrayContains: controller.userBase!.uid)
+                                .where('driver', isNull: true)
                                 .snapshots(),
 
                             // controller.geo!
