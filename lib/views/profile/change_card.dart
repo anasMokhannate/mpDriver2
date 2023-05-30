@@ -578,6 +578,7 @@ class _ChangeCardState extends State<ChangeCard> {
                                     PrimaryButton(
                                       text: 'Terminer',
                                       function: () async {
+                                        Navigator.pop(context);
                                         controller.submit(context);
                                       },
                                     ),
