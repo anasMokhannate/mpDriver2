@@ -456,7 +456,7 @@ class _CommandCardState extends State<CommandCard> {
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.w),
         child: Container(
-          height: 120.h,
+          height: 125.h,
           width: MediaQuery.of(context).size.width,
           decoration: BoxDecoration(
             color: Colors.transparent,

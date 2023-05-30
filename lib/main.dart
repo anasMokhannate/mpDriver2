@@ -12,9 +12,11 @@ import 'package:get_storage/get_storage.dart';
 import 'package:motopickupdriver/utils/colors.dart';
 import 'package:motopickupdriver/utils/navigations.dart';
 import 'package:motopickupdriver/utils/services.dart';
+import 'package:workmanager/workmanager.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  
   await EasyLocalization.ensureInitialized();
   await Firebase.initializeApp();
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;

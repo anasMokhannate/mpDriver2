@@ -106,26 +106,53 @@ class PrimaryButton extends StatefulWidget {
 }
 
 class _PrimaryButtonState extends State<PrimaryButton> {
+  bool _isButtonDisabled = false;
+
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: widget.function,
-      child: Center(
-        child: Container(
-          height: 65.h,
-          width: 250.w,
-          decoration: BoxDecoration(
-            color: primary,
-            borderRadius: BorderRadius.circular(360),
-          ),
-          alignment: Alignment.center,
-          child: Text(
-            widget.text,
-            style: TextStyle(
-                fontFamily: 'LatoBold', fontSize: 14.sp, color: Colors.white),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        InkWell(
+          onTap: _isButtonDisabled
+              ? null
+              : () async {
+                  setState(() {
+                    _isButtonDisabled = true; // disable the button
+                  });
+                  widget.function(); // call the original button function
+                  await Future.delayed(
+                      const Duration(seconds: 5)); // wait for 5 seconds
+                  setState(() {
+                    _isButtonDisabled = false; // enable the button
+                  });
+                },
+          child: Container(
+            height: 65.h,
+            width: 250.w,
+            decoration: BoxDecoration(
+              color: _isButtonDisabled ? Colors.grey : primary,
+              borderRadius: BorderRadius.circular(360),
+            ),
+            alignment: Alignment.center,
+            child: _isButtonDisabled
+                ? const SizedBox(
+                    width: 20,
+                    height: 20,
+                    child: CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                    ),
+                  )
+                : Text(
+                    widget.text,
+                    style: TextStyle(
+                        fontFamily: 'LatoBold',
+                        fontSize: 14.sp,
+                        color: Colors.white),
+                  ),
           ),
         ),
-      ),
+      ],
     );
   }
 }

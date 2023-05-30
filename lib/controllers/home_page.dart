@@ -15,6 +15,7 @@ import 'package:motopickupdriver/utils/colors.dart';
 import 'package:motopickupdriver/utils/models/order.dart' as Orderr;
 import 'package:motopickupdriver/utils/queries.dart';
 import 'package:motopickupdriver/utils/services.dart';
+import 'package:workmanager/workmanager.dart';
 
 import '../utils/models/user.dart';
 
@@ -68,8 +69,7 @@ class HomePageController extends GetxController {
 
   void startLocationUpdates() {
     positionStream = Geolocator.getPositionStream(
-      locationSettings:
-          const LocationSettings(accuracy: LocationAccuracy.medium),
+      locationSettings: const LocationSettings(accuracy: LocationAccuracy.best),
     ).listen((Position position) {
       // Update the location in Firestore
       if (userBase!.isOnline ?? false) {
@@ -79,9 +79,10 @@ class HomePageController extends GetxController {
   }
 
   updateLocationInFirestore(latitude, longitude) async {
-    print("$status status");
+    print("$status status--");
     userBase!.location =
         GeoFlutterFire().point(latitude: latitude!, longitude: longitude!).data;
+    print(userBase!.location!["geopoint"].latitude);
     // await completeUser(userBase!);
     await FirebaseFirestore.instance
         .collection("mp_users")
@@ -89,6 +90,8 @@ class HomePageController extends GetxController {
         .update({
       'location': userBase!.location,
       // 'driver_latitude': latitude,
+    }).then((value) {
+      print('location updated');
     });
   }
 
@@ -215,9 +218,17 @@ class HomePageController extends GetxController {
 
   void updateMyLocation(documentSnapshot) {}
 
+  void callbackDispatcher() {
+    Workmanager().executeTask((taskName, inputData) async {
+      print("Background task executed");
+      return Future.value(true);
+    });
+  }
+
   @override
   void onInit() async {
     super.onInit();
+
     await getCurrentUser().then((value) async {
       await initOneSignal();
       userBase = value;
@@ -226,7 +237,14 @@ class HomePageController extends GetxController {
       userBase!.isActivatedAccount = true;
       await getUserLocation();
       center = GeoFirePoint(latitude!, longitude!);
-      startLocationUpdates();
+
+      Workmanager? workmanager = Workmanager();
+
+      await workmanager.initialize(callbackDispatcher, isInDebugMode: true);
+
+      // Timer.periodic(const Duration(seconds: 4), (timer) {
+      // startLocationUpdates();
+      // });
       // stream = geo!
       //     .collection(
       //         collectionRef: FirebaseFirestore.instance.collection("mp_orders"))

@@ -206,23 +206,17 @@ class OrderInformationsController extends GetxController {
 
   void startLocationUpdates(givenid) {
     positionStream = Geolocator.getPositionStream(
-      locationSettings:
-          const LocationSettings(accuracy: LocationAccuracy.medium),
+      locationSettings: const LocationSettings(accuracy: LocationAccuracy.best),
     ).listen((Position position) {
       // Update the location in Firestore
       if (userBase!.isOnline ?? false) {
-        updateLocationInFirestore(
+        updateLocationInFirestoreOrders(
             position.latitude, position.longitude, givenid);
       }
-
-    }
-    
-    )
-    ;
-   
+    });
   }
 
-  updateLocationInFirestore(latitude, longitude, givenID) async {
+  updateLocationInFirestoreOrders(latitude, longitude, givenID) async {
     userBase!.location =
         GeoFlutterFire().point(latitude: latitude!, longitude: longitude!).data;
     // await completeUser(userBase!);
