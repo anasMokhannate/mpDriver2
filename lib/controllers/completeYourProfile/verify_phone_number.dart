@@ -69,21 +69,20 @@ class VerifyPhoneNumberController extends GetxController {
                 },
                 codeAutoRetrievalTimeout: (verificationId) async {});
           } catch (e) {
+            loading.toggle();
+            update();
             showAlertDialogOneButton(
                 context, 'Echéc', "Validation a échoué", "Ok");
-                loading.toggle();
-                update();
-            
           }
         } else {
+          loading.toggle();
+          update();
           showAlertDialogOneButton(
             context,
             'Le numéro de téléphone existe déjà',
             'Veuillez fournir un autre numéro de téléphone',
             'Ok',
           );
-          loading.toggle();
-          update();
         }
       });
     }

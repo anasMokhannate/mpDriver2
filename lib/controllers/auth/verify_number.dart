@@ -110,11 +110,11 @@ class VerfiyNumberController extends GetxController {
           });
         });
       } catch (e) {
-        showAlertDialogOneButton(
-            context, "Code requis", "Veuillez entrer le bon code.", "Ok");
         loading.toggle();
         update();
-        Get.snackbar('catch', 'catch');
+
+        showAlertDialogOneButton(context, "Code Expiré",
+            "Le code SMS a expiré. Veuillez renvoyer le code de vérification pour réessayer.", "Ok");
       }
     } else {
       showAlertDialogOneButton(

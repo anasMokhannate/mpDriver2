@@ -71,10 +71,13 @@ class VerifyCodeController extends GetxController {
             Get.to(() => AddingMoto());
           });
         }).catchError((e) {
-          showAlertDialogOneButton(context, "Code incorrect",
-              "Veuillez entrer le bon code.", "Ok");
           loading.toggle();
           update();
+          showAlertDialogOneButton(
+              context,
+              "Code Expiré",
+              "Le code SMS a expiré. Veuillez renvoyer le code de vérification pour réessayer.",
+              "Ok");
         });
       } catch (e) {
         message =
@@ -82,10 +85,10 @@ class VerifyCodeController extends GetxController {
         update();
       }
     } else {
-      showAlertDialogOneButton(
-          context, "Code requis", "Veuillez entrer le bon code.", "Ok");
       loading.toggle();
       update();
+      showAlertDialogOneButton(
+          context, "Code requis", "Veuillez entrer le bon code.", "Ok");
     }
   }
 
