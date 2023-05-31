@@ -173,7 +173,7 @@ class RateClient extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               SizedBox(
-                                width: 150.w,
+                                width: 160.w,
                                 child: PrimaryButton(
                                   text: 'Valider',
                                   function: () async {
@@ -187,6 +187,7 @@ class RateClient extends StatelessWidget {
                                       controller.sendFeedBack();
                                     });
                                   },
+                                  width: 159.5,
                                 ),
                               ),
                               InkWell(

@@ -98,7 +98,9 @@ class _PhoneButtonState extends State<PhoneButton> {
 class PrimaryButton extends StatefulWidget {
   String text;
   final VoidCallback function;
-  PrimaryButton({required this.text, required this.function, Key? key})
+  double? width;
+  PrimaryButton(
+      {required this.text, required this.function, Key? key, this.width = 250})
       : super(key: key);
 
   @override
@@ -117,19 +119,23 @@ class _PrimaryButtonState extends State<PrimaryButton> {
           onTap: _isButtonDisabled
               ? null
               : () async {
-                  setState(() {
-                    _isButtonDisabled = true; // disable the button
-                  });
+                  if (mounted) {
+                    setState(() {
+                      _isButtonDisabled = true; // disable the button
+                    });
+                  }
                   widget.function(); // call the original button function
                   await Future.delayed(
                       const Duration(seconds: 5)); // wait for 5 seconds
-                  setState(() {
-                    _isButtonDisabled = false; // enable the button
-                  });
+                  if (mounted) {
+                    setState(() {
+                      _isButtonDisabled = false; // enable the button
+                    });
+                  }
                 },
           child: Container(
             height: 65.h,
-            width: 250.w,
+            width: widget.width!.w,
             decoration: BoxDecoration(
               color: _isButtonDisabled ? Colors.grey : primary,
               borderRadius: BorderRadius.circular(360),
