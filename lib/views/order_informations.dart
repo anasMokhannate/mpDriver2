@@ -938,7 +938,7 @@ class OrderInformations extends StatelessWidget {
                                                                               // controller
                                                                               //     .stopTimer();
                                                                               if (controller.positionStream != null) {
-                                                                                controller.positionStream!.cancel();
+                                                                                // controller.positionStream!.cancel();
                                                                               }
 
                                                                               Get.delete<OrderInformations>();

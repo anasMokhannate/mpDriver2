@@ -5,6 +5,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:diacritic/diacritic.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_background/flutter_background.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geoflutterfire2/geoflutterfire2.dart';
 import 'package:geolocator/geolocator.dart';
@@ -15,7 +16,6 @@ import 'package:motopickupdriver/utils/colors.dart';
 import 'package:motopickupdriver/utils/models/order.dart' as Orderr;
 import 'package:motopickupdriver/utils/queries.dart';
 import 'package:motopickupdriver/utils/services.dart';
-import 'package:workmanager/workmanager.dart';
 
 import '../utils/models/user.dart';
 
@@ -216,14 +216,12 @@ class HomePageController extends GetxController {
     }
   }
 
-  void updateMyLocation(documentSnapshot) {}
-
-  void callbackDispatcher() {
-    Workmanager().executeTask((taskName, inputData) async {
-      print("Background task executed");
-      return Future.value(true);
-    });
-  }
+  // void callbackDispatcher() {
+  //   Workmanager().executeTask((taskName, inputData) async {
+  //     print("Background task executed");
+  //     return Future.value(true);
+  //   });
+  // }
 
   @override
   void onInit() async {
@@ -238,13 +236,8 @@ class HomePageController extends GetxController {
       await getUserLocation();
       center = GeoFirePoint(latitude!, longitude!);
 
-      Workmanager? workmanager = Workmanager();
+      startLocationUpdates();
 
-      await workmanager.initialize(callbackDispatcher, isInDebugMode: true);
-
-      // Timer.periodic(const Duration(seconds: 4), (timer) {
-      // startLocationUpdates();
-      // });
       // stream = geo!
       //     .collection(
       //         collectionRef: FirebaseFirestore.instance.collection("mp_orders"))

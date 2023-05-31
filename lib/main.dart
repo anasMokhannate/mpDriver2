@@ -5,6 +5,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_background/flutter_background.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:geoflutterfire2/geoflutterfire2.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
@@ -12,11 +13,16 @@ import 'package:get_storage/get_storage.dart';
 import 'package:motopickupdriver/utils/colors.dart';
 import 'package:motopickupdriver/utils/navigations.dart';
 import 'package:motopickupdriver/utils/services.dart';
-import 'package:workmanager/workmanager.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
+  // await FlutterBackground.initialize().then((value) async {
+  //   await FlutterBackground.enableBackgroundExecution().then((value) {
+  //     print('background enabled $value');
+  //   });
+  // });
+
   await EasyLocalization.ensureInitialized();
   await Firebase.initializeApp();
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
