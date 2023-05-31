@@ -5,7 +5,6 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:diacritic/diacritic.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_background/flutter_background.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geoflutterfire2/geoflutterfire2.dart';
 import 'package:geolocator/geolocator.dart';
@@ -16,6 +15,7 @@ import 'package:motopickupdriver/utils/colors.dart';
 import 'package:motopickupdriver/utils/models/order.dart' as Orderr;
 import 'package:motopickupdriver/utils/queries.dart';
 import 'package:motopickupdriver/utils/services.dart';
+import 'package:location/location.dart' as loc;
 
 import '../utils/models/user.dart';
 
@@ -79,6 +79,7 @@ class HomePageController extends GetxController {
   }
 
   updateLocationInFirestore(latitude, longitude) async {
+    
     print("$status status--");
     userBase!.location =
         GeoFlutterFire().point(latitude: latitude!, longitude: longitude!).data;
@@ -229,13 +230,15 @@ class HomePageController extends GetxController {
 
     await getCurrentUser().then((value) async {
       await initOneSignal();
+      loc.Location location = loc.Location();
+
       userBase = value;
       status = userBase!.isOnline ?? false;
       //userBase!.driverTotalOrders = 0;
       userBase!.isActivatedAccount = true;
       await getUserLocation();
       center = GeoFirePoint(latitude!, longitude!);
-
+      location.enableBackgroundMode(enable: true);
       startLocationUpdates();
 
       // stream = geo!
