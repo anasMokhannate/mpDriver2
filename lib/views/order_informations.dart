@@ -183,6 +183,24 @@ class OrderInformations extends StatelessWidget {
                                         } else {
                                           controller.driverId = "";
                                         }
+                                        if (documentSnapshot["driver"] !=
+                                                null &&
+                                            documentSnapshot["driver"]['uid'] !=
+                                                controller.userBase!.uid &&
+                                            controller.orderStatus ==
+                                                'customer_accepted') {
+                                          controller.userBase!
+                                              .currentOrderDriver = null;
+                                          saveCurrentUser(controller.userBase!);
+                                          completeUser(controller.userBase!);
+
+                                          // Get.delete<
+                                          //     OrderInformationsController>();
+                                          Future.delayed(Duration.zero).then(
+                                              (value) =>
+                                                  Get.offAll(() => HomePage()));
+                                        }
+
                                         // controller.driverId = driver.uid ?? "";
 
                                         controller.startlatitude =
@@ -486,15 +504,13 @@ class OrderInformations extends StatelessWidget {
                                                                           docSnapshot
                                                                               .data();
                                                                       phoneNo =
-                                                                          data!["customer"]
-                                                                              [
+                                                                          data![
                                                                               'phone_number'];
 
                                                                       print(
                                                                           "haaa $phoneNo");
-                                                                      launchUrl(
-                                                                          Uri.parse(
-                                                                              "https://wa.me/$phoneNo"));
+                                                                      launch(
+                                                                          "https://wa.me/$phoneNo");
                                                                     }
                                                                   }
                                                                 },
@@ -685,8 +701,8 @@ class OrderInformations extends StatelessWidget {
 
                                                                             print("zzzz ${documentSnapshot["driver"]['uid']} ${controller.driverId}");
                                                                             // if (controller.driverId == controller.userBase!.uid) {
-                                                                            if (controller.orderStatus ==
-                                                                                'customer_accepted') {
+                                                                            if (controller.orderStatus == 'customer_accepted' &&
+                                                                                documentSnapshot["driver"]['uid'] == controller.userBase!.uid) {
                                                                               controller.startCourse = true;
                                                                               controller.startLocationUpdates(documentSnapshot['order_id']);
                                                                               await FirebaseFirestore.instance.collection("mp_orders").doc(controller.userBase!.currentOrderDriver).update({
@@ -717,14 +733,14 @@ class OrderInformations extends StatelessWidget {
                                                                               BoxDecoration(
                                                                             color:
                                                                                 // controller.driverId == controller.userBase!.uid
-                                                                                controller.orderStatus == 'customer_accepted' ? primary : Colors.grey.withOpacity(0.4),
+                                                                                controller.orderStatus == 'customer_accepted' && documentSnapshot["driver"]['uid'] == controller.userBase!.uid ? primary : Colors.grey.withOpacity(0.4),
                                                                             borderRadius:
                                                                                 BorderRadius.circular(360),
                                                                           ),
                                                                           child:
                                                                               Text(
                                                                             // controller.driverId == controller.userBase!.uid ?
-                                                                            controller.orderStatus == 'customer_accepted'
+                                                                            controller.orderStatus == 'customer_accepted' && documentSnapshot["driver"]['uid'] == controller.userBase!.uid
                                                                                 ? 'Continuer'
                                                                                 : 'En attente',
                                                                             style:
@@ -938,7 +954,7 @@ class OrderInformations extends StatelessWidget {
                                                                               // controller
                                                                               //     .stopTimer();
                                                                               if (controller.positionStream != null) {
-                                                                                 controller.positionStream!.cancel();
+                                                                                controller.positionStream!.cancel();
                                                                               }
 
                                                                               Get.delete<OrderInformations>();

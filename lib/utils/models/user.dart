@@ -19,10 +19,10 @@ class MpUser {
   bool? isDriver;
   int? cancelledDelivery;
   int? succededDelivery;
-  int? plannedDelivery;
+  int plannedDelivery;
   int? cancelledTrip;
   int? succededTrip;
-  int? plannedTrip;
+  int plannedTrip;
   double? customerNote;
   List? motos;
   String? identityCardNumber;
@@ -45,9 +45,11 @@ class MpUser {
   String? authType;
   String? lastDocumentUpdateDate;
   int? customerTotalOrders;
+
   int? customerTotalPaid;
   int? driverTotalPaid;
   int? driverTotalOrders;
+
   double? driverNote;
 
   MpUser({
@@ -73,19 +75,15 @@ class MpUser {
     this.succededDelivery,
     this.plannedDelivery = 0,
     this.cancelledTrip = 0,
-    this.succededTrip,
+    this.succededTrip = 0,
     this.plannedTrip = 0,
-    this.customerNote,
+    this.customerNote = 0,
     this.motos,
     this.identityCardNumber,
     this.identityCardPicture,
     this.identityCardExpirationDate,
     this.drivingLicencePicture,
     this.drivingLicenceExpirationDate,
-    this.carteGrisePicture,
-    this.carteGriseExpirationDate,
-    this.assurancePicture,
-    this.assuranceExpirationDate,
     this.orderTotalAmount,
     this.anthropometrique,
     this.reportedTimes,
@@ -96,11 +94,11 @@ class MpUser {
     this.currentPageDriver,
     this.lastDocumentUpdateDate,
     this.authType,
-    this.customerTotalOrders,
-    this.customerTotalPaid,
-    this.driverTotalPaid,
-    this.driverTotalOrders,
-    this.driverNote,
+    this.customerTotalOrders = 0,
+    this.customerTotalPaid = 0,
+    this.driverTotalPaid = 0,
+    this.driverTotalOrders = 0,
+    this.driverNote = 0,
   });
 
   factory MpUser.fromJson(Map<String, dynamic>? json) {
@@ -125,10 +123,10 @@ class MpUser {
       isDriver: json?['is_driver'],
       cancelledDelivery: json?['cancelled_delivery'],
       succededDelivery: json?['succeded_delivery'],
-      plannedDelivery: json?['planned_delivery'],
+      plannedDelivery: json?['planned_delivery'] ?? 0,
       cancelledTrip: json?['cancelled_trip'],
       succededTrip: json?['succeded_trip'],
-      plannedTrip: json?['planned_trip'],
+      plannedTrip: json?['planned_trip'] ?? 0,
       customerNote: json?['customer_note']?.toDouble() ?? 0.0,
       motos: json?['motos'],
       identityCardNumber: json?['identity_card_number'],
@@ -136,10 +134,6 @@ class MpUser {
       identityCardExpirationDate: json?['identity_card_expiration_date'],
       drivingLicencePicture: json?['driving_licence_picture'],
       drivingLicenceExpirationDate: json?['driving_licence_expiration_date'],
-      carteGrisePicture: json?['grise_picture'],
-      carteGriseExpirationDate: json?['grise_expiration_date'],
-      assurancePicture: json?['assurance_picture'],
-      assuranceExpirationDate: json?['assurance_expiration_date'],
       orderTotalAmount: json?['order_total_amount'],
       anthropometrique: json?['anthropometrique'],
       reportedTimes: json?['reported_times'],
@@ -150,11 +144,11 @@ class MpUser {
       currentPageDriver: json?['current_page_driver'],
       lastDocumentUpdateDate: json?['last_document_update_date'],
       authType: json?['auth_type'],
-      customerTotalOrders: json?['customer_total_orders'],
+      customerTotalOrders: json?['customer_total_orders'] ?? 0,
       customerTotalPaid: json?['customer_total_paid']?.toInt() ?? 0,
       driverTotalPaid: json?['driver_total_paid']?.toInt() ?? 0,
-      driverTotalOrders: json?['driver_total_orders'],
-      driverNote: json?['driver_note'] ?? 0.0,
+      driverTotalOrders: json?['driver_total_orders'] ?? 0,
+      driverNote: json?['driver_note'],
     );
   }
 
@@ -171,6 +165,7 @@ class MpUser {
     data['last_login_date'] = lastLoginDate;
     data['current_city'] = currentCity;
     data['location'] = location;
+
     data['is_deleted_account'] = isDeletedAccount;
     data['is_activated_account'] = isActivatedAccount;
     data['is_verified_account'] = isVerifiedAccount;
@@ -185,31 +180,38 @@ class MpUser {
     data['succeded_trip'] = succededTrip;
     data['planned_trip'] = plannedTrip;
     data['customer_note'] = customerNote ?? 0.0;
+
     data['motos'] = motos;
+    data['identity_card_number'] = identityCardNumber;
+    data['identity_card_picture'] = identityCardPicture;
+    data['identity_card_expiration_date'] = identityCardExpirationDate;
     data['current_page_client'] = currentPageClient;
     data['current_page_driver'] = currentPageDriver;
     data['auth_type'] = authType;
     data['driving_licence_picture'] = drivingLicencePicture;
     data['driving_licence_expiration_date'] = drivingLicenceExpirationDate;
-    data['grise_picture'] = carteGrisePicture;
-    data['grise_expiration_date'] = carteGriseExpirationDate;
-    data['assurance_picture'] = assurancePicture;
-    data['assurance_expiration_date'] = assuranceExpirationDate;
-    data['reported_times'] = reportedTimes;
-    data['curr_fcm'] = fcm;
-    data['identity_card_number'] = identityCardNumber;
-    data['identity_card_picture'] = identityCardPicture;
-    data['identity_card_expiration_date'] = identityCardExpirationDate;
     data['order_total_amount'] = orderTotalAmount;
     data['anthropometrique'] = anthropometrique;
     data['reported_times'] = reportedTimes;
+    data['curr_fcm'] = fcm;
+    data['current_order_driver'] = currentOrderDriver;
+    data['current_order_customer'] = currentOrderCustomer;
+    data['identity_card_number'] = identityCardNumber;
+    data['identity_card_picture'] = identityCardPicture;
+    data['identity_card_expiration_date'] = identityCardExpirationDate;
+    data['driving_licence_picture'] = drivingLicencePicture;
+    data['driving_licence_expiration_date'] = drivingLicenceExpirationDate;
+    data['order_total_amount'] = orderTotalAmount;
+    data['anthropometrique'] = anthropometrique;
+    data['reported_times'] = reportedTimes;
+    data['curr_fcm'] = fcm;
     data['current_order_driver'] = currentOrderDriver;
     data['current_order_customer'] = currentOrderCustomer;
     data['last_document_update_date'] = lastDocumentUpdateDate;
-    data['customer_total_orders'] = customerTotalOrders;
+    data['customer_total_orders'] = customerTotalOrders ?? 0;
     data['customer_total_paid'] = customerTotalPaid;
     data['driver_total_paid'] = driverTotalPaid;
-    data['driver_total_orders'] = driverTotalOrders;
+    data['driver_total_orders'] = driverTotalOrders ?? 0;
     data['driver_note'] = driverNote;
 
     return data;

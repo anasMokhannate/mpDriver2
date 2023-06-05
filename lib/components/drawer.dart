@@ -159,7 +159,8 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                           onPressed: () {
                             final uri = Uri.parse(
                                 "https://www.facebook.com/Motopickupafrica?mibextid=ZbWKwL");
-                            launchUrl(uri);
+                            launchUrl(uri,
+                                mode: LaunchMode.externalNonBrowserApplication);
                           },
                           icon: const Icon(
                             Icons.facebook,
@@ -171,7 +172,8 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                           onPressed: () {
                             final uri = Uri.parse(
                                 "https://instagram.com/motopickupafrica?igshid=ZmRlMzRkMDU=");
-                            launchUrl(uri);
+                            launchUrl(uri,
+                                mode: LaunchMode.externalNonBrowserApplication);
                           },
                           icon: const Icon(
                             Boxicons.bxl_instagram,
