@@ -85,8 +85,7 @@ class HomePage extends StatelessWidget {
                         onToggle: (val) async {
                           await getCurrentUser().then((userFromDB) {
                             controller.userBase = userFromDB;
-                            print(
-                                'zzz currentOrderCustomer ${controller.userBase!.currentOrderCustomer}');
+                          
                             if (controller.userBase!.currentOrderCustomer !=
                                 null) {
                               showAlertDialogOneButton(
@@ -255,8 +254,7 @@ class HomePage extends StatelessWidget {
                                         // controller.update();
                                         controller.isPlanned =
                                             documentSnapshot['is_planned'];
-                                        print(
-                                            'is Plqnnnnneed ${controller.isPlanned}');
+                                       
                                         return OrdersCard(
                                           isPlanned: controller.isPlanned,
                                           status: 1,
@@ -304,7 +302,7 @@ class HomePage extends StatelessWidget {
                                                         documentSnapshot.data()
                                                             as Map<String,
                                                                 dynamic>);
-                                                print("haaaa");
+                                              
                                                 controller.isOnOrder = true;
                                                 controller.isWithOrder = true;
                                                 Get.offAll(
@@ -374,8 +372,7 @@ class HomePage extends StatelessWidget {
 
                               await getCurrentUser().then((userFromDB) {
                                 controller.userBase = userFromDB;
-                                print(
-                                    'zzz currentOrderCustomer ${controller.userBase!.currentOrderCustomer}');
+                           
                                 if (controller.userBase!.currentOrderCustomer !=
                                     null) {
                                   showAlertDialogOneButton(

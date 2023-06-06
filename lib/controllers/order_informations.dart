@@ -53,7 +53,7 @@ class OrderInformationsController extends GetxController {
   }
 
   getOrderStatus(String orderId) async {
-    print("zzz currentOrderId ${userBase!.currentOrderDriver}");
+    
     var docSnapshot = await FirebaseFirestore.instance
         .collection('mp_orders')
         .doc(orderId)
@@ -244,7 +244,7 @@ class OrderInformationsController extends GetxController {
   void onInit() async {
     super.onInit();
     loc.Location location = loc.Location();
-    print("driver id $driverId");
+    
     await getCurrentUser().then((value) async {
       userBase = value;
       isOnline = userBase!.isOnline ?? false;

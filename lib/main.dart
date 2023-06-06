@@ -15,12 +15,7 @@ import 'package:motopickupdriver/utils/services.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  // await FlutterBackground.initialize().then((value) async {
-  //   await FlutterBackground.enableBackgroundExecution().then((value) {
-  //     print('background enabled $value');
-  //   });
-  // });
+ 
 
   await EasyLocalization.ensureInitialized();
   await Firebase.initializeApp();

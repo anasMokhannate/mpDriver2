@@ -23,9 +23,9 @@ class ReVerifyPhoneController extends GetxController {
     super.onInit();
     await getUserFromMemory().then((value) {
       userBase = value;
-      print("useeeeeeeeeeeeeeeeeeeeeeeeeer ${userBase!}");
+      
       phoneNumber = userBase!.phoneNumber!;
-      print(phoneNumber);
+      
       verificationCode = Get.arguments;
       //startTimer();
       update();

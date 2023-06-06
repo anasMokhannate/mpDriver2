@@ -55,7 +55,7 @@ class VerifyPhoneNumberController extends GetxController {
                   } else {
                     showAlertDialogOneButton(
                         context, 'Echéc', "Validation a échoué", "Ok");
-                    print(e.message);
+                    
                   }
                 },
                 codeSent: (verificationId, resendingToken) async {

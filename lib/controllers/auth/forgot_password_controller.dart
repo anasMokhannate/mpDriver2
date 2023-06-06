@@ -89,7 +89,7 @@ class ForgotPasswordController extends GetxController {
                 }
               });
             } catch (e) {
-              print("error $e");
+              
               loading.toggle();
               update();
             }

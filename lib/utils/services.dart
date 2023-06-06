@@ -24,22 +24,22 @@ handlerPermission() async {
   if (permission.isDenied) {
     await Permission.phone.request();
     await Permission.location.request();
-    await Permission.locationAlways.request();
+    // await Permission.locationAlways.request();
   }
   if (permission.isRestricted) {
     await Permission.phone.request();
     await Permission.location.request();
-    await Permission.locationAlways.request();
+    // await Permission.locationAlways.request();
   }
   if (permission.isPermanentlyDenied) {
     await Permission.phone.request();
     await Permission.location.request();
-    await Permission.locationAlways.request();
+    // await Permission.locationAlways.request();
   }
   if (permission.isLimited) {
     await Permission.phone.request();
     await Permission.location.request();
-    await Permission.locationAlways.request();
+    // await Permission.locationAlways.request();
   }
 }
 
@@ -115,7 +115,6 @@ Future<void> initOneSignal() async {
     osUserID = changes.to.userId ?? '';
     String playerid = osUserID;
     await SessionManager().set('user_fcm', playerid);
-    print("playerid: $playerid");
   });
   await OneSignal.shared.promptUserForPushNotificationPermission(
     fallbackToSettings: true,

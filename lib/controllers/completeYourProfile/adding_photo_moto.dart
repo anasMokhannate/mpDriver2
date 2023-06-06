@@ -27,7 +27,7 @@ class AddingPhotoMotoController extends GetxController {
     await getUserFromMemory().then((value) async {
       userBase = value;
       moto = Moto.fromJson(userBase?.motos![0] as Map<String, dynamic>);
-      print(moto);
+      
     });
     update();
   }

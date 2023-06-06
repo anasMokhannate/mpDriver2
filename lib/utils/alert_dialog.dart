@@ -379,7 +379,7 @@ void showAchievementView(BuildContext context, title, text) {
       //alignment: Alignment.topCenter,
       duration: const Duration(seconds: 4),
       isCircle: true, listener: (status) {
-    print(status);
+    
     //AchievementState.opening
     //AchievementState.open
     //AchievementState.closing

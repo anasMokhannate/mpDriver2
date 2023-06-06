@@ -29,7 +29,7 @@ Future<Widget?> initWidget() async {
   bool isFirstTime = await SessionManager().get('first_time') ?? true;
   //bool hasAccepted = await SessionManager().get('hasAccepted') ?? true;
   await SessionManager().get('user_fcm').then((value) {
-    print('objects $value');
+    
   });
   if (isFirstTime) {
     mainPage = const OnBoardingPage();
@@ -40,19 +40,15 @@ Future<Widget?> initWidget() async {
       } else {
         MpUser user = value;
         await getUser(user.uid).then((userFromDb) async {
-          print('object zzz ${user.uid} ${userFromDb.currentPageDriver}');
+          
           switch (userFromDb.currentPageDriver) {
             case 'homePage':
               if (userFromDb.currentOrderDriver != null) {
                 if (await getOrderStatus(userFromDb.currentOrderDriver!) ==
                     'in_rating') {
-                  print(
-                      'if zzz ${user.uid} ${userFromDb.currentPageDriver} ${userFromDb.currentOrderDriver} ${getOrderStatus(userFromDb.currentOrderDriver!)}');
-                  mainPage = RateClient();
+                             mainPage = RateClient();
                 } else {
-                  print(
-                      'else zzz ${user.uid} ${userFromDb.currentPageDriver} ${userFromDb.currentOrderDriver} ${getOrderStatus(userFromDb.currentOrderDriver!)}');
-                  mainPage = OrderInformations();
+                      mainPage = OrderInformations();
                 }
               } else {
                 mainPage = HomePage();
@@ -102,11 +98,11 @@ Future<Widget?> initWidget() async {
 //   Widget? mainPage;
 //   String id = "";
 //   bool isLoggedIn = box.read('isLoggedIn') ?? false;
-//   print(isLoggedIn);
+//   
 //   if (isLoggedIn) {
 //     try {
 //       await getCurrentUser().then((value) async {
-//       print(value!.email);
+//       
 //       isActivated = value.isActivatedAccount!;
 //       isVerified = value.isVerifiedAccount!;
 //       id = value.uid!;

@@ -44,7 +44,7 @@ class VerifyCodeController extends GetxController {
     await getUserFromMemory().then((value) {
       currUser = value;
       phoneNumber = currUser!.phoneNumber!;
-      print(phoneNumber);
+      
       verificationCode = Get.arguments;
       startTimer();
       update();

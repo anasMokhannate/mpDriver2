@@ -34,14 +34,13 @@ class ChangeCardController extends GetxController {
   selectImageCard() async {
     try {
       cardFile = await ImagePicker().pickImage(source: ImageSource.gallery);
-      // print("abc ${cardFile?.name ?? "sss"}");
       if (cardFile != null) {
         card = File(cardFile!.path);
         cardEdited = true;
         update();
       }
     } catch (e) {
-      print(e);
+      
     }
   }
 
@@ -55,7 +54,7 @@ class ChangeCardController extends GetxController {
         update();
       }
     } catch (e) {
-      print(e);
+      rethrow;
     }
   }
 
@@ -69,7 +68,7 @@ class ChangeCardController extends GetxController {
         update();
       }
     } catch (e) {
-      print(e);
+      
     }
   }
 
@@ -82,7 +81,7 @@ class ChangeCardController extends GetxController {
         update();
       }
     } catch (e) {
-      print(e);
+      
     }
   }
 
@@ -95,7 +94,7 @@ class ChangeCardController extends GetxController {
         update();
       }
     } catch (e) {
-      print(e);
+      
     }
   }
 
@@ -126,22 +125,13 @@ class ChangeCardController extends GetxController {
   uploadImages() async {
     FirebaseStorage fs = FirebaseStorage.instance;
     bool isEdited = false;
-    // print("abc before uploadImages: ");
-    // print("abc i $cardEdited ${userBase?.identityCardPicture}");
-    // print("abc l $licenceEdited ${userBase?.drivingLicencePicture}");
-    // print("abc as $assuranceEdited ${userBase?.assurancePicture}");
-    // print("abc g $griseEdited ${userBase?.carteGrisePicture}");
-    // print("abc an $antropometriqueEdited ${userBase?.anthropometrique}");
 
     if (cardEdited) {
-      print('card edited');
       await fs
           .ref('user-images/${cardFile!.name}')
           .putFile(card!)
           .then((p0) async {
-        print('card editedd');
         await p0.ref.getDownloadURL().then((value) async {
-          print('card editeddd');
           // currCard = value;
           userBase!.identityCardPicture = value;
           userBase!.identityCardExpirationDate = cardExpire;
@@ -217,17 +207,8 @@ class ChangeCardController extends GetxController {
     userBase!.isActivatedAccount = false;
     userBase!.currentPageDriver = "congratsPage";
 
-    print("abc i $cardEdited ${userBase?.identityCardPicture}");
-    print("abc l $licenceEdited ${userBase?.drivingLicencePicture}");
-    print("abc as $assuranceEdited ${userBase?.assurancePicture}");
-    print("abc g $griseEdited ${userBase?.carteGrisePicture}");
-    print("abc an $antropometriqueEdited ${userBase?.anthropometrique}");
-
-    print('imaage 0  : ${userBase!.anthropometrique}');
     await saveCurrentUser(userBase!).then((value) async {
-      print('imaage 1  : ${userBase!.anthropometrique}');
       await completeUser(userBase!).then((value) {
-        print('imaage 2  : ${userBase!.anthropometrique}');
         loading.toggle();
         update();
         Get.offAll(() => Congrats(), transition: Transition.rightToLeft);
@@ -243,17 +224,17 @@ class ChangeCardController extends GetxController {
       loading.toggle();
       update();
       await uploadImages().then((isEdited) async {
-        // print("abc after uploadImages: ");
-        // print("abc i $cardEdited ${userBase?.identityCardPicture}");
-        // print("abc l $licenceEdited ${userBase?.drivingLicencePicture}");
-        // print("abc as $assuranceEdited ${userBase?.assurancePicture}");
-        // print("abc g $griseEdited ${userBase?.carteGrisePicture}");
-        // print("abc an $antropometriqueEdited ${userBase?.anthropometrique}");
+        // 
+        // 
+        // 
+        // 
+        // 
+        // 
         if (isEdited) {
-          print("card ed1");
+          
           updateUserImages();
         } else {
-          print("card ed2");
+          
           loading.toggle();
           update();
           Get.offAll(() => ProfilePage(), transition: Transition.rightToLeft);
@@ -267,7 +248,7 @@ class ChangeCardController extends GetxController {
     super.onInit();
     await getUserFromMemory().then((value) async {
       userBase = value;
-      print('fen user ${userBase!.identityCardPicture}');
+      
       // cardFile = XFile(value!.identityCardPicture!);
       // card = File(cardFile!.path);
       // cardLicence = XFile(value.drivingLicencePicture!);

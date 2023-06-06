@@ -30,7 +30,7 @@ class VerifyIdentityController extends GetxController {
         update();
       }
     } catch (e) {
-      print(e);
+      
     }
   }
 
@@ -42,7 +42,7 @@ class VerifyIdentityController extends GetxController {
         update();
       }
     } catch (e) {
-      print(e);
+      
     }
   }
 
@@ -55,7 +55,7 @@ class VerifyIdentityController extends GetxController {
         update();
       }
     } catch (e) {
-      print(e);
+      
     }
   }
 
@@ -67,7 +67,7 @@ class VerifyIdentityController extends GetxController {
         update();
       }
     } catch (e) {
-      print(e);
+      
     }
   }
 
@@ -79,7 +79,7 @@ class VerifyIdentityController extends GetxController {
         update();
       }
     } catch (e) {
-      print(e);
+      
     }
   }
 
@@ -163,7 +163,7 @@ class VerifyIdentityController extends GetxController {
         await p2.ref.getDownloadURL().then((value) async {
           userBase!.carteGrisePicture = value;
           userBase!.carteGriseExpirationDate = griseExpire;
-          print("fen1");
+          
 
           if (cardAnthropometrique != null) {
             await FirebaseStorage.instance
@@ -172,14 +172,14 @@ class VerifyIdentityController extends GetxController {
                 .then((p1) async {
               await p1.ref.getDownloadURL().then((value) async {
                 userBase!.anthropometrique = value;
-                print('fen3');
+                
               });
-              print('fen4');
+              
             });
-            print('fen5');
+            
           }
 
-          print("fen6");
+          
           userBase!.currentPageDriver = 'congratsPage';
           userBase!.isDriver = true;
           // if (isCoursier == true && isDriver == false) {
@@ -205,7 +205,7 @@ class VerifyIdentityController extends GetxController {
             // });
           });
         });
-        print("fen2");
+        
       });
 
       // });

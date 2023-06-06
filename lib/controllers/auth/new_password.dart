@@ -12,7 +12,7 @@ class NewPasswordController extends GetxController {
   TextEditingController confirmePasswod = TextEditingController();
 
   // validate(context) {
-  //   print(FirebaseAuth.instance.currentUser);
+  //   
   // }
 
   // submit(context) async {

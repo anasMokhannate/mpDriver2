@@ -129,14 +129,14 @@ class WelcomeController extends GetxController {
     super.onInit();
 
     await SessionManager().get("hasAccepted").then((value) {
-      print('Conditions d\'utilisation : $value ');
+      
     });
     await getUserFromMemory().then((value) {
-      print('user from memory (welcome 1): ${value?.email} ${value?.authType}');
+      
     });
     SessionManager().remove('currentUser');
     await getUserFromMemory().then((value) {
-      print('user from memory (welcome 2): ${value?.email} ${value?.authType}');
+      
     });
   }
 }

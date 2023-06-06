@@ -85,7 +85,7 @@ Future deleteUser(MpUser user, reason) async {
 }
 
 Future<String?> getProvider(String email) async {
-  print('email: $email');
+  
   String provider = "";
   await FirebaseFirestore.instance
       .collection("mp_users")
@@ -99,7 +99,6 @@ Future<String?> getProvider(String email) async {
       provider = value.docs.first.get("auth_type");
     }
   });
-  print('provider: $provider');
   return provider;
 }
 
@@ -218,9 +217,7 @@ getOrderStatus(String orderId) async {
 }
 
 Future annulerOrder(MpUser driver, orderModel.Order order) async {
-  print("fdfasf ${order.driversAccepted} ");
-  print("kjh  ${driver.uid}");
-  print(order.customer!['uid']);
+
 
   if (order.status == 'customer_accepted') {
     await FirebaseFirestore.instance

@@ -80,10 +80,10 @@ class HomePageController extends GetxController {
 
   updateLocationInFirestore(latitude, longitude) async {
     
-    print("$status status--");
+    
     userBase!.location =
         GeoFlutterFire().point(latitude: latitude!, longitude: longitude!).data;
-    print(userBase!.location!["geopoint"].latitude);
+    
     // await completeUser(userBase!);
     await FirebaseFirestore.instance
         .collection("mp_users")
@@ -92,7 +92,7 @@ class HomePageController extends GetxController {
       'location': userBase!.location,
       // 'driver_latitude': latitude,
     }).then((value) {
-      print('location updated');
+      
     });
   }
 
@@ -183,7 +183,7 @@ class HomePageController extends GetxController {
         position.latitude, position.longitude,
         localeIdentifier: "fr_FR");
     city = placemarks.first.locality;
-    print("this is  $city  ${placemarks.first.street}");
+    
     city = removeDiacritics(city ?? "");
     userBase!.location =
         GeoFlutterFire().point(latitude: latitude!, longitude: longitude!).data;
@@ -219,7 +219,7 @@ class HomePageController extends GetxController {
 
   // void callbackDispatcher() {
   //   Workmanager().executeTask((taskName, inputData) async {
-  //     print("Background task executed");
+  //     
   //     return Future.value(true);
   //   });
   // }
@@ -250,7 +250,7 @@ class HomePageController extends GetxController {
       //         field: 'order_pickup_location',
       //         strictMode: true) as Stream<QuerySnapshot<Object?>>?;
 
-      print(userBase);
+      
       updateFcm(userBase!);
       saveCurrentUser(value!);
       await getConfigParams().then((value) => cities = value);

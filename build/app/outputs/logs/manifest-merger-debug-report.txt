@@ -358,10 +358,6 @@ MERGED from [androidx.work:work-runtime:2.7.1] C:\Users\oussa\.gradle\caches\tra
 MERGED from [androidx.work:work-runtime:2.7.1] C:\Users\oussa\.gradle\caches\transforms-3\0137074672829c8fbe4c29d9b5c1e65b\transformed\work-runtime-2.7.1\AndroidManifest.xml:25:5-68
 	android:name
 		ADDED from C:\medyouin\wiam\NewEra\mpDriver2\android\app\src\main\AndroidManifest.xml:9:22-65
-uses-permission#android.permission.ACCESS_BACKGROUND_LOCATION
-ADDED from C:\medyouin\wiam\NewEra\mpDriver2\android\app\src\main\AndroidManifest.xml:10:5-84
-	android:name
-		ADDED from C:\medyouin\wiam\NewEra\mpDriver2\android\app\src\main\AndroidManifest.xml:10:22-82
 uses-permission#android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
 ADDED from C:\medyouin\wiam\NewEra\mpDriver2\android\app\src\main\AndroidManifest.xml:11:4-94
 	android:name

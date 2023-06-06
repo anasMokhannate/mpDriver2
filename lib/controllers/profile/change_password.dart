@@ -54,18 +54,18 @@ class ChangePasswordController extends GetxController {
   // submit(context) async {
   //   loading.toggle();
   //   update();
-  //   print("sub 1");
+  //   
   //   await validate(context).then((valid) async {
-  //     print("sub 2");
+  //     
   //     if (valid) {
-  //       print('in valid');
+  //       
   //       try {
   //         User? user = FirebaseAuth.instance.currentUser;
   //         await FirebaseAuth.instance
   //             .signInWithEmailAndPassword(
   //                 email: userBase!.email!, password: currentPassword.text)
   //             .then((_) {
-  //           print("sub 3 ${user!.phoneNumber}");
+  //           
 
   //           user.updatePassword(newPassword.text).then((_) {
   //             loading.toggle();

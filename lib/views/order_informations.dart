@@ -147,7 +147,7 @@ class OrderInformations extends StatelessWidget {
                                                     Map<String, dynamic>>>
                                             snapshot) {
                                       if (!snapshot.hasData) {
-                                        print('no dataaa');
+                                      
                                         return Container();
                                       } else if (snapshot.hasData &&
                                           snapshot.data!.docs.isNotEmpty) {
@@ -155,8 +155,7 @@ class OrderInformations extends StatelessWidget {
                                         //     'customer_accepted';
                                         // controller.getOrderStatus();
 
-                                        print(
-                                            "zzz status ${controller.orderStatus}");
+                                   
 
                                         // TODO: he relevant error-causing widget was
                                         // StreamBuilder<QuerySnapshot<Map<String, dynamic>>>
@@ -257,8 +256,7 @@ class OrderInformations extends StatelessWidget {
                                         //   ),
                                         // );
 
-                                        print(
-                                            "zzz orderId ${documentSnapshot['order_id']}");
+                                     
                                         controller.ttime = double.parse(
                                                         documentSnapshot[
                                                             'nbre_km_depart_destination']) /
@@ -483,8 +481,7 @@ class OrderInformations extends StatelessWidget {
                                                                             [
                                                                             'uid'];
 
-                                                                    print(
-                                                                        'haaa ');
+                                                                  
 
                                                                     String
                                                                         phoneNo =
@@ -507,8 +504,7 @@ class OrderInformations extends StatelessWidget {
                                                                           data![
                                                                               'phone_number'];
 
-                                                                      print(
-                                                                          "haaa $phoneNo");
+                                                                  
                                                                       launch(
                                                                           "https://wa.me/$phoneNo");
                                                                     }
@@ -653,7 +649,7 @@ class OrderInformations extends StatelessWidget {
                                                                             () async {
                                                                           if (documentSnapshot[
                                                                               'is_planned']) {
-                                                                            print("zzz1");
+                                                                         
                                                                             controller.startCourse =
                                                                                 false;
                                                                             controller.isOnOrder =
@@ -697,10 +693,7 @@ class OrderInformations extends StatelessWidget {
                                                                             await controller.getWithOrder();
                                                                             controller.update();
                                                                           } else {
-                                                                            print("zzzzz");
-
-                                                                            print("zzzz ${documentSnapshot["driver"]['uid']} ${controller.driverId}");
-                                                                            // if (controller.driverId == controller.userBase!.uid) {
+                                                                                 // if (controller.driverId == controller.userBase!.uid) {
                                                                             if (controller.orderStatus == 'customer_accepted' &&
                                                                                 documentSnapshot["driver"]['uid'] == controller.userBase!.uid) {
                                                                               controller.startCourse = true;
@@ -832,9 +825,7 @@ class OrderInformations extends StatelessWidget {
                                                                           double
                                                                               distancee =
                                                                               double.parse(documentSnapshot['nbre_km_depart_destination']) / 50;
-                                                                          print(controller
-                                                                              .ttime
-                                                                              .toInt());
+                                                                       
                                                                           sendNotification([
                                                                             fcm
                                                                           ], "voyage a commencée",
