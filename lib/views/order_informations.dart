@@ -147,15 +147,12 @@ class OrderInformations extends StatelessWidget {
                                                     Map<String, dynamic>>>
                                             snapshot) {
                                       if (!snapshot.hasData) {
-                                      
                                         return Container();
                                       } else if (snapshot.hasData &&
                                           snapshot.data!.docs.isNotEmpty) {
                                         // controller.orderStatus =
                                         //     'customer_accepted';
                                         // controller.getOrderStatus();
-
-                                   
 
                                         // TODO: he relevant error-causing widget was
                                         // StreamBuilder<QuerySnapshot<Map<String, dynamic>>>
@@ -256,7 +253,6 @@ class OrderInformations extends StatelessWidget {
                                         //   ),
                                         // );
 
-                                     
                                         controller.ttime = double.parse(
                                                         documentSnapshot[
                                                             'nbre_km_depart_destination']) /
@@ -481,8 +477,6 @@ class OrderInformations extends StatelessWidget {
                                                                             [
                                                                             'uid'];
 
-                                                                  
-
                                                                     String
                                                                         phoneNo =
                                                                         "";
@@ -504,7 +498,6 @@ class OrderInformations extends StatelessWidget {
                                                                           data![
                                                                               'phone_number'];
 
-                                                                  
                                                                       launch(
                                                                           "https://wa.me/$phoneNo");
                                                                     }
@@ -649,7 +642,6 @@ class OrderInformations extends StatelessWidget {
                                                                             () async {
                                                                           if (documentSnapshot[
                                                                               'is_planned']) {
-                                                                         
                                                                             controller.startCourse =
                                                                                 false;
                                                                             controller.isOnOrder =
@@ -693,7 +685,7 @@ class OrderInformations extends StatelessWidget {
                                                                             await controller.getWithOrder();
                                                                             controller.update();
                                                                           } else {
-                                                                                 // if (controller.driverId == controller.userBase!.uid) {
+                                                                            // if (controller.driverId == controller.userBase!.uid) {
                                                                             if (controller.orderStatus == 'customer_accepted' &&
                                                                                 documentSnapshot["driver"]['uid'] == controller.userBase!.uid) {
                                                                               controller.startCourse = true;
@@ -819,24 +811,22 @@ class OrderInformations extends StatelessWidget {
                                                                           () async {
                                                                         String
                                                                             fcm =
-                                                                            documentSnapshot["customer"]["curr_fcm"];
+                                                                            documentSnapshot["customer"]["curr_fcm"] ??
+                                                                                "";
 
                                                                         newOne() async {
-                                                                          double
-                                                                              distancee =
-                                                                              double.parse(documentSnapshot['nbre_km_depart_destination']) / 50;
-                                                                       
-                                                                          sendNotification([
-                                                                            fcm
-                                                                          ], "voyage a commencée",
-                                                                              "votre chauffeur arrivera dans ${double.parse(documentSnapshot['nbre_km_depart_destination']) / 50 < 1 ? "${controller.ttime.toStringAsFixed(1)} minutes" : "${controller.ttime.toStringAsFixed(1)} heures"}  ");
-                                                                          plannedNotif(
-                                                                              [
-                                                                                fcm
-                                                                              ],
-                                                                              "Votre Motopickup vous attend.",
-                                                                              "",
-                                                                              DateTime.now().add(Duration(minutes: controller.ttime.toInt())));
+                                                                          if (fcm ==
+                                                                              "") {
+                                                                            sendNotification([
+                                                                              fcm
+                                                                            ], "voyage a commencée",
+                                                                                "votre chauffeur arrivera dans ${double.parse(documentSnapshot['nbre_km_depart_destination']) / 50 < 1 ? "${controller.ttime.toStringAsFixed(1)} minutes" : "${controller.ttime.toStringAsFixed(1)} heures"}  ");
+                                                                            plannedNotif([
+                                                                              fcm
+                                                                            ], "Votre Motopickup vous attend.", "",
+                                                                                DateTime.now().add(Duration(minutes: controller.ttime.toInt())));
+                                                                          }
+
                                                                           // double.parse(documentSnapshot['nbre_km_depart_destination']) /
                                                                           //             50 <
                                                                           //         1
@@ -921,7 +911,7 @@ class OrderInformations extends StatelessWidget {
                                                                               () async {
                                                                             String
                                                                                 fcm =
-                                                                                documentSnapshot["customer"]["curr_fcm"];
+                                                                                documentSnapshot["customer"]["curr_fcm"] ?? "";
 
                                                                             paiment(context,
                                                                                 () async {

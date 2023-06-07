@@ -15,8 +15,6 @@ import 'package:motopickupdriver/utils/services.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
- 
-
   await EasyLocalization.ensureInitialized();
   await Firebase.initializeApp();
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;

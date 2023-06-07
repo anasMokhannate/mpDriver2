@@ -164,6 +164,9 @@ updateFcm(MpUser user) async {
 }
 
 sendNotification(fcm, heading, content) async {
+  if (fcm == "") {
+    return;
+  }
   await OneSignal.shared.postNotification(OSCreateNotification(
     playerIds: fcm,
     content: content,
