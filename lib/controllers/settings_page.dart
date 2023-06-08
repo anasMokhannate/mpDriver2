@@ -6,14 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:motopickupdriver/controllers/home_page.dart';
 import 'package:motopickupdriver/utils/alert_dialog.dart';
 import 'package:motopickupdriver/utils/models/user.dart';
 import 'package:motopickupdriver/utils/queries.dart';
 import 'package:motopickupdriver/utils/services.dart';
 import 'package:motopickupdriver/utils/typography.dart';
-import 'package:motopickupdriver/views/auth/login_page.dart';
 import 'package:motopickupdriver/views/help_center.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 
@@ -120,23 +119,27 @@ class SettingController extends GetxController {
       await FirebaseAuth.instance.currentUser!.delete().then((value) {
         deleteUser(userBase!, reason.text).then((value) async {
           await FirebaseAuth.instance.signOut();
-         // String fcm = await SessionManager().get('driver_fcm') ?? '';
+          // String fcm = await SessionManager().get('driver_fcm') ?? '';
           await GoogleSignIn(scopes: ['profile', 'email']).signOut();
           await SessionManager().remove("currentUser");
           // await SessionManager().destroy();
-          
-         // await SessionManager().set('driver_fcm', fcm);
+
+          // await SessionManager().set('driver_fcm', fcm);
           isTrue.toggle();
           update();
+          Get.delete<HomePageController>();
           Get.offAll(() => WelcomeScreen());
+
+          sendNotification([userBase!.fcm!], "Votre compte a été supprimé",
+              "Votre compte a été supprimé avec succès. Merci d'avoir utilisé notre application.");
         });
       });
     } catch (e) {
       showAlertDialogOneButton(
           Get.context!,
           'Connexion récente',
-          "Vous avez besoin d'une connexion récente pour supprimer votre compte.",
-          'ok');
+          "Vous avez besoin d'une connexion récente, veuillez vous reconnecter pour pouvoir supprimer votre compte.",
+          'Ok');
     }
   }
 
