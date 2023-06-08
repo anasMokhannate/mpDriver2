@@ -53,7 +53,6 @@ class OrderInformationsController extends GetxController {
   }
 
   getOrderStatus(String orderId) async {
-    
     var docSnapshot = await FirebaseFirestore.instance
         .collection('mp_orders')
         .doc(orderId)
@@ -244,13 +243,16 @@ class OrderInformationsController extends GetxController {
   void onInit() async {
     super.onInit();
     loc.Location location = loc.Location();
-    
+
     await getCurrentUser().then((value) async {
       userBase = value;
       isOnline = userBase!.isOnline ?? false;
       await saveCurrentUser(userBase!);
       await getUserLocation();
-      location.enableBackgroundMode(enable: true);
+      bool bgModeEnabled = await location.isBackgroundModeEnabled();
+      if (!bgModeEnabled) {
+        location.enableBackgroundMode(enable: true);
+      }
       // startLocationUpdates();
       // await getWithOrder();
       orderStatus = await getOrderStatus(userBase!.currentOrderDriver!);

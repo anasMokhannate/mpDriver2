@@ -44,7 +44,7 @@ class VerifyCodeController extends GetxController {
     await getUserFromMemory().then((value) {
       currUser = value;
       phoneNumber = currUser!.phoneNumber!;
-      
+
       verificationCode = Get.arguments;
       startTimer();
       update();
@@ -71,13 +71,18 @@ class VerifyCodeController extends GetxController {
             Get.to(() => AddingMoto());
           });
         }).catchError((e) {
+          // loading.toggle();
+          // update();
+          // showAlertDialogOneButton(
+          //     context,
+          //     "Code Expiré",
+          //     "Le code SMS a expiré. Veuillez renvoyer le code de vérification pour réessayer.",
+          //     "Ok");
+
+          message =
+              "Erreur lors de la creation du compte, veuillez nous contacter pour régler ce problème";
           loading.toggle();
           update();
-          showAlertDialogOneButton(
-              context,
-              "Code Expiré",
-              "Le code SMS a expiré. Veuillez renvoyer le code de vérification pour réessayer.",
-              "Ok");
         });
       } catch (e) {
         message =

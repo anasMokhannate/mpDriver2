@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:motopickupdriver/utils/models/emergency.dart';
 import 'package:motopickupdriver/utils/services.dart';
 
@@ -82,10 +83,11 @@ Future deleteUser(MpUser user, reason) async {
     'is_activated_account': false,
     'is_verified_account': false
   });
+
+  // FirebaseAuth.instance.currentUser?.delete();
 }
 
 Future<String?> getProvider(String email) async {
-  
   String provider = "";
   await FirebaseFirestore.instance
       .collection("mp_users")
@@ -217,8 +219,6 @@ getOrderStatus(String orderId) async {
 }
 
 Future annulerOrder(MpUser driver, orderModel.Order order) async {
-
-
   if (order.status == 'customer_accepted') {
     await FirebaseFirestore.instance
         .collection('mp_orders')
