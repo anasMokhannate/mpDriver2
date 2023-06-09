@@ -84,6 +84,10 @@ class MpUser {
     this.identityCardExpirationDate,
     this.drivingLicencePicture,
     this.drivingLicenceExpirationDate,
+    this.assurancePicture,
+    this.assuranceExpirationDate,
+    this.carteGrisePicture,
+    this.carteGriseExpirationDate,
     this.orderTotalAmount,
     this.anthropometrique,
     this.reportedTimes,
@@ -134,6 +138,10 @@ class MpUser {
       identityCardExpirationDate: json?['identity_card_expiration_date'],
       drivingLicencePicture: json?['driving_licence_picture'],
       drivingLicenceExpirationDate: json?['driving_licence_expiration_date'],
+      assurancePicture: json?['assurance_picture'],
+      assuranceExpirationDate: json?['assurance_expiration_date'],
+      carteGrisePicture: json?['carte_grise_picture'],
+      carteGriseExpirationDate: json?['carte_grise_expiration_date'],
       orderTotalAmount: json?['order_total_amount'],
       anthropometrique: json?['anthropometrique'],
       reportedTimes: json?['reported_times'],
@@ -201,6 +209,10 @@ class MpUser {
     data['identity_card_expiration_date'] = identityCardExpirationDate;
     data['driving_licence_picture'] = drivingLicencePicture;
     data['driving_licence_expiration_date'] = drivingLicenceExpirationDate;
+    data['assurance_picture'] = assurancePicture;
+    data['assurance_expiration_date'] = assuranceExpirationDate;
+    data['carte_grise_picture'] = carteGrisePicture;
+    data['carte_grise_expiration_date'] = carteGriseExpirationDate;
     data['order_total_amount'] = orderTotalAmount;
     data['anthropometrique'] = anthropometrique;
     data['reported_times'] = reportedTimes;
