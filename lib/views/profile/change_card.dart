@@ -100,7 +100,8 @@ class _ChangeCardState extends State<ChangeCard> {
                                   //   )
                                   ? CachedNetworkImage(
                                       imageUrl: controller
-                                          .userBase!.identityCardPicture!,
+                                              .userBase!.identityCardPicture ??
+                                          "",
                                       fit: BoxFit.cover,
                                       progressIndicatorBuilder: (context, url,
                                               downloadProgress) =>
@@ -240,7 +241,8 @@ class _ChangeCardState extends State<ChangeCard> {
                                   //   )
                                   ? CachedNetworkImage(
                                       imageUrl: controller
-                                          .userBase!.assurancePicture!,
+                                              .userBase!.assurancePicture ??
+                                          "",
                                       fit: BoxFit.cover,
                                       progressIndicatorBuilder: (context, url,
                                               downloadProgress) =>
@@ -310,7 +312,8 @@ class _ChangeCardState extends State<ChangeCard> {
                                   //   )
                                   ? CachedNetworkImage(
                                       imageUrl: controller
-                                          .userBase!.carteGrisePicture!,
+                                              .userBase!.carteGrisePicture ??
+                                          "",
                                       fit: BoxFit.cover,
                                       progressIndicatorBuilder: (context, url,
                                               downloadProgress) =>

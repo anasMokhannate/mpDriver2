@@ -15,7 +15,6 @@ import 'package:motopickupdriver/utils/colors.dart';
 import 'package:motopickupdriver/utils/models/order.dart' as Orderr;
 import 'package:motopickupdriver/utils/queries.dart';
 import 'package:motopickupdriver/utils/services.dart';
-import 'package:location/location.dart' as loc;
 
 import '../utils/models/user.dart';
 
@@ -79,17 +78,20 @@ class HomePageController extends GetxController {
   }
 
   updateLocationInFirestore(latitude, longitude) async {
-    userBase!.location =
-        GeoFlutterFire().point(latitude: latitude!, longitude: longitude!).data;
+    if (userBase!.isOnline ?? false || userBase!.isActivatedAccount!) {
+      userBase!.location = GeoFlutterFire()
+          .point(latitude: latitude!, longitude: longitude!)
+          .data;
 
-    // await completeUser(userBase!);
-    await FirebaseFirestore.instance
-        .collection("mp_users")
-        .doc(userBase!.uid)
-        .update({
-      'location': userBase!.location,
-      // 'driver_latitude': latitude,
-    }).then((value) {});
+      // await completeUser(userBase!);
+      await FirebaseFirestore.instance
+          .collection("mp_users")
+          .doc(userBase!.uid)
+          .update({
+        'location': userBase!.location,
+        // 'driver_latitude': latitude,
+      }).then((value) {});
+    }
   }
 
 // Stop listening for location updates
@@ -226,7 +228,7 @@ class HomePageController extends GetxController {
 
     await getCurrentUser().then((value) async {
       await initOneSignal();
-      loc.Location location = loc.Location();
+      // loc.Location location = loc.Location();
 
       userBase = value;
       status = userBase!.isOnline ?? false;
@@ -234,10 +236,10 @@ class HomePageController extends GetxController {
       userBase!.isActivatedAccount = true;
       await getUserLocation();
       center = GeoFirePoint(latitude!, longitude!);
-      bool bgModeEnabled = await location.isBackgroundModeEnabled();
-      if (!bgModeEnabled) {
-        location.enableBackgroundMode(enable: true);
-      }
+      // bool bgModeEnabled = await location.isBackgroundModeEnabled();
+      // // if (!bgModeEnabled) {
+      // //   location.enableBackgroundMode(enable: true);
+      // // }
 
       startLocationUpdates();
 

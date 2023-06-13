@@ -39,9 +39,7 @@ class ChangeCardController extends GetxController {
         cardEdited = true;
         update();
       }
-    } catch (e) {
-      
-    }
+    } catch (e) {}
   }
 
   selectImageAnthropometrique() async {
@@ -67,9 +65,7 @@ class ChangeCardController extends GetxController {
         assuranceEdited = true;
         update();
       }
-    } catch (e) {
-      
-    }
+    } catch (e) {}
   }
 
   selectImageGrise() async {
@@ -80,9 +76,7 @@ class ChangeCardController extends GetxController {
         griseEdited = true;
         update();
       }
-    } catch (e) {
-      
-    }
+    } catch (e) {}
   }
 
   selectImageLicence() async {
@@ -93,9 +87,7 @@ class ChangeCardController extends GetxController {
         licenceEdited = true;
         update();
       }
-    } catch (e) {
-      
-    }
+    } catch (e) {}
   }
 
   Future<bool> validat(context) async {
@@ -224,17 +216,15 @@ class ChangeCardController extends GetxController {
       loading.toggle();
       update();
       await uploadImages().then((isEdited) async {
-        // 
-        // 
-        // 
-        // 
-        // 
-        // 
+        //
+        //
+        //
+        //
+        //
+        //
         if (isEdited) {
-          
           updateUserImages();
         } else {
-          
           loading.toggle();
           update();
           Get.offAll(() => ProfilePage(), transition: Transition.rightToLeft);
@@ -248,7 +238,7 @@ class ChangeCardController extends GetxController {
     super.onInit();
     await getUserFromMemory().then((value) async {
       userBase = value;
-      
+
       // cardFile = XFile(value!.identityCardPicture!);
       // card = File(cardFile!.path);
       // cardLicence = XFile(value.drivingLicencePicture!);
@@ -272,10 +262,10 @@ class ChangeCardController extends GetxController {
       // currAssurance = value.assurancePicture!;
       // currGrise = value.carteGrisePicture!;
 
-      cardExpire = value!.identityCardExpirationDate!;
-      licenceExpire = value.drivingLicenceExpirationDate!;
-      assuranceExpire = value.assuranceExpirationDate!;
-      griseExpire = value.carteGriseExpirationDate!;
+      cardExpire = value!.identityCardExpirationDate ?? "";
+      licenceExpire = value.drivingLicenceExpirationDate ?? "";
+      assuranceExpire = value.assuranceExpirationDate ?? "";
+      griseExpire = value.carteGriseExpirationDate ?? "";
 
       // card = File(value.identityCardPicture!);
       // licence = File(value.drivingLicencePicture!);

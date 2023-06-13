@@ -12,7 +12,6 @@ import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:motopickupdriver/utils/colors.dart';
 import 'package:motopickupdriver/utils/services.dart';
-import 'package:location/location.dart' as loc;
 
 import '../utils/models/user.dart';
 
@@ -242,17 +241,17 @@ class OrderInformationsController extends GetxController {
   @override
   void onInit() async {
     super.onInit();
-    loc.Location location = loc.Location();
+    // loc.Location location = loc.Location();
 
     await getCurrentUser().then((value) async {
       userBase = value;
       isOnline = userBase!.isOnline ?? false;
       await saveCurrentUser(userBase!);
       await getUserLocation();
-      bool bgModeEnabled = await location.isBackgroundModeEnabled();
-      if (!bgModeEnabled) {
-        location.enableBackgroundMode(enable: true);
-      }
+      // bool bgModeEnabled = await location.isBackgroundModeEnabled();
+      // if (!bgModeEnabled) {
+      //   location.enableBackgroundMode(enable: true);
+      // }
       // startLocationUpdates();
       // await getWithOrder();
       orderStatus = await getOrderStatus(userBase!.currentOrderDriver!);
